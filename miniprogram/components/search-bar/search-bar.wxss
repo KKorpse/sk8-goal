@@ -1,7 +1,7 @@
-/* 搜索栏样式 */
+/* 搜索栏样式 - 优化版 */
 
 .search-bar {
-  padding: 16rpx 24rpx;
+  padding: var(--spacing-md) var(--spacing-lg);
 }
 
 .search-input-wrapper {
@@ -9,33 +9,37 @@
   align-items: center;
   background: var(--bg-surface);
   border-radius: 0;
-  padding: 0 24rpx;
+  padding: 0 var(--spacing-lg);
   height: 80rpx;
   border: 4rpx solid var(--border-color);
-  box-shadow: inset 4rpx 4rpx 0px 0px #555555, inset -4rpx -4rpx 0px 0px #ffffff;
+  box-shadow: var(--shadow-pressed);
+  transition: all var(--transition-fast);
 }
 
 .search-bar.focused .search-input-wrapper {
   border-color: var(--primary-yellow);
+  box-shadow: 
+    var(--shadow-sm),
+    0 0 15rpx rgba(255, 255, 85, 0.3);
 }
 
 .search-icon {
-  font-size: 32rpx;
-  margin-right: 16rpx;
-  color: var(--text-dark);
+  font-size: var(--icon-md);
+  margin-right: var(--spacing-md);
+  color: var(--text-secondary);
 }
 
 .search-input {
   flex: 1;
   height: 100%;
-  font-size: 28rpx;
-  color: var(--text-primary);
-  text-shadow: var(--shadow-text);
+  font-size: var(--font-base);
+  color: var(--text-primary-light);
+  text-shadow: none;
 }
 
 .search-placeholder {
-  color: var(--text-dark);
-  font-size: 28rpx;
+  color: var(--text-secondary);
+  font-size: var(--font-base);
   text-shadow: none;
 }
 
@@ -48,10 +52,11 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-left: 12rpx;
-  box-shadow: inset 2rpx 2rpx 0px 0px #ffffff, inset -2rpx -2rpx 0px 0px #555555;
+  margin-left: var(--spacing-md);
+  box-shadow: var(--shadow-sm);
   opacity: 0;
   transform: scale(0.8);
+  transition: all var(--transition-fast);
 }
 
 .clear-btn.show {
@@ -59,8 +64,13 @@
   transform: scale(1);
 }
 
+.clear-btn:active {
+  box-shadow: var(--shadow-pressed);
+  transform: scale(0.9);
+}
+
 .clear-icon {
-  font-size: 24rpx;
-  color: var(--text-dark);
+  font-size: var(--font-sm);
+  color: var(--text-secondary);
   line-height: 1;
 }

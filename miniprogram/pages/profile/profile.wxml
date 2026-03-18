@@ -4,17 +4,23 @@
   <view class="profile-card">
     <!-- 头像和基本信息 -->
     <view class="card-header">
-      <view class="avatar-wrapper">
+      <view class="avatar-wrapper" bindtap="chooseAvatar">
         <view class="avatar-steve" wx:if="{{!userInfo.avatar}}"></view>
-        <image 
-          class="avatar" 
+        <image
+          class="avatar"
           wx:else
           src="{{userInfo.avatar}}"
           mode="aspectFill"
         />
+        <view class="avatar-edit-hint">
+          <text class="edit-icon">📷</text>
+        </view>
       </view>
       <view class="user-info">
-        <text class="nickname">{{userInfo.nickname || '滑板玩家'}}</text>
+        <view class="nickname-wrapper" bindtap="editNickname">
+          <text class="nickname">{{userInfo.nickname || '滑板玩家'}}</text>
+          <text class="nickname-edit-icon">✏️</text>
+        </view>
         <text class="user-id">ID: {{userInfo.id}}</text>
       </view>
     </view>
@@ -60,11 +66,21 @@
           class="badge-item {{item.unlocked ? '' : 'locked'}}" 
           wx:for="{{allBadges}}" 
           wx:key="id"
+          wx:if="{{index < 7}}"
           bindtap="onBadgeTap"
           data-badge="{{item}}"
           data-index="{{index}}"
         >
           <text class="badge-emoji">{{item.unlocked ? item.emoji : '🔒'}}</text>
+        </view>
+        <!-- 更多徽章提示 -->
+        <view 
+          class="badge-item badge-more" 
+          wx:if="{{allBadges.length > 7}}"
+          bindtap="onBadgeTap"
+          data-badge="{{allBadges[7]}}"
+        >
+          <text class="badge-more-text">+{{allBadges.length - 7}}</text>
         </view>
       </view>
     </view>
@@ -95,11 +111,11 @@
   <view class="ollie-card">
     <view class="ollie-display" bindtap="toggleOllieExpand">
       <view class="ollie-main">
-        <text class="ollie-title"> Ollie 高度</text>
+        <text class="ollie-title">🦘 Ollie 高度</text>
         <view class="ollie-values">
           <text class="ollie-val-main">{{ollie.normal}}</text>
           <text class="ollie-val-sub">/ {{ollie.switch}}</text>
-          <text class="ollie-unit">半立</text>
+          <text class="ollie-unit"> 立</text>
         </view>
       </view>
       <text class="ollie-expand-arrow {{ollieExpanded ? 'expanded' : ''}}">▼</text>
@@ -107,7 +123,10 @@
     <!-- 展开的设置面板 -->
     <view class="ollie-settings {{ollieExpanded ? 'show' : ''}}">
       <view class="ollie-setting-item">
-        <text class="ollie-label">{{userInfo.stance === 'regular' ? 'Regular' : 'Goofy'}}</text>
+        <view class="ollie-label-wrapper">
+          <text class="ollie-label-icon">🦶</text>
+          <text class="ollie-label">正角 ({{userInfo.stance === 'regular' ? 'Regular' : 'Goofy'}})</text>
+        </view>
         <view class="ollie-control">
           <view class="ollie-btn" bindtap="adjustOllie" data-type="normal" data-delta="-0.5">-</view>
           <text class="ollie-value">{{ollie.normal}}</text>
@@ -116,7 +135,10 @@
       </view>
       <view class="ollie-divider"></view>
       <view class="ollie-setting-item">
-        <text class="ollie-label">{{userInfo.stance === 'regular' ? 'Nollie/Fakie' : 'Nollie/Fakie'}}</text>
+        <view class="ollie-label-wrapper">
+          <text class="ollie-label-icon">🔄</text>
+          <text class="ollie-label">反角 (Switch/Fakie)</text>
+        </view>
         <view class="ollie-control">
           <view class="ollie-btn" bindtap="adjustOllie" data-type="switch" data-delta="-0.5">-</view>
           <text class="ollie-value">{{ollie.switch}}</text>
@@ -126,7 +148,7 @@
     </view>
   </view>
   
-  <!-- 成招记录 -->
+  <!-- 成招记录 - 横屏游戏风格 -->
   <view class="timeline-card">
     <view class="timeline-header">
       <text class="timeline-title"> 成招记录</text>
@@ -137,22 +159,80 @@
         <text class="unlock-arrow">›</text>
       </view>
     </view>
-    
-    <!-- 横向滑动时间轴 -->
-    <scroll-view scroll-x class="timeline-scroll" wx:if="{{timeline.length > 0}}">
-      <view class="timeline-horizontal">
-        <view class="timeline-node" wx:for="{{timeline}}" wx:key="id" bindtap="onTimelineNodeTap" data-index="{{index}}">
-          <text class="node-time">{{item.date}}</text>
-          <view class="node-dot {{item.status}}"></view>
-          <text class="node-name">{{item.trickName}}</text>
-          <text class="node-stance">{{item.stance === 'normal' ? 'N' : item.stance === 'fakie' ? 'F' : item.stance === 'switch' ? 'S' : 'No'}}</text>
-        </view>
+
+    <!-- 横屏游戏场景 -->
+    <view class="game-scene" wx:if="{{timeline.length > 0}}">
+      <!-- 天空背景 -->
+      <view class="sky-bg">
+        <!-- 飘动的云朵 -->
+        <view class="cloud cloud-1">☁️</view>
+        <view class="cloud cloud-2">☁️</view>
+        <view class="cloud cloud-3">☁️</view>
       </view>
-    </scroll-view>
-    
+
+      <!-- 横向滚动区域 -->
+      <scroll-view scroll-x class="game-scroll" enhanced show-scrollbar="{{false}}">
+        <view class="game-track" style="width: {{timeline.length * 140 + 200}}rpx;">
+          <!-- 起点 -->
+          <view class="track-start">
+            <view class="start-flag">🚩</view>
+            <text class="start-label">起点</text>
+          </view>
+
+          <!-- 招式节点 - 问号砖块风格 -->
+          <view
+            class="trick-block {{item.status}}"
+            wx:for="{{timeline}}"
+            wx:key="id"
+            bindtap="onTimelineNodeTap"
+            data-index="{{index}}"
+          >
+            <!-- 砖块主体 -->
+            <view class="block-body">
+              <view class="block-shine"></view>
+              <text class="block-emoji">{{item.emoji || '🛹'}}</text>
+            </view>
+            <!-- 状态标识 -->
+            <view class="block-status {{item.status}}">
+              <text class="status-star">{{item.status === 'mastered' ? '⭐' : item.status === 'trial' ? '✨' : '🔥'}}</text>
+            </view>
+            <!-- 日期 -->
+            <text class="block-date">{{item.date}}</text>
+            <!-- 招式名 -->
+            <text class="block-name">{{item.trickName}}</text>
+            <!-- 脚位标签 -->
+            <view class="block-stance">
+              <text>{{item.stance === 'normal' ? 'N' : item.stance === 'fakie' ? 'F' : item.stance === 'switch' ? 'S' : 'No'}}</text>
+            </view>
+          </view>
+
+          <!-- 终点 -->
+          <view class="track-end">
+            <view class="end-castle">🏰</view>
+            <text class="end-label">继续挑战</text>
+          </view>
+        </view>
+      </scroll-view>
+
+      <!-- 地面 -->
+      <view class="ground">
+        <view class="grass"></view>
+        <view class="dirt"></view>
+      </view>
+
+      <!-- 滑板小人 -->
+      <view class="skater">
+        <text class="skater-emoji">🛹</text>
+      </view>
+    </view>
+
     <!-- 空状态 -->
     <view class="timeline-empty" wx:if="{{timeline.length === 0}}">
-      <text class="empty-emoji">🎯</text>
+      <view class="empty-game-bg">
+        <view class="cloud cloud-1">☁️</view>
+        <view class="cloud cloud-2">☁️</view>
+      </view>
+      <text class="empty-emoji">🎮</text>
       <text class="empty-text">还没有成招记录</text>
       <text class="empty-hint">去动作库点亮你的第一个招式吧！</text>
     </view>
@@ -201,6 +281,37 @@
   </view>
 </view>
 
+<!-- 昵称修改弹窗 -->
+<view class="badge-modal-mask {{showNicknameModal ? 'show' : ''}}" bindtap="closeNicknameModal" wx:if="{{showNicknameModal}}">
+  <view class="badge-modal nickname-modal" catchtap="preventClose">
+    <view class="badge-modal-header">
+      <view class="badge-modal-icon">
+        <text class="badge-modal-emoji">✏️</text>
+      </view>
+      <text class="badge-modal-name">修改昵称</text>
+    </view>
+    <view class="badge-modal-body">
+      <view class="nickname-input-wrapper">
+        <input 
+          class="nickname-input"
+          type="text"
+          maxlength="12"
+          placeholder="请输入昵称"
+          value="{{tempNickname}}"
+          bindinput="onNicknameInput"
+          focus="{{showNicknameModal}}"
+        />
+        <text class="nickname-count">{{tempNickname.length || 0}}/12</text>
+      </view>
+      <text class="nickname-hint">昵称将显示在个人主页</text>
+    </view>
+    <view class="badge-modal-footer nickname-modal-footer">
+      <view class="nickname-btn cancel" bindtap="closeNicknameModal">取消</view>
+      <view class="nickname-btn confirm" bindtap="confirmNickname">确认</view>
+    </view>
+  </view>
+</view>
+
 <!-- 招式列表弹窗 -->
 <view class="trick-list-modal-mask {{showTrickListModal ? 'show' : ''}}" bindtap="closeTrickListModal" wx:if="{{showTrickListModal}}">
   <view class="trick-list-modal" catchtap="preventClose">
@@ -223,6 +334,37 @@
     </scroll-view>
     <view class="trick-list-footer">
       <view class="trick-list-btn" bindtap="closeTrickListModal">关闭</view>
+    </view>
+  </view>
+</view>
+
+<!-- 昵称修改弹窗 -->
+<view class="badge-modal-mask {{showNicknameModal ? 'show' : ''}}" bindtap="closeNicknameModal" wx:if="{{showNicknameModal}}">
+  <view class="badge-modal nickname-modal" catchtap="preventClose">
+    <view class="badge-modal-header">
+      <view class="badge-modal-icon">
+        <text class="badge-modal-emoji">✏️</text>
+      </view>
+      <text class="badge-modal-name">修改昵称</text>
+    </view>
+    <view class="badge-modal-body">
+      <view class="nickname-input-wrapper">
+        <input 
+          class="nickname-input"
+          type="text"
+          maxlength="12"
+          placeholder="请输入昵称"
+          value="{{tempNickname}}"
+          bindinput="onNicknameInput"
+          focus="{{showNicknameModal}}"
+        />
+        <text class="nickname-count">{{tempNickname.length || 0}}/12</text>
+      </view>
+      <text class="nickname-hint">昵称将显示在个人主页</text>
+    </view>
+    <view class="badge-modal-footer nickname-modal-footer">
+      <view class="nickname-btn cancel" bindtap="closeNicknameModal">取消</view>
+      <view class="nickname-btn confirm" bindtap="confirmNickname">确认</view>
     </view>
   </view>
 </view>
@@ -254,6 +396,37 @@
     </view>
     <view class="badge-modal-footer">
       <view class="badge-modal-btn" bindtap="closeTimelineDetail">知道了</view>
+    </view>
+  </view>
+</view>
+
+<!-- 昵称修改弹窗 -->
+<view class="badge-modal-mask {{showNicknameModal ? 'show' : ''}}" bindtap="closeNicknameModal" wx:if="{{showNicknameModal}}">
+  <view class="badge-modal nickname-modal" catchtap="preventClose">
+    <view class="badge-modal-header">
+      <view class="badge-modal-icon">
+        <text class="badge-modal-emoji">✏️</text>
+      </view>
+      <text class="badge-modal-name">修改昵称</text>
+    </view>
+    <view class="badge-modal-body">
+      <view class="nickname-input-wrapper">
+        <input 
+          class="nickname-input"
+          type="text"
+          maxlength="12"
+          placeholder="请输入昵称"
+          value="{{tempNickname}}"
+          bindinput="onNicknameInput"
+          focus="{{showNicknameModal}}"
+        />
+        <text class="nickname-count">{{tempNickname.length || 0}}/12</text>
+      </view>
+      <text class="nickname-hint">昵称将显示在个人主页</text>
+    </view>
+    <view class="badge-modal-footer nickname-modal-footer">
+      <view class="nickname-btn cancel" bindtap="closeNicknameModal">取消</view>
+      <view class="nickname-btn confirm" bindtap="confirmNickname">确认</view>
     </view>
   </view>
 </view>

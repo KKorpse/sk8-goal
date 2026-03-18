@@ -7,11 +7,12 @@ Page({
     history: [],
     yearsSkating: 0,
     showModal: false,
-    nodeType: 'start', // 'start' | 'pause'
     selectedDate: '',
     today: '',
     editingNode: null,
-    editingIndex: -1
+    editingIndex: -1,
+    isSkating: false, // 当前是否正在滑板
+    actionType: 'start' // 按钮状态：'start' | 'pause'
   },
 
   onLoad() {
@@ -48,55 +49,98 @@ Page({
   loadData() {
     const history = wx.getStorageSync('skating_history') || []
     
-    // 按时间排序（最新的在前）
-    history.sort((a, b) => b.timestamp - a.timestamp)
+    // 按时间排序（最新的在前）用于显示
+    const sortedHistory = [...history].sort((a, b) => b.timestamp - a.timestamp)
     
-    // 格式化显示数据
-    const formattedHistory = history.map((item, index, arr) => {
+    // 判断当前是否正在滑板（最后一个节点是 start）
+    const chronological = [...history].sort((a, b) => a.timestamp - b.timestamp)
+    const lastNode = chronological[chronological.length - 1]
+    const isSkating = lastNode && lastNode.type === 'start'
+    
+    // 计算总滑板年数
+    const { totalMs, periods } = this.calculateYearsSkating(history)
+    const yearsSkating = Math.round(totalMs / (365.25 * 24 * 60 * 60 * 1000) * 10) / 10
+    
+    // 格式化显示数据，添加持续时间
+    const formattedHistory = sortedHistory.map((item, index) => {
       const date = new Date(item.timestamp)
       const dateStr = `${date.getFullYear()}.${String(date.getMonth() + 1).padStart(2, '0')}.${String(date.getDate()).padStart(2, '0')}`
       
-      // 计算持续时间
+      // 查找该节点对应的时间段
+      const period = periods.find(p => 
+        (item.type === 'start' && p.startTimestamp === item.timestamp) ||
+        (item.type === 'pause' && p.endTimestamp === item.timestamp)
+      )
+      
       let duration = ''
-      if (item.type === 'start' && item.endTime) {
-        const ms = item.endTime - item.timestamp
-        duration = this.formatDuration(ms)
+      if (period) {
+        duration = this.formatDuration(period.duration)
       }
       
       return {
         ...item,
         dateStr,
-        duration
+        duration: item.type === 'start' ? duration : '' // 只在 start 节点显示持续时间
       }
     })
     
-    // 计算总滑板年数
-    const yearsSkating = this.calculateYearsSkating(history)
-    
     this.setData({
       history: formattedHistory,
-      yearsSkating
+      yearsSkating,
+      isSkating,
+      actionType: isSkating ? 'pause' : 'start'
     })
   },
 
   /**
    * 计算真实滑板年数
+   * 逻辑：每个 start 到最近的 pause 是一个时间段
+   * 如果最后一个节点是 start，则从该 start 到当前时间累积
    */
   calculateYearsSkating(history) {
-    if (history.length === 0) return 0
+    if (history.length === 0) return { totalMs: 0, periods: [] }
     
     const now = Date.now()
-    let totalMs = 0
     
-    history.forEach(period => {
-      if (period.type === 'start') {
-        const endTime = period.endTime || now
-        totalMs += endTime - period.timestamp
+    // 按时间顺序排序
+    const sorted = [...history].sort((a, b) => a.timestamp - b.timestamp)
+    
+    // 配对 start 和 pause
+    const periods = []
+    let currentStart = null
+    
+    sorted.forEach(node => {
+      if (node.type === 'start') {
+        // 新的开始节点
+        if (currentStart !== null) {
+          // 前一个 start 没有配对的 pause，这种情况理论上不应该发生
+          // 但为了安全，我们忽略前一个未配对的 start
+        }
+        currentStart = node
+      } else if (node.type === 'pause' && currentStart !== null) {
+        // 找到配对的 pause
+        periods.push({
+          startTimestamp: currentStart.timestamp,
+          endTimestamp: node.timestamp,
+          duration: node.timestamp - currentStart.timestamp
+        })
+        currentStart = null
       }
     })
     
-    // 转换为年，保留一位小数
-    return Math.round(totalMs / (365.25 * 24 * 60 * 60 * 1000) * 10) / 10
+    // 如果最后一个节点是 start，累积到当前时间
+    if (currentStart !== null) {
+      periods.push({
+        startTimestamp: currentStart.timestamp,
+        endTimestamp: now,
+        duration: now - currentStart.timestamp
+      })
+    }
+    
+    // 计算总时间
+    const totalMs = periods.reduce((sum, p) => sum + p.duration, 0)
+    
+    return { totalMs, periods }
   },
 
   /**
@@ -120,26 +164,14 @@ Page({
   },
 
   /**
-   * 添加开始节点
+   * 切换滑板状态（开始/暂停）
    */
-  addStartNode() {
+  toggleSkating() {
+    const { actionType, today } = this.data
+    
     this.setData({
       showModal: true,
-      nodeType: 'start',
-      selectedDate: this.data.today,
-      editingNode: null,
-      editingIndex: -1
-    })
-  },
-
-  /**
-   * 添加暂停节点
-   */
-  addPauseNode() {
-    this.setData({
-      showModal: true,
-      nodeType: 'pause',
-      selectedDate: this.data.today,
+      selectedDate: today,
       editingNode: null,
       editingIndex: -1
     })
@@ -168,7 +200,7 @@ Page({
    * 确认添加/编辑节点
    */
   confirmNode() {
-    const { selectedDate, nodeType, editingNode, editingIndex } = this.data
+    const { selectedDate, actionType, editingNode, editingIndex } = this.data
     const history = wx.getStorageSync('skating_history') || []
     
     // 解析日期
@@ -183,23 +215,9 @@ Page({
       // 新增模式
       const newNode = {
         id: `node_${Date.now()}`,
-        type: nodeType,
+        type: actionType, // 'start' 或 'pause'
         timestamp,
         date: selectedDate
-      }
-      
-      if (nodeType === 'start') {
-        // 如果是开始节点，找到上一个未结束的开始节点并设置结束时间
-        const lastUnfinished = history.find(h => h.type === 'start' && !h.endTime)
-        if (lastUnfinished && lastUnfinished.timestamp < timestamp) {
-          lastUnfinished.endTime = timestamp
-        }
-      } else if (nodeType === 'pause') {
-        // 如果是暂停节点，找到最近的开始节点并设置结束时间
-        const lastStart = history.filter(h => h.type === 'start').sort((a, b) => b.timestamp - a.timestamp)[0]
-        if (lastStart && lastStart.timestamp < timestamp && !lastStart.endTime) {
-          lastStart.endTime = timestamp
-        }
       }
       
       history.push(newNode)
@@ -211,7 +229,7 @@ Page({
     this.loadData()
     
     wx.showToast({
-      title: editingNode ? '已更新' : '已添加',
+      title: editingNode ? '已更新' : (actionType === 'start' ? '开始滑板' : '暂停滑板'),
       icon: 'success'
     })
   },
@@ -228,7 +246,6 @@ Page({
       const date = new Date(node.timestamp)
       this.setData({
         showModal: true,
-        nodeType: node.type,
         selectedDate: this.formatDate(date),
         editingNode: node,
         editingIndex: history.findIndex(h => h.id === id)

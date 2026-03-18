@@ -1,44 +1,55 @@
 /**
  * SkateGoal 主题变量
- * Minecraft 风格配色方案
+ * Minecraft 风格配色方案 - 优化版
  */
 
 page {
-  /* 主色调 (Minecraft) */
+  /* 主色调 (Minecraft) - 柔和版 */
   --primary-purple: #AA00AA; /* MC Purple */
   --primary-yellow: #FFFF55; /* MC Yellow */
-  --primary-cyan: #55FFFF;   /* MC Aqua */
+  --primary-cyan: #00CCCC;   /* MC Aqua - 降低亮度 */
   --primary-orange: #FFAA00; /* MC Gold */
-  --primary-green: #55FF55;  /* MC Green */
+  --primary-green: #44DD44;  /* MC Green - 降低亮度 */
   --primary-red: #FF5555;    /* MC Red */
   
-  /* 背景色 */
+  /* 背景色 - 优化层次 */
   --bg-dark: #3b2818; /* Dirt background color */
+  --bg-darker: #2d1e11; /* 更深的泥土色 */
   --bg-card: #c6c6c6; /* Stone/UI background */
   --bg-card-light: #d8d8d8;
+  --bg-card-hover: #b8b8b8; /* 卡片悬停态 */
   --bg-surface: #8b8b8b; /* Darker stone */
+  --bg-surface-dark: #6b6b6b; /* 更深的surface */
   
-  /* 文字色 */
-  --text-primary: #ffffff;
-  --text-secondary: #e0e0e0;
-  --text-muted: #a0a0a0;
-  --text-dark: #3f3f3f;
+  /* 文字色 - 优化对比度 */
+  --text-primary: #2a2a2a;      /* 深色文字用于浅色背景 */
+  --text-primary-light: #ffffff; /* 浅色文字用于深色背景 */
+  --text-secondary: #555555;    /* 次要文字 - 深色背景用 */
+  --text-secondary-light: #cccccc; /* 次要文字 - 浅色背景用 */
+  --text-muted: #888888;        /* 弱化文字 */
+  --text-dark: #3f3f3f;         /* 深色文字 */
   
-  /* 状态色 */
-  --status-trial: #55FFFF;
-  --status-grinding: #FFAA00;
-  --status-mastered: #55FF55;
-  --status-none: #555555;
+  /* 状态色 - 优化辨识度（柔和版） */
+  --status-trial: #00AAAA;      /* 青色 - 体验卡 */
+  --status-grinding: #FF8800;   /* 橙色 - 死磕中 */
+  --status-mastered: #22AA44;   /* 绿色 - 一脚一个 */
+  --status-none: #666666;       /* 灰色 - 未解锁 */
+  
+  /* 状态色柔和版 - 用于背景 */
+  --status-trial-bg: rgba(0, 170, 170, 0.15);
+  --status-grinding-bg: rgba(255, 136, 0, 0.15);
+  --status-mastered-bg: rgba(34, 170, 68, 0.15);
   
   /* 强调色 */
   --accent-glow: #FF5555;
   --accent-success: #55FF55;
   --border-color: #000000; /* True black for MC borders */
+  --border-light: #555555; /* 浅边框 */
   
-  /* 渐变 (MC 通常不怎么用渐变，但保留变量以兼容) */
+  /* 渐变 */
   --gradient-purple: #AA00AA;
   --gradient-yellow: #FFFF55;
-  --gradient-cyan: #55FFFF;
+  --gradient-cyan: #00CCCC;
   --gradient-card: #c6c6c6;
   
   /* 阴影 (MC 风格 3D 边框) */
@@ -47,9 +58,10 @@ page {
   --shadow-lg: inset 8rpx 8rpx 0px 0px #ffffff, inset -8rpx -8rpx 0px 0px #555555, 8rpx 8rpx 0px 0px #000000;
   --shadow-purple: inset 4rpx 4rpx 0px 0px #FF55FF, inset -4rpx -4rpx 0px 0px #550055;
   --shadow-yellow: inset 4rpx 4rpx 0px 0px #FFFFaa, inset -4rpx -4rpx 0px 0px #aa5500;
-  --shadow-cyan: inset 4rpx 4rpx 0px 0px #aaffff, inset -4rpx -4rpx 0px 0px #00aaaa;
+  --shadow-cyan: inset 4rpx 4rpx 0px 0px #66eeee, inset -4rpx -4rpx 0px 0px #008888;
+  --shadow-pressed: inset 4rpx 4rpx 0px 0px #555555, inset -4rpx -4rpx 0px 0px #ffffff;
   --shadow-text: none;
-  --shadow-text-bold: 2rpx 2rpx 0px #3f3f3f; /* Only for white/light text */
+  --shadow-text-bold: 2rpx 2rpx 0px #ffffff;
   
   /* 圆角 (MC 风格没有圆角) */
   --radius-sm: 0rpx;
@@ -58,26 +70,39 @@ page {
   --radius-xl: 0rpx;
   --radius-full: 0rpx;
   
-  /* 间距 */
+  /* 间距 - 统一系统 */
   --spacing-xs: 8rpx;
   --spacing-sm: 12rpx;
-  --spacing-md: 20rpx;
-  --spacing-lg: 28rpx;
-  --spacing-xl: 40rpx;
+  --spacing-md: 16rpx;
+  --spacing-lg: 24rpx;
+  --spacing-xl: 32rpx;
+  --spacing-section: 32rpx;    /* 模块间距 */
+  --spacing-card: 24rpx;       /* 卡片间距 */
+  --spacing-inner: 28rpx;      /* 卡片内间距 */
+  --spacing-item: 16rpx;       /* 列表项间距 */
   
-  /* 字号 */
-  --font-xs: 22rpx;
-  --font-sm: 26rpx;
+  /* 字号 - 精简层级 */
+  --font-xs: 20rpx;
+  --font-sm: 24rpx;
   --font-base: 28rpx;
   --font-lg: 32rpx;
   --font-xl: 36rpx;
-  --font-2xl: 40rpx;
-  --font-3xl: 48rpx;
-  --font-4xl: 56rpx;
+  --font-2xl: 44rpx;
+  --font-3xl: 52rpx;
   
-  /* 过渡动画 */
-  --transition-fast: none; /* MC UI 很多是没有过渡的 */
-  --transition-normal: none;
-  --transition-slow: none;
-  --transition-bounce: none;
+  /* 过渡动画 - 添加必要动画 */
+  --transition-fast: 0.15s ease;
+  --transition-normal: 0.25s ease;
+  --transition-slow: 0.35s ease;
+  --transition-bounce: 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+  
+  /* 图标大小 */
+  --icon-sm: 32rpx;
+  --icon-md: 40rpx;
+  --icon-lg: 48rpx;
+  --icon-xl: 56rpx;
+  
+  /* 底部安全距离 */
+  --safe-area-bottom: calc(180rpx + env(safe-area-inset-bottom));
+  --safe-area-bottom-sm: calc(40rpx + env(safe-area-inset-bottom));
 }

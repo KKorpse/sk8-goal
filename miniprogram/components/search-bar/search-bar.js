@@ -8,7 +8,7 @@ Component({
     // 占位文字
     placeholder: {
       type: String,
-      value: '🔍 搜个招...'
+      value: '搜个招...'
     },
     // 当前值
     value: {

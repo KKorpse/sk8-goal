@@ -4,7 +4,7 @@
   <view class="header-fixed">
     <!-- 搜索栏 -->
     <search-bar 
-      placeholder="🔍 搜个招..."
+      placeholder="搜个招..."
       value="{{searchKeyword}}"
       bind:search="onSearch"
     />

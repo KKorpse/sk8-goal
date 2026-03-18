@@ -43,7 +43,10 @@ Page({
     trickList: [],
     // 成招详情弹窗
     showTimelineDetail: false,
-    selectedTimeline: {}
+    selectedTimeline: {},
+    // 昵称修改弹窗
+    showNicknameModal: false,
+    tempNickname: ''
   },
 
   onLoad() {
@@ -80,10 +83,17 @@ Page({
     
     // 获取统计数据
     const stats = trickService.getStats()
-    
-    // 获取时光轴
-    const timeline = userService.getTimeline(20)
-    
+
+    // 获取时光轴并添加 emoji
+    const timelineRaw = userService.getTimeline(20)
+    const allTricks = require('../../mock/tricks').getAllTricks()
+    const trickMap = {}
+    allTricks.forEach(t => { trickMap[t.id] = t })
+    const timeline = timelineRaw.map(item => ({
+      ...item,
+      emoji: trickMap[item.trickId]?.emoji || '🛹'
+    }))
+
     // 计算真实板龄
     const yearsSkating = this.calculateYearsSkating()
     
@@ -107,20 +117,35 @@ Page({
 
   /**
    * 计算真实滑板年数
+   * 逻辑：每个 start 到最近的 pause 是一个时间段
+   * 如果最后一个节点是 start，则从该 start 到当前时间累积
    */
   calculateYearsSkating() {
     const history = wx.getStorageSync('skating_history') || []
     if (history.length === 0) return 0
     
     const now = Date.now()
-    let totalMs = 0
     
-    history.forEach(period => {
-      if (period.type === 'start') {
-        const endTime = period.endTime || now
-        totalMs += endTime - period.startTime
+    // 按时间顺序排序
+    const sorted = [...history].sort((a, b) => a.timestamp - b.timestamp)
+    
+    // 配对 start 和 pause
+    let totalMs = 0
+    let currentStart = null
+    
+    sorted.forEach(node => {
+      if (node.type === 'start') {
+        currentStart = node
+      } else if (node.type === 'pause' && currentStart !== null) {
+        totalMs += node.timestamp - currentStart.timestamp
+        currentStart = null
       }
     })
+    
+    // 如果最后一个节点是 start，累积到当前时间
+    if (currentStart !== null) {
+      totalMs += now - currentStart.timestamp
+    }
     
     // 转换为年，保留一位小数
     return Math.round(totalMs / (365.25 * 24 * 60 * 60 * 1000) * 10) / 10
@@ -356,6 +381,13 @@ Page({
       return badge
     })
     
+    // 已解锁的排在前面
+    allBadges.sort((a, b) => {
+      if (a.unlocked && !b.unlocked) return -1
+      if (!a.unlocked && b.unlocked) return 1
+      return 0
+    })
+    
     const unlocked = allBadges.filter(b => b.unlocked)
     return { all: allBadges, unlocked }
   },
@@ -375,13 +407,111 @@ Page({
   setStance(e) {
     const { stance } = e.currentTarget.dataset
     const userInfo = userService.updateUserInfo({ stance })
-    this.setData({ 
+    this.setData({
       userInfo,
       stanceExpanded: false
     })
     wx.showToast({
       title: `已切换至 ${stance === 'regular' ? 'Regular' : 'Goofy'}`,
       icon: 'none'
+    })
+  },
+
+  /**
+   * 选择头像
+   */
+  chooseAvatar() {
+    wx.chooseMedia({
+      count: 1,
+      mediaType: ['image'],
+      sourceType: ['album', 'camera'],
+      sizeType: ['compressed'],
+      success: (res) => {
+        const tempFilePath = res.tempFiles[0].tempFilePath
+
+        // 保存到本地缓存
+        wx.saveFile({
+          tempFilePath,
+          success: (saveRes) => {
+            const savedFilePath = saveRes.savedFilePath
+
+            // 更新用户信息
+            const userInfo = userService.updateUserInfo({ avatar: savedFilePath })
+            this.setData({ userInfo })
+
+            wx.showToast({
+              title: '头像已更新',
+              icon: 'success'
+            })
+          },
+          fail: () => {
+            // 如果保存失败，直接使用临时路径
+            const userInfo = userService.updateUserInfo({ avatar: tempFilePath })
+            this.setData({ userInfo })
+            wx.showToast({
+              title: '头像已更新',
+              icon: 'success'
+            })
+          }
+        })
+      }
+    })
+  },
+
+  /**
+   * 编辑昵称 - 打开弹窗
+   */
+  editNickname() {
+    this.setData({
+      showNicknameModal: true,
+      tempNickname: this.data.userInfo.nickname || ''
+    })
+  },
+
+  /**
+   * 输入昵称
+   */
+  onNicknameInput(e) {
+    this.setData({
+      tempNickname: e.detail.value
+    })
+  },
+
+  /**
+   * 关闭昵称弹窗
+   */
+  closeNicknameModal() {
+    this.setData({ showNicknameModal: false })
+  },
+
+  /**
+   * 确认修改昵称
+   */
+  confirmNickname() {
+    const newNickname = this.data.tempNickname.trim()
+    if (!newNickname) {
+      wx.showToast({
+        title: '昵称不能为空',
+        icon: 'none'
+      })
+      return
+    }
+    if (newNickname.length > 12) {
+      wx.showToast({
+        title: '昵称不能超过12个字',
+        icon: 'none'
+      })
+      return
+    }
+    
+    const userInfo = userService.updateUserInfo({ nickname: newNickname })
+    this.setData({
+      userInfo,
+      showNicknameModal: false
+    })
+    wx.showToast({
+      title: '昵称已更新',
+      icon: 'success'
     })
   },
 

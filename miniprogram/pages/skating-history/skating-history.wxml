@@ -18,15 +18,11 @@
     </view>
   </view>
   
-  <!-- 操作按钮 -->
+  <!-- 操作按钮（单一切换按钮） -->
   <view class="action-bar">
-    <view class="action-btn start" bindtap="addStartNode">
-      <text class="action-emoji">▶️</text>
-      <text class="action-text">开始滑板</text>
-    </view>
-    <view class="action-btn pause" bindtap="addPauseNode">
-      <text class="action-emoji">⏸️</text>
-      <text class="action-text">暂停滑板</text>
+    <view class="action-btn {{actionType}}" bindtap="toggleSkating">
+      <text class="action-emoji">{{actionType === 'start' ? '▶️' : '⏸️'}}</text>
+      <text class="action-text">{{actionType === 'start' ? '开始滑板' : '暂停滑板'}}</text>
     </view>
   </view>
   
@@ -73,7 +69,7 @@
 <view class="modal-mask {{showModal ? 'show' : ''}}" bindtap="closeModal" wx:if="{{showModal}}">
   <view class="modal-content" catchtap="preventClose">
     <view class="modal-header">
-      <text class="modal-title">{{editingNode ? '编辑节点' : (nodeType === 'start' ? '开始滑板' : '暂停滑板')}}</text>
+      <text class="modal-title">{{editingNode ? '编辑节点' : (actionType === 'start' ? '开始滑板' : '暂停滑板')}}</text>
     </view>
     <view class="modal-body">
       <view class="date-picker-row">

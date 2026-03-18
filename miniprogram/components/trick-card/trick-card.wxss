@@ -1,4 +1,4 @@
-/* 招式卡片组件样式 */
+/* 招式卡片组件样式 - 优化版 */
 
 .trick-card {
   display: flex;
@@ -6,15 +6,17 @@
   justify-content: space-between;
   background: var(--bg-card);
   border-radius: 0;
-  padding: 24rpx 28rpx;
-  margin-bottom: 20rpx;
+  padding: var(--spacing-lg) var(--spacing-inner);
+  margin-bottom: var(--spacing-card);
   box-shadow: var(--shadow-sm);
   border: 4rpx solid var(--border-color);
+  transition: all var(--transition-fast);
 }
 
 .trick-card-hover {
   transform: scale(0.98);
-  box-shadow: inset 4rpx 4rpx 0px 0px #555555, inset -4rpx -4rpx 0px 0px #ffffff;
+  box-shadow: var(--shadow-pressed);
+  background: var(--bg-card-hover);
 }
 
 /* 左侧 */
@@ -33,12 +35,12 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  margin-right: 20rpx;
-  box-shadow: inset 4rpx 4rpx 0px 0px #ffffff, inset -4rpx -4rpx 0px 0px #555555;
+  margin-right: var(--spacing-lg);
+  box-shadow: var(--shadow-sm);
 }
 
 .icon-text {
-  font-size: 40rpx;
+  font-size: var(--icon-md);
 }
 
 .trick-info {
@@ -47,15 +49,16 @@
 }
 
 .trick-name {
-  font-size: 30rpx;
+  font-size: var(--font-lg);
   font-weight: 600;
   color: var(--text-primary);
   line-height: 1.3;
+  text-shadow: none;
 }
 
 .trick-name-cn {
-  font-size: 24rpx;
-  color: var(--text-dark);
+  font-size: var(--font-sm);
+  color: var(--text-secondary);
   margin-top: 4rpx;
   text-shadow: none;
 }
@@ -69,7 +72,7 @@
 .stance-dots {
   display: flex;
   align-items: center;
-  gap: 16rpx;
+  gap: var(--spacing-md);
 }
 
 .stance-item {
@@ -83,8 +86,9 @@
   width: 18rpx;
   height: 18rpx;
   border-radius: 0;
-  border: 2rpx solid #000;
+  border: 3rpx solid var(--border-color);
   background: var(--status-none);
+  transition: all var(--transition-fast);
 }
 
 .stance-dot.none {
@@ -93,19 +97,22 @@
 
 .stance-dot.trial {
   background: var(--status-trial);
+  box-shadow: 0 0 8rpx var(--status-trial);
 }
 
 .stance-dot.grinding {
   background: var(--status-grinding);
+  box-shadow: 0 0 8rpx var(--status-grinding);
 }
 
 .stance-dot.mastered {
   background: var(--status-mastered);
+  box-shadow: 0 0 10rpx var(--status-mastered);
 }
 
 .stance-abbr {
   font-size: 18rpx;
-  color: var(--text-dark);
+  color: var(--text-secondary);
   font-weight: bold;
   text-shadow: none;
 }

@@ -1,9 +1,10 @@
-/* 滑板历史页面样式 */
+/* 滑板历史页面样式 - 优化版 */
 
 .history-page {
   min-height: 100vh;
   background: transparent;
-  padding: 20rpx;
+  padding: var(--spacing-lg);
+  padding-bottom: var(--safe-area-bottom-sm);
 }
 
 /* 顶部统计卡片 */
@@ -11,20 +12,20 @@
   background: var(--bg-card);
   border: 4rpx solid var(--border-color);
   border-radius: 0;
-  padding: 32rpx;
-  margin-bottom: 24rpx;
-  box-shadow: inset 4rpx 4rpx 0px 0px #ffffff, inset -4rpx -4rpx 0px 0px #555555;
+  padding: var(--spacing-inner);
+  margin-bottom: var(--spacing-card);
+  box-shadow: var(--shadow-md);
 }
 
 .summary-header {
-  margin-bottom: 24rpx;
+  margin-bottom: var(--spacing-lg);
 }
 
 .summary-title {
-  font-size: 30rpx;
+  font-size: var(--font-lg);
   font-weight: bold;
   color: var(--text-primary);
-  text-shadow: var(--shadow-text-bold);
+  text-shadow: none;
 }
 
 .summary-content {
@@ -41,15 +42,15 @@
 }
 
 .summary-value {
-  font-size: 56rpx;
+  font-size: var(--font-3xl);
   font-weight: bold;
   color: var(--primary-yellow);
-  text-shadow: var(--shadow-text);
+  text-shadow: 2rpx 2rpx 0 #000;
 }
 
 .summary-label {
-  font-size: 28rpx;
-  color: var(--text-dark);
+  font-size: var(--font-base);
+  color: var(--text-secondary);
   font-weight: bold;
 }
 
@@ -62,8 +63,8 @@
 /* 操作按钮栏 */
 .action-bar {
   display: flex;
-  gap: 20rpx;
-  margin-bottom: 24rpx;
+  gap: var(--spacing-lg);
+  margin-bottom: var(--spacing-card);
 }
 
 .action-btn {
@@ -71,34 +72,43 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 12rpx;
-  padding: 24rpx;
+  gap: var(--spacing-md);
+  padding: var(--spacing-lg);
   background: var(--bg-surface);
   border: 4rpx solid var(--border-color);
-  box-shadow: inset 4rpx 4rpx 0px 0px #ffffff, inset -4rpx -4rpx 0px 0px #555555;
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-fast);
 }
 
 .action-btn:active {
-  box-shadow: inset 4rpx 4rpx 0px 0px #555555, inset -4rpx -4rpx 0px 0px #ffffff;
+  box-shadow: var(--shadow-pressed);
+  transform: scale(0.98);
 }
 
 .action-btn.start {
-  background: var(--primary-green);
+  background: var(--primary-orange);
+  box-shadow: inset 4rpx 4rpx 0px 0px #ffcc66, inset -4rpx -4rpx 0px 0px #aa6600;
 }
 
 .action-btn.pause {
-  background: var(--status-trial);
+  background: var(--primary-cyan);
+  box-shadow: inset 4rpx 4rpx 0px 0px #66eeee, inset -4rpx -4rpx 0px 0px #008888;
+}
+
+.action-btn.start:active,
+.action-btn.pause:active {
+  box-shadow: inset 4rpx 4rpx 0px 0px #555555, inset -4rpx -4rpx 0px 0px #ffffff;
 }
 
 .action-emoji {
-  font-size: 32rpx;
+  font-size: var(--icon-md);
 }
 
 .action-text {
-  font-size: 28rpx;
+  font-size: var(--font-base);
   font-weight: bold;
-  color: var(--text-primary);
-  text-shadow: var(--shadow-text);
+  color: var(--text-primary-light);
+  text-shadow: 2rpx 2rpx 0 #000;
 }
 
 /* 时间线区域 */
@@ -106,25 +116,25 @@
   background: var(--bg-card);
   border: 4rpx solid var(--border-color);
   border-radius: 0;
-  padding: 28rpx;
-  box-shadow: inset 4rpx 4rpx 0px 0px #ffffff, inset -4rpx -4rpx 0px 0px #555555;
+  padding: var(--spacing-inner);
+  box-shadow: var(--shadow-md);
 }
 
 .timeline-header {
-  margin-bottom: 24rpx;
+  margin-bottom: var(--spacing-lg);
 }
 
 .timeline-title {
-  font-size: 28rpx;
+  font-size: var(--font-base);
   font-weight: bold;
   color: var(--text-primary);
-  text-shadow: var(--shadow-text);
+  text-shadow: none;
 }
 
 /* 时间线节点 */
 .timeline-node {
   display: flex;
-  margin-bottom: 20rpx;
+  margin-bottom: var(--spacing-lg);
 }
 
 .timeline-node:last-child {
@@ -160,22 +170,30 @@
   position: relative;
   z-index: 1;
   margin-top: 8rpx;
+  transition: all var(--transition-fast);
 }
 
 .node-dot.start {
-  background: var(--primary-green);
+  background: var(--primary-orange);
+  box-shadow: 0 0 8rpx var(--primary-orange);
 }
 
 .node-dot.pause {
-  background: var(--status-trial);
+  background: var(--primary-cyan);
+  box-shadow: 0 0 8rpx var(--primary-cyan);
 }
 
 .node-content {
   flex: 1;
-  padding: 16rpx 20rpx;
+  padding: var(--spacing-md) var(--spacing-lg);
   background: var(--bg-surface);
   border: 4rpx solid var(--border-color);
-  box-shadow: inset 2rpx 2rpx 0px 0px #ffffff, inset -2rpx -2rpx 0px 0px #555555;
+  box-shadow: var(--shadow-pressed);
+  transition: all var(--transition-fast);
+}
+
+.node-content:active {
+  background: var(--bg-surface-dark);
 }
 
 .node-header {
@@ -186,15 +204,15 @@
 }
 
 .node-type {
-  font-size: 26rpx;
+  font-size: var(--font-sm);
   font-weight: bold;
   color: var(--text-primary);
-  text-shadow: var(--shadow-text);
+  text-shadow: none;
 }
 
 .node-date {
-  font-size: 22rpx;
-  color: var(--text-dark);
+  font-size: var(--font-xs);
+  color: var(--text-secondary);
   font-weight: bold;
 }
 
@@ -203,24 +221,25 @@
 }
 
 .duration-text {
-  font-size: 22rpx;
+  font-size: var(--font-xs);
   color: var(--text-secondary);
 }
 
 .node-actions {
   display: flex;
-  gap: 20rpx;
-  margin-top: 12rpx;
-  padding-top: 12rpx;
+  gap: var(--spacing-lg);
+  margin-top: var(--spacing-md);
+  padding-top: var(--spacing-md);
   border-top: 2rpx solid var(--border-color);
 }
 
 .node-action {
-  font-size: 22rpx;
+  font-size: var(--font-xs);
   color: var(--text-secondary);
-  padding: 4rpx 12rpx;
+  padding: 8rpx var(--spacing-md);
   border: 2rpx solid var(--border-color);
   background: var(--bg-card);
+  transition: all var(--transition-fast);
 }
 
 .node-action:active {
@@ -236,43 +255,44 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: 60rpx 0;
+  padding: var(--spacing-xl) 0;
 }
 
 .empty-emoji {
   font-size: 60rpx;
-  margin-bottom: 20rpx;
+  margin-bottom: var(--spacing-lg);
 }
 
 .empty-text {
-  font-size: 28rpx;
+  font-size: var(--font-base);
   color: var(--text-primary);
   font-weight: bold;
-  text-shadow: var(--shadow-text);
-  margin-bottom: 12rpx;
+  text-shadow: none;
+  margin-bottom: var(--spacing-md);
 }
 
 .empty-hint {
-  font-size: 24rpx;
+  font-size: var(--font-sm);
   color: var(--text-secondary);
   font-weight: bold;
 }
 
-/* 弹窗 */
+/* 弹窗 - 优化版 */
 .modal-mask {
   position: fixed;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.75);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.3s ease;
+  transition: opacity var(--transition-normal);
+  backdrop-filter: blur(8rpx);
 }
 
 .modal-mask.show {
@@ -284,24 +304,39 @@
   width: 80%;
   max-width: 600rpx;
   background: var(--bg-card);
-  border: 4rpx solid var(--border-color);
-  box-shadow: inset 4rpx 4rpx 0px 0px #ffffff, inset -4rpx -4rpx 0px 0px #555555;
+  border: 6rpx solid var(--border-color);
+  box-shadow: 
+    var(--shadow-lg),
+    0 0 40rpx rgba(0, 0, 0, 0.5);
+  animation: modalIn var(--transition-normal) ease-out;
+}
+
+@keyframes modalIn {
+  from {
+    opacity: 0;
+    transform: scale(0.9) translateY(20rpx);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
 }
 
 .modal-header {
-  padding: 24rpx;
+  padding: var(--spacing-inner);
   border-bottom: 4rpx solid var(--border-color);
+  background: var(--bg-surface);
 }
 
 .modal-title {
-  font-size: 30rpx;
+  font-size: var(--font-lg);
   font-weight: bold;
   color: var(--text-primary);
-  text-shadow: var(--shadow-text-bold);
+  text-shadow: none;
 }
 
 .modal-body {
-  padding: 32rpx 24rpx;
+  padding: var(--spacing-xl) var(--spacing-inner);
 }
 
 .date-picker-row {
@@ -310,20 +345,25 @@
 }
 
 .picker-label {
-  font-size: 28rpx;
+  font-size: var(--font-base);
   color: var(--text-primary);
   font-weight: bold;
-  text-shadow: var(--shadow-text);
+  text-shadow: none;
 }
 
 .picker-value {
-  padding: 12rpx 24rpx;
+  padding: var(--spacing-md) var(--spacing-lg);
   background: var(--bg-surface);
   border: 4rpx solid var(--border-color);
-  box-shadow: inset 2rpx 2rpx 0px 0px #ffffff, inset -2rpx -2rpx 0px 0px #555555;
-  font-size: 28rpx;
+  box-shadow: var(--shadow-sm);
+  font-size: var(--font-base);
   color: var(--text-primary);
   font-weight: bold;
+  transition: all var(--transition-fast);
+}
+
+.picker-value:active {
+  box-shadow: var(--shadow-pressed);
 }
 
 .modal-footer {
@@ -333,12 +373,13 @@
 
 .modal-btn {
   flex: 1;
-  padding: 24rpx;
+  padding: var(--spacing-lg);
   text-align: center;
-  font-size: 28rpx;
+  font-size: var(--font-base);
   font-weight: bold;
   color: var(--text-primary);
-  text-shadow: var(--shadow-text);
+  text-shadow: none;
+  transition: all var(--transition-fast);
 }
 
 .modal-btn.cancel {
@@ -352,9 +393,10 @@
 
 .modal-btn:active {
   box-shadow: inset 2rpx 2rpx 0px 0px #555555;
+  transform: scale(0.98);
 }
 
 /* 底部安全距离 */
 .bottom-safe {
-  height: 40rpx;
+  height: var(--safe-area-bottom-sm);
 }

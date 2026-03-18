@@ -1,6 +1,6 @@
 /**
  * SkateGoal 全局样式
- * Minecraft 风格配色方案
+ * Minecraft 风格配色方案 - 优化版
  */
 
 @import "./styles/theme.wxss";
@@ -8,19 +8,16 @@
 /* Reset */
 page {
   background-color: var(--bg-dark);
-  /* 使用 CSS 绘制简单的泥土背景像素纹理 */
+  /* 使用 CSS 绘制优化后的泥土背景像素纹理 */
   background-image: 
-    radial-gradient(#2d1e11 15%, transparent 16%),
-    radial-gradient(#2d1e11 15%, transparent 16%);
-  background-size: 32rpx 32rpx;
-  background-position: 0 0, 16rpx 16rpx;
+    radial-gradient(circle at 25% 25%, rgba(74, 53, 32, 0.8) 2rpx, transparent 2rpx),
+    radial-gradient(circle at 75% 75%, rgba(45, 30, 17, 0.6) 2rpx, transparent 2rpx);
+  background-size: 24rpx 24rpx;
   min-height: 100%;
   font-size: 28rpx;
   line-height: 1.6;
   color: var(--text-primary);
-  /* MC 风格一般要有文字阴影 */
-  text-shadow: var(--shadow-text);
-  font-family: 'Courier New', Courier, monospace, 'PingFang SC', sans-serif; /* 替换为等宽或者方正像素字体 */
+  font-family: 'Courier New', Courier, monospace, 'PingFang SC', sans-serif;
 }
 
 /* 通用容器 */
@@ -37,8 +34,8 @@ page {
   background: var(--bg-card);
   border: 4rpx solid var(--border-color);
   border-radius: var(--radius-md);
-  padding: 28rpx;
-  margin: 20rpx;
+  padding: var(--spacing-inner);
+  margin: var(--spacing-card);
   box-shadow: var(--shadow-md);
   position: relative;
 }
@@ -47,7 +44,7 @@ page {
   content: "";
   position: absolute;
   top: 0; left: 0; right: 0; bottom: 0;
-  border: 4rpx solid #ffffff;
+  border: 4rpx solid rgba(255, 255, 255, 0.3);
   pointer-events: none;
 }
 
@@ -70,40 +67,49 @@ page {
   padding: 8rpx 20rpx;
   border: 4rpx solid var(--border-color);
   background: var(--bg-surface);
-  color: var(--text-primary);
-  font-size: 24rpx;
-  box-shadow: inset 4rpx 4rpx 0px 0px #ffffff, inset -4rpx -4rpx 0px 0px #555555;
+  color: var(--text-primary-light);
+  font-size: var(--font-sm);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-fast);
 }
 
 .pill-active {
   background: var(--bg-card);
-  color: var(--primary-yellow);
-  box-shadow: inset 4rpx 4rpx 0px 0px #555555, inset -4rpx -4rpx 0px 0px #ffffff;
+  color: var(--text-primary);
+  box-shadow: var(--shadow-pressed);
 }
 
-/* 状态点 */
+/* 状态点 - 优化辨识度 */
 .status-dot {
-  width: 16rpx;
-  height: 16rpx;
-  background: var(--border-color);
-  border: 2rpx solid #000;
+  width: 18rpx;
+  height: 18rpx;
+  background: var(--status-none);
+  border: 3rpx solid var(--border-color);
+  transition: all var(--transition-fast);
 }
 
 .status-dot.trial {
   background: var(--status-trial);
+  box-shadow: 0 0 8rpx var(--status-trial);
 }
 
 .status-dot.grinding {
   background: var(--status-grinding);
+  box-shadow: 0 0 8rpx var(--status-grinding);
 }
 
 .status-dot.mastered {
   background: var(--status-mastered);
+  box-shadow: 0 0 10rpx var(--status-mastered);
 }
 
-/* 文字样式 */
+/* 文字样式 - 优化对比度 */
 .text-primary {
   color: var(--text-primary);
+}
+
+.text-primary-light {
+  color: var(--text-primary-light);
 }
 
 .text-secondary {
@@ -116,18 +122,38 @@ page {
 
 .text-yellow {
   color: var(--primary-yellow);
+  text-shadow: 2rpx 2rpx 0 #000;
 }
 
 .text-purple {
   color: var(--primary-purple);
+  text-shadow: 2rpx 2rpx 0 #000;
 }
 
 .text-cyan {
   color: var(--status-trial);
+  text-shadow: 2rpx 2rpx 0 #000;
 }
 
 .text-orange {
   color: var(--status-grinding);
+  text-shadow: 2rpx 2rpx 0 #000;
+}
+
+.text-green {
+  color: var(--status-mastered);
+  text-shadow: 2rpx 2rpx 0 #000;
+}
+
+/* 卡片内文字样式 */
+.card-text {
+  color: var(--text-primary);
+  text-shadow: none;
+}
+
+.card-text-secondary {
+  color: var(--text-secondary);
+  text-shadow: none;
 }
 
 /* 字重 */
@@ -143,37 +169,33 @@ page {
   font-weight: 500;
 }
 
-/* 字号 */
+/* 字号 - 使用变量 */
 .text-xs {
-  font-size: 22rpx;
+  font-size: var(--font-xs);
 }
 
 .text-sm {
-  font-size: 26rpx;
+  font-size: var(--font-sm);
 }
 
 .text-base {
-  font-size: 28rpx;
+  font-size: var(--font-base);
 }
 
 .text-lg {
-  font-size: 32rpx;
+  font-size: var(--font-lg);
 }
 
 .text-xl {
-  font-size: 36rpx;
+  font-size: var(--font-xl);
 }
 
 .text-2xl {
-  font-size: 40rpx;
+  font-size: var(--font-2xl);
 }
 
 .text-3xl {
-  font-size: 48rpx;
-}
-
-.text-4xl {
-  font-size: 56rpx;
+  font-size: var(--font-3xl);
 }
 
 /* Flex 布局 */
@@ -210,55 +232,55 @@ page {
 }
 
 .gap-sm {
-  gap: 12rpx;
+  gap: var(--spacing-sm);
 }
 
 .gap-md {
-  gap: 20rpx;
+  gap: var(--spacing-md);
 }
 
 .gap-lg {
-  gap: 28rpx;
+  gap: var(--spacing-lg);
 }
 
-/* 间距 */
+/* 间距 - 统一使用变量 */
 .mt-sm {
-  margin-top: 12rpx;
+  margin-top: var(--spacing-sm);
 }
 
 .mt-md {
-  margin-top: 20rpx;
+  margin-top: var(--spacing-md);
 }
 
 .mt-lg {
-  margin-top: 28rpx;
+  margin-top: var(--spacing-lg);
 }
 
 .mb-sm {
-  margin-bottom: 12rpx;
+  margin-bottom: var(--spacing-sm);
 }
 
 .mb-md {
-  margin-bottom: 20rpx;
+  margin-bottom: var(--spacing-md);
 }
 
 .mb-lg {
-  margin-bottom: 28rpx;
+  margin-bottom: var(--spacing-lg);
 }
 
 .p-sm {
-  padding: 12rpx;
+  padding: var(--spacing-sm);
 }
 
 .p-md {
-  padding: 20rpx;
+  padding: var(--spacing-md);
 }
 
 .p-lg {
-  padding: 28rpx;
+  padding: var(--spacing-lg);
 }
 
-/* 动画 */
+/* 动画 - 添加过渡效果 */
 @keyframes pulse {
   0%, 100% {
     opacity: 1;
@@ -286,6 +308,14 @@ page {
   }
 }
 
+@keyframes celebrate {
+  0% { transform: scale(1); }
+  25% { transform: scale(1.05); }
+  50% { transform: scale(1); }
+  75% { transform: scale(1.03); }
+  100% { transform: scale(1); }
+}
+
 .animate-pulse {
   animation: pulse 2s ease-in-out infinite;
 }
@@ -296,4 +326,40 @@ page {
 
 .animate-glow {
   animation: glow 1.5s ease-in-out infinite;
+}
+
+.animate-celebrate {
+  animation: celebrate 0.5s ease-out;
+}
+
+/* 状态切换动画 */
+.fade-in {
+  animation: fadeIn var(--transition-normal) ease-out;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10rpx); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* 弹窗动画 */
+.slide-up {
+  animation: slideUp var(--transition-normal) ease-out;
+}
+
+@keyframes slideUp {
+  from { transform: translateY(100%); }
+  to { transform: translateY(0); }
+}
+
+/* 骨架屏动画 */
+@keyframes skeleton {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.skeleton {
+  background: linear-gradient(90deg, var(--bg-surface) 25%, var(--bg-card) 50%, var(--bg-surface) 75%);
+  background-size: 200% 100%;
+  animation: skeleton 1.5s infinite;
 }
