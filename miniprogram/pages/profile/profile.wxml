@@ -5,12 +5,13 @@
     <!-- 头像和基本信息 -->
     <view class="card-header">
       <view class="avatar-wrapper">
+        <view class="avatar-steve" wx:if="{{!userInfo.avatar}}"></view>
         <image 
           class="avatar" 
-          src="{{userInfo.avatar || '/images/icons/default-avatar.png'}}"
+          wx:else
+          src="{{userInfo.avatar}}"
           mode="aspectFill"
         />
-        <view class="avatar-glow"></view>
       </view>
       <view class="user-info">
         <text class="nickname">{{userInfo.nickname || '滑板玩家'}}</text>
@@ -20,34 +21,92 @@
     
     <!-- 标签信息 -->
     <view class="user-tags">
-      <view class="tag">
-        <text class="tag-icon">🛹</text>
+      <!-- 脚位标签 - 可点击展开 -->
+      <view class="tag tag-clickable" bindtap="toggleStanceExpand">
+        <text class="tag-icon">🦶</text>
         <text class="tag-text">{{stanceText[userInfo.stance] || 'Regular'}}</text>
+        <text class="tag-arrow {{stanceExpanded ? 'expanded' : ''}}">▼</text>
       </view>
-      <view class="tag">
-        <text class="tag-icon">📅</text>
-        <text class="tag-text">板龄 {{userInfo.yearsSkating || 1}} 年</text>
+      <!-- 板龄标签 - 可点击跳转 -->
+      <view class="tag tag-clickable" bindtap="onSkatingHistoryTap">
+        <text class="tag-icon"></text>
+        <text class="tag-text">板龄 {{yearsSkating}} 年</text>
+        <text class="tag-arrow">›</text>
       </view>
     </view>
     
-    <!-- 头衔 -->
-    <view class="title-wrapper" bindtap="onTitleTap">
-      <view class="title-badge">
-        <text class="title-emoji">{{userInfo.titleEmoji || '🐣'}}</text>
-        <text class="title-text">{{userInfo.title || '板场萌新'}}</text>
+    <!-- 脚位设置面板 -->
+    <view class="stance-panel {{stanceExpanded ? 'show' : ''}}">
+      <view class="stance-option {{userInfo.stance === 'regular' ? 'active' : ''}}" bindtap="setStance" data-stance="regular">
+        <text class="stance-emoji">🦶</text>
+        <text class="stance-name">Regular (左脚前)</text>
+        <text class="stance-check" wx:if="{{userInfo.stance === 'regular'}}">✓</text>
       </view>
-      <text class="title-arrow">›</text>
+      <view class="stance-option {{userInfo.stance === 'goofy' ? 'active' : ''}}" bindtap="setStance" data-stance="goofy">
+        <text class="stance-emoji">🦶</text>
+        <text class="stance-name">Goofy (右脚前)</text>
+        <text class="stance-check" wx:if="{{userInfo.stance === 'goofy'}}">✓</text>
+      </view>
+    </view>
+    
+    <!-- 成就徽章 -->
+    <view class="badges-wrapper">
+      <view class="badges-header">
+        <text class="badges-title">🏆 成就徽章</text>
+        <text class="badges-count">{{unlockedBadges.length}}/{{allBadges.length}}</text>
+      </view>
+      <view class="badges-list">
+        <view 
+          class="badge-item {{item.unlocked ? '' : 'locked'}}" 
+          wx:for="{{allBadges}}" 
+          wx:key="id"
+          bindtap="onBadgeTap"
+          data-badge="{{item}}"
+          data-index="{{index}}"
+        >
+          <text class="badge-emoji">{{item.unlocked ? item.emoji : '🔒'}}</text>
+        </view>
+      </view>
     </view>
   </view>
   
-  <!-- Ollie 专修 -->
-  <view class="ollie-card">
-    <view class="ollie-header">
-      <text class="ollie-title">🛹 Ollie 高度</text>
-      <text class="ollie-unit">(单位: 半立)</text>
+  <!-- 统计概览 -->
+  <view class="stats-card">
+    <view class="stats-header">
+      <text class="stats-title"> 我的招式</text>
     </view>
-    <view class="ollie-content">
-      <view class="ollie-item">
+    <view class="stats-grid">
+      <view class="stat-box mastered stat-clickable" bindtap="onStatTap" data-type="mastered">
+        <text class="stat-num">{{stats.masteredCount || 0}}</text>
+        <text class="stat-label">一脚一个</text>
+      </view>
+      <view class="stat-box trial stat-clickable" bindtap="onStatTap" data-type="trial">
+        <text class="stat-num">{{stats.trialCount || 0}}</text>
+        <text class="stat-label">体验卡</text>
+      </view>
+      <view class="stat-box grinding stat-clickable" bindtap="onStatTap" data-type="grinding">
+        <text class="stat-num">{{stats.grindingCount || 0}}</text>
+        <text class="stat-label">死磕中</text>
+      </view>
+    </view>
+  </view>
+  
+  <!-- Ollie 展示 (可展开设置) -->
+  <view class="ollie-card">
+    <view class="ollie-display" bindtap="toggleOllieExpand">
+      <view class="ollie-main">
+        <text class="ollie-title"> Ollie 高度</text>
+        <view class="ollie-values">
+          <text class="ollie-val-main">{{ollie.normal}}</text>
+          <text class="ollie-val-sub">/ {{ollie.switch}}</text>
+          <text class="ollie-unit">半立</text>
+        </view>
+      </view>
+      <text class="ollie-expand-arrow {{ollieExpanded ? 'expanded' : ''}}">▼</text>
+    </view>
+    <!-- 展开的设置面板 -->
+    <view class="ollie-settings {{ollieExpanded ? 'show' : ''}}">
+      <view class="ollie-setting-item">
         <text class="ollie-label">{{userInfo.stance === 'regular' ? 'Regular' : 'Goofy'}}</text>
         <view class="ollie-control">
           <view class="ollie-btn" bindtap="adjustOllie" data-type="normal" data-delta="-0.5">-</view>
@@ -56,7 +115,7 @@
         </view>
       </view>
       <view class="ollie-divider"></view>
-      <view class="ollie-item">
+      <view class="ollie-setting-item">
         <text class="ollie-label">{{userInfo.stance === 'regular' ? 'Nollie/Fakie' : 'Nollie/Fakie'}}</text>
         <view class="ollie-control">
           <view class="ollie-btn" bindtap="adjustOllie" data-type="switch" data-delta="-0.5">-</view>
@@ -67,68 +126,34 @@
     </view>
   </view>
   
-  <!-- 统计概览 -->
-  <view class="stats-card">
-    <view class="stats-header">
-      <text class="stats-title">🎯 修练进度</text>
-    </view>
-    <view class="stats-content">
-      <view class="stat-item main">
-        <text class="stat-number">{{stats.litCount || 0}}</text>
-        <text class="stat-label">已点亮</text>
-      </view>
-      <view class="stat-divider"></view>
-      <view class="stat-item">
-        <text class="stat-number small mastered">{{stats.masteredCount || 0}}</text>
-        <text class="stat-label">🦶 一脚一个</text>
-      </view>
-      <view class="stat-item">
-        <text class="stat-number small trial">{{stats.trialCount || 0}}</text>
-        <text class="stat-label">🎫 体验卡</text>
-      </view>
-      <view class="stat-item">
-        <text class="stat-number small grinding">{{stats.grindingCount || 0}}</text>
-        <text class="stat-label">🔥 死磕中</text>
-      </view>
-    </view>
-    <!-- 进度条 -->
-    <view class="progress-wrapper">
-      <view class="progress-bar">
-        <view class="progress-fill" style="width: {{stats.progress || 0}}%"></view>
-      </view>
-      <text class="progress-text">{{stats.progress || 0}}%</text>
-    </view>
-  </view>
-  
-  <!-- 解锁新招 -->
-  <view class="action-card" bindtap="onGoToTricks">
-    <text class="action-emoji">🛹</text>
-    <text class="action-text">解锁新招</text>
-    <text class="action-arrow">›</text>
-  </view>
-  
-  <!-- 成就时光轴 -->
+  <!-- 成招记录 -->
   <view class="timeline-card">
     <view class="timeline-header">
-      <text class="timeline-title">📅 成就时光轴</text>
+      <text class="timeline-title"> 成招记录</text>
+      <!-- 解锁新招按钮 -->
+      <view class="unlock-btn" bindtap="onGoToTricks">
+        <text class="unlock-icon"></text>
+        <text class="unlock-text">解锁新招</text>
+        <text class="unlock-arrow">›</text>
+      </view>
     </view>
     
-    <!-- 时光轴列表 -->
-    <view class="timeline-list" wx:if="{{timeline.length > 0}}">
-      <timeline-item 
-        wx:for="{{timeline}}" 
-        wx:key="id"
-        record="{{item}}"
-        isFirst="{{index === 0}}"
-        isLast="{{index === timeline.length - 1}}"
-        bind:tap="onTimelineItemTap"
-      />
-    </view>
+    <!-- 横向滑动时间轴 -->
+    <scroll-view scroll-x class="timeline-scroll" wx:if="{{timeline.length > 0}}">
+      <view class="timeline-horizontal">
+        <view class="timeline-node" wx:for="{{timeline}}" wx:key="id" bindtap="onTimelineNodeTap" data-index="{{index}}">
+          <text class="node-time">{{item.date}}</text>
+          <view class="node-dot {{item.status}}"></view>
+          <text class="node-name">{{item.trickName}}</text>
+          <text class="node-stance">{{item.stance === 'normal' ? 'N' : item.stance === 'fakie' ? 'F' : item.stance === 'switch' ? 'S' : 'No'}}</text>
+        </view>
+      </view>
+    </scroll-view>
     
     <!-- 空状态 -->
-    <view class="timeline-empty" wx:else>
+    <view class="timeline-empty" wx:if="{{timeline.length === 0}}">
       <text class="empty-emoji">🎯</text>
-      <text class="empty-text">还没有成就记录</text>
+      <text class="empty-text">还没有成招记录</text>
       <text class="empty-hint">去动作库点亮你的第一个招式吧！</text>
     </view>
   </view>
@@ -141,4 +166,94 @@
   
   <!-- 底部安全距离 -->
   <view class="bottom-safe"></view>
+</view>
+
+<!-- 徽章详情弹窗 -->
+<view class="badge-modal-mask {{showBadgeModal ? 'show' : ''}}" bindtap="closeBadgeModal" wx:if="{{showBadgeModal}}">
+  <view class="badge-modal" catchtap="preventClose">
+    <view class="badge-modal-header">
+      <view class="badge-modal-icon {{selectedBadge.unlocked ? '' : 'locked'}}">
+        <text class="badge-modal-emoji">{{selectedBadge.unlocked ? selectedBadge.emoji : '🔒'}}</text>
+      </view>
+      <text class="badge-modal-name">{{selectedBadge.name}}</text>
+    </view>
+    <view class="badge-modal-body">
+      <view class="badge-desc">
+        <text class="badge-desc-text">{{selectedBadge.description}}</text>
+      </view>
+      <view class="badge-status">
+        <text class="badge-status-label">状态：</text>
+        <text class="badge-status-value {{selectedBadge.unlocked ? 'unlocked' : 'locked'}}">
+          {{selectedBadge.unlocked ? '已解锁 ✓' : '未解锁'}}
+        </text>
+      </view>
+      <view class="badge-progress" wx:if="{{!selectedBadge.unlocked && selectedBadge.progress !== undefined}}">
+        <text class="badge-progress-label">进度：</text>
+        <view class="badge-progress-bar">
+          <view class="badge-progress-fill" style="width: {{selectedBadge.progressPercent}}%"></view>
+        </view>
+        <text class="badge-progress-text">{{selectedBadge.progressText}}</text>
+      </view>
+    </view>
+    <view class="badge-modal-footer">
+      <view class="badge-modal-btn" bindtap="closeBadgeModal">知道了</view>
+    </view>
+  </view>
+</view>
+
+<!-- 招式列表弹窗 -->
+<view class="trick-list-modal-mask {{showTrickListModal ? 'show' : ''}}" bindtap="closeTrickListModal" wx:if="{{showTrickListModal}}">
+  <view class="trick-list-modal" catchtap="preventClose">
+    <view class="trick-list-header">
+      <text class="trick-list-title">{{trickListTitle}}</text>
+      <text class="trick-list-count">{{trickList.length}} 个</text>
+    </view>
+    <scroll-view scroll-y class="trick-list-body">
+      <view class="trick-list-item" wx:for="{{trickList}}" wx:key="id">
+        <text class="trick-item-emoji">{{item.emoji || '🛹'}}</text>
+        <view class="trick-item-info">
+          <text class="trick-item-name">{{item.name}}</text>
+          <text class="trick-item-stance" wx:if="{{item.stance}}">{{item.stance}}</text>
+        </view>
+        <text class="trick-item-date" wx:if="{{item.date}}">{{item.date}}</text>
+      </view>
+      <view class="trick-list-empty" wx:if="{{trickList.length === 0}}">
+        <text class="trick-list-empty-text">暂无招式</text>
+      </view>
+    </scroll-view>
+    <view class="trick-list-footer">
+      <view class="trick-list-btn" bindtap="closeTrickListModal">关闭</view>
+    </view>
+  </view>
+</view>
+
+<!-- 成招详情弹窗 -->
+<view class="badge-modal-mask {{showTimelineDetail ? 'show' : ''}}" bindtap="closeTimelineDetail" wx:if="{{showTimelineDetail}}">
+  <view class="badge-modal" catchtap="preventClose">
+    <view class="badge-modal-header">
+      <view class="badge-modal-icon {{selectedTimeline.status}}">
+        <text class="badge-modal-emoji">{{selectedTimeline.emoji || '🛹'}}</text>
+      </view>
+      <text class="badge-modal-name">{{selectedTimeline.trickName}}</text>
+    </view>
+    <view class="badge-modal-body">
+      <view class="timeline-detail-row">
+        <text class="timeline-detail-label">脚位</text>
+        <text class="timeline-detail-value">{{selectedTimeline.stance}}</text>
+      </view>
+      <view class="timeline-detail-row">
+        <text class="timeline-detail-label">熟练度</text>
+        <text class="timeline-detail-value status-{{selectedTimeline.status}}">
+          {{selectedTimeline.status === 'mastered' ? '一脚一个' : selectedTimeline.status === 'trial' ? '体验卡' : '死磕中'}}
+        </text>
+      </view>
+      <view class="timeline-detail-row">
+        <text class="timeline-detail-label">记录日期</text>
+        <text class="timeline-detail-value">{{selectedTimeline.date}}</text>
+      </view>
+    </view>
+    <view class="badge-modal-footer">
+      <view class="badge-modal-btn" bindtap="closeTimelineDetail">知道了</view>
+    </view>
+  </view>
 </view>

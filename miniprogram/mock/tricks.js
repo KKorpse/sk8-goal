@@ -53,15 +53,6 @@ const tricks = [
 
   // ========== 平地基础 - Ollie 系列 ==========
   {
-    id: 'ollie',
-    name: 'Ollie',
-    nameCn: '豚跳',
-    category: 'flat',
-    group: 'Ollie 系列',
-    icon: '🦘',
-    description: '滑板最核心的跳跃动作，一切招式的基础'
-  },
-  {
     id: 'bs-180',
     name: 'BS 180',
     nameCn: '背转180',

@@ -1,23 +1,23 @@
 {
-  "projectname": "SkateGoal",
-  "setting": {
-    "urlCheck": true,
-    "coverView": true,
-    "lazyloadPlaceholderEnable": false,
-    "skylineRenderEnable": false,
-    "preloadBackgroundData": false,
-    "autoAudits": false,
-    "useApiHook": true,
-    "showShadowRootInWxmlPanel": false,
-    "useStaticServer": true,
-    "useLanDebug": false,
-    "showES6CompileOption": false,
-    "compileHotReLoad": true,
-    "bigPackageSizeSupport": false,
-    "checkInvalidKey": true,
-    "useIsolateContext": false,
-    "ignoreDevUnusedFiles": true,
-    "useApiHostProcess": true
-  },
-  "libVersion": "3.14.3"
+    "projectname": "SkateGoal",
+    "setting": {
+        "urlCheck": true,
+        "coverView": true,
+        "lazyloadPlaceholderEnable": false,
+        "skylineRenderEnable": false,
+        "preloadBackgroundData": false,
+        "autoAudits": false,
+        "useApiHook": true,
+        "showShadowRootInWxmlPanel": false,
+        "useStaticServer": true,
+        "useLanDebug": false,
+        "showES6CompileOption": false,
+        "compileHotReLoad": true,
+        "bigPackageSizeSupport": false,
+        "checkInvalidKey": true,
+        "useIsolateContext": false,
+        "ignoreDevUnusedFiles": true,
+        "useApiHostProcess": true
+    },
+    "libVersion": "3.14.3"
 }

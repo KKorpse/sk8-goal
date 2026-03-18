@@ -147,10 +147,9 @@ function updateTrickStatus(trickId, stance, status) {
     return { success: false, error: 'Storage failed' }
   }
   
-  // 如果是有效的进度（非 none 且非降级到 grinding），添加时光轴记录
+  // 如果是有效的进度（非 none），添加时光轴记录
   let timelineRecord = null
-  if (status !== 'none' && (status === 'trial' || status === 'mastered')) {
-    // 只记录 trial 和 mastered（死磕中不记录到时光轴）
+  if (status !== 'none') {
     timelineRecord = {
       id: util.generateId(),
       trickId: trickId,
@@ -174,31 +173,30 @@ function updateTrickStatus(trickId, stance, status) {
 
 /**
  * 获取统计数据
+ * 所有统计都基于 timeline（成招记录）
  * @returns {Object}
  */
 function getStats() {
-  const progress = storageService.getUserProgress()
+  const timeline = storageService.getTimeline()
   const totalTricks = mockTricks.getAllTricks().length
   
+  // 从成招记录统计三种状态
   let masteredCount = 0  // 一脚一个
   let trialCount = 0     // 体验卡
   let grindingCount = 0  // 死磕中
-  let totalStances = 0   // 总脚位数（每个招式4个脚位）
   
-  Object.values(progress).forEach(stances => {
-    Object.values(stances).forEach(status => {
-      if (status === 'mastered') {
-        masteredCount++
-      } else if (status === 'trial') {
-        trialCount++
-      } else if (status === 'grinding') {
-        grindingCount++
-      }
-    })
+  timeline.forEach(record => {
+    if (record.status === 'mastered') {
+      masteredCount++
+    } else if (record.status === 'trial') {
+      trialCount++
+    } else if (record.status === 'grinding') {
+      grindingCount++
+    }
   })
   
-  // 已点亮 = 一脚一个 + 体验卡
-  const litCount = masteredCount + trialCount
+  // 已点亮 = 全部三种状态
+  const litCount = masteredCount + trialCount + grindingCount
   
   return {
     totalTricks,

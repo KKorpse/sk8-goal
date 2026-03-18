@@ -47,13 +47,9 @@ function updateUserInfo(updates) {
  * @returns {Array}
  */
 function getTimeline(limit = 50) {
-  let timeline = storageService.getTimeline()
+  let timeline = storageService.getTimeline() || []
   
-  // 如果没有时光轴数据，使用示例数据
-  if (!timeline || timeline.length === 0) {
-    timeline = [...mockUser.sampleTimeline]
-    storageService.setTimeline(timeline)
-  }
+  // 不再自动填充示例数据，保持为空，需要用户手动添加成就
   
   // 按时间倒序排列
   timeline.sort((a, b) => b.timestamp - a.timestamp)
@@ -93,10 +89,65 @@ function initSampleData() {
   // 设置示例进度
   storageService.setUserProgress(mockUser.sampleUserProgress)
   
-  // 设置示例时光轴
-  storageService.setTimeline(mockUser.sampleTimeline)
+  // 同步 progress 到 timeline（trial 和 mastered 才算成招）
+  syncProgressToTimeline()
   
   return true
+}
+
+/**
+ * 同步 progress 数据到 timeline
+ * 确保 progress 中非 none 的状态都有对应的 timeline 记录
+ */
+function syncProgressToTimeline() {
+  const progress = storageService.getUserProgress()
+  const timeline = storageService.getTimeline()
+  const allTricks = require('../mock/tricks').getAllTricks()
+  const util = require('../utils/util')
+  
+  // 构建 timeline 中已有的记录 key
+  const existingKeys = new Set()
+  timeline.forEach(r => {
+    existingKeys.add(`${r.trickId}-${r.stance}`)
+  })
+  
+  // 构建招式 ID 到名称的映射
+  const trickMap = {}
+  allTricks.forEach(t => {
+    trickMap[t.id] = t
+  })
+  
+  // 检查 progress 中非 none 的状态是否在 timeline 中
+  let hasNewRecords = false
+  Object.entries(progress).forEach(([trickId, stances]) => {
+    Object.entries(stances).forEach(([stance, status]) => {
+      const key = `${trickId}-${stance}`
+      // 非 none 的状态都要记录到 timeline
+      if (status !== 'none' && !existingKeys.has(key)) {
+        const trick = trickMap[trickId]
+        if (trick) {
+          timeline.unshift({
+            id: util.generateId(),
+            trickId: trickId,
+            trickName: trick.name,
+            stance: stance,
+            status: status,
+            date: util.formatDate(new Date()),
+            timestamp: Date.now()
+          })
+          hasNewRecords = true
+        }
+      }
+    })
+  })
+  
+  // 保存更新后的 timeline
+  if (hasNewRecords) {
+    timeline.sort((a, b) => b.timestamp - a.timestamp)
+    storageService.setTimeline(timeline)
+  }
+  
+  return hasNewRecords
 }
 
 /**
@@ -132,6 +183,7 @@ module.exports = {
   getTimeline,
   getUserStats,
   initSampleData,
+  syncProgressToTimeline,
   getAllTitles,
   resetAllData
 }

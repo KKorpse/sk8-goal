@@ -1,0 +1,91 @@
+<!--滑板历史页面-->
+<view class="history-page">
+  <!-- 顶部统计 -->
+  <view class="summary-card">
+    <view class="summary-header">
+      <text class="summary-title">📅 滑板历程</text>
+    </view>
+    <view class="summary-content">
+      <view class="summary-item">
+        <text class="summary-value">{{yearsSkating}}</text>
+        <text class="summary-label">年</text>
+      </view>
+      <view class="summary-divider"></view>
+      <view class="summary-item">
+        <text class="summary-value">{{history.length}}</text>
+        <text class="summary-label">个节点</text>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 操作按钮 -->
+  <view class="action-bar">
+    <view class="action-btn start" bindtap="addStartNode">
+      <text class="action-emoji">▶️</text>
+      <text class="action-text">开始滑板</text>
+    </view>
+    <view class="action-btn pause" bindtap="addPauseNode">
+      <text class="action-emoji">⏸️</text>
+      <text class="action-text">暂停滑板</text>
+    </view>
+  </view>
+  
+  <!-- 时间线 -->
+  <view class="timeline-section">
+    <view class="timeline-header">
+      <text class="timeline-title">时间线</text>
+    </view>
+    
+    <view class="timeline-list" wx:if="{{history.length > 0}}">
+      <view class="timeline-node" wx:for="{{history}}" wx:key="id">
+        <view class="node-line {{index === 0 ? 'first' : ''}}">
+          <view class="node-dot {{item.type === 'start' ? 'start' : 'pause'}}"></view>
+        </view>
+        <view class="node-content">
+          <view class="node-header">
+            <text class="node-type">{{item.type === 'start' ? '▶️ 开始' : '⏸️ 暂停'}}</text>
+            <text class="node-date">{{item.dateStr}}</text>
+          </view>
+          <view class="node-duration" wx:if="{{item.duration}}">
+            <text class="duration-text">持续 {{item.duration}}</text>
+          </view>
+          <view class="node-actions">
+            <text class="node-action" catchtap="editNode" data-id="{{item.id}}" data-index="{{index}}">编辑</text>
+            <text class="node-action delete" catchtap="deleteNode" data-id="{{item.id}}" data-index="{{index}}">删除</text>
+          </view>
+        </view>
+      </view>
+    </view>
+    
+    <!-- 空状态 -->
+    <view class="empty-state" wx:else>
+      <text class="empty-emoji">🛹</text>
+      <text class="empty-text">还没有滑板记录</text>
+      <text class="empty-hint">点击上方按钮添加你的滑板历程</text>
+    </view>
+  </view>
+  
+  <!-- 底部安全距离 -->
+  <view class="bottom-safe"></view>
+</view>
+
+<!-- 日期选择弹窗 -->
+<view class="modal-mask {{showModal ? 'show' : ''}}" bindtap="closeModal" wx:if="{{showModal}}">
+  <view class="modal-content" catchtap="preventClose">
+    <view class="modal-header">
+      <text class="modal-title">{{editingNode ? '编辑节点' : (nodeType === 'start' ? '开始滑板' : '暂停滑板')}}</text>
+    </view>
+    <view class="modal-body">
+      <view class="date-picker-row">
+        <text class="picker-label">日期：</text>
+        <picker mode="date" value="{{selectedDate}}" start="1990-01-01" end="{{today}}" bindchange="onDateChange">
+          <view class="picker-value">{{selectedDate}}</view>
+        </picker>
+      </view>
+    </view>
+    <view class="modal-footer">
+      <view class="modal-btn cancel" bindtap="closeModal">取消</view>
+      <view class="modal-btn confirm" bindtap="confirmNode">确定</view>
+    </view>
+  </view>
+</view>

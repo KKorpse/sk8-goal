@@ -3,12 +3,17 @@
  * 小程序入口文件
  */
 
+const userService = require('./services/userService')
+
 App({
   onLaunch(opts) {
     console.log('🛹 SkateGoal Launch', opts)
     
     // 初始化用户数据
     this.initUserData()
+    
+    // 同步 progress 到 timeline（确保数据一致性）
+    userService.syncProgressToTimeline()
   },
 
   onShow(opts) {
@@ -23,6 +28,9 @@ App({
    * 初始化用户数据
    */
   initUserData() {
+    // 初始化示例数据（首次使用）
+    userService.initSampleData()
+    
     // 从本地存储读取用户数据
     const userInfo = wx.getStorageSync('userInfo')
     const userProgress = wx.getStorageSync('userProgress')

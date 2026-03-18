@@ -16,100 +16,15 @@ const defaultUserInfo = {
 // 示例用户进度数据
 const sampleUserProgress = {
   'pushing': {
-    normal: 'mastered',
-    fakie: 'mastered',
-    switch: 'grinding',
-    nollie: 'trial'
-  },
-  'ollie': {
-    normal: 'mastered',
-    fakie: 'trial',
-    switch: 'grinding',
-    nollie: 'none'
-  },
-  'kickflip': {
     normal: 'trial',
-    fakie: 'none',
-    switch: 'none',
-    nollie: 'none'
-  },
-  'manual': {
-    normal: 'mastered',
-    fakie: 'grinding',
-    switch: 'none',
-    nollie: 'none'
-  },
-  'bs-180': {
-    normal: 'trial',
-    fakie: 'none',
-    switch: 'none',
-    nollie: 'none'
-  },
-  'pop-shuvit': {
-    normal: 'grinding',
     fakie: 'none',
     switch: 'none',
     nollie: 'none'
   }
 }
 
-// 示例时光轴数据
-const sampleTimeline = [
-  {
-    id: 't1',
-    trickId: 'kickflip',
-    trickName: 'Kickflip',
-    stance: 'normal',
-    status: 'trial',
-    date: '2026.03.15',
-    timestamp: 1773763200000
-  },
-  {
-    id: 't2',
-    trickId: 'ollie',
-    trickName: 'Ollie',
-    stance: 'fakie',
-    status: 'trial',
-    date: '2026.03.10',
-    timestamp: 1773331200000
-  },
-  {
-    id: 't3',
-    trickId: 'ollie',
-    trickName: 'Ollie',
-    stance: 'normal',
-    status: 'mastered',
-    date: '2026.02.20',
-    timestamp: 1771804800000
-  },
-  {
-    id: 't4',
-    trickId: 'manual',
-    trickName: 'Manual',
-    stance: 'normal',
-    status: 'mastered',
-    date: '2026.02.01',
-    timestamp: 1770163200000
-  },
-  {
-    id: 't5',
-    trickId: 'pushing',
-    trickName: 'Pushing',
-    stance: 'normal',
-    status: 'mastered',
-    date: '2026.01.15',
-    timestamp: 1768694400000
-  },
-  {
-    id: 't6',
-    trickId: 'pushing',
-    trickName: 'Pushing',
-    stance: 'fakie',
-    status: 'mastered',
-    date: '2026.01.20',
-    timestamp: 1769126400000
-  }
-]
+// 示例时光轴数据（默认为空，用户手动解锁招式时添加）
+const sampleTimeline = []
 
 // 头衔配置
 const titles = [
