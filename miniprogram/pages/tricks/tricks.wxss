@@ -117,5 +117,5 @@
 
 /* 底部安全距离 */
 .bottom-safe {
-  height: calc(120rpx + env(safe-area-inset-bottom));
+  height: calc(200rpx + env(safe-area-inset-bottom));
 }
