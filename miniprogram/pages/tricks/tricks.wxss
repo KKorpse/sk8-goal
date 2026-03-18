@@ -2,7 +2,7 @@
 
 .tricks-page {
   min-height: 100vh;
-  background: var(--bg-dark);
+  background: transparent;
 }
 
 /* 顶部固定区域 */
@@ -10,8 +10,15 @@
   position: sticky;
   top: 0;
   z-index: 100;
-  background: linear-gradient(180deg, var(--bg-dark) 0%, var(--bg-dark) 90%, transparent 100%);
+  /* 泥土背景 */
+  background-image: 
+    radial-gradient(#2d1e11 15%, transparent 16%),
+    radial-gradient(#2d1e11 15%, transparent 16%);
+  background-size: 32rpx 32rpx;
+  background-position: 0 0, 16rpx 16rpx;
+  background-color: var(--bg-dark);
   padding-bottom: 10rpx;
+  border-bottom: 4rpx solid #000;
 }
 
 /* 招式列表 */
@@ -32,9 +39,9 @@
   width: 60rpx;
   height: 60rpx;
   border: 4rpx solid var(--border-color);
-  border-top-color: var(--primary-purple);
-  border-radius: 50%;
-  animation: spin 1s linear infinite;
+  border-top-color: var(--primary-yellow);
+  border-radius: 0;
+  animation: spin 1s steps(8, end) infinite;
 }
 
 @keyframes spin {
@@ -47,6 +54,7 @@
   margin-top: 20rpx;
   font-size: 26rpx;
   color: var(--text-secondary);
+  font-weight: bold;
 }
 
 /* 空状态 */
@@ -67,11 +75,14 @@
   font-size: 30rpx;
   color: var(--text-primary);
   margin-bottom: 12rpx;
+  font-weight: bold;
+  text-shadow: var(--shadow-text);
 }
 
 .empty-hint {
   font-size: 26rpx;
-  color: var(--text-muted);
+  color: var(--text-secondary);
+  font-weight: bold;
 }
 
 /* 招式分组 */
@@ -86,17 +97,18 @@
 }
 
 .group-line {
-  width: 6rpx;
+  width: 16rpx;
   height: 32rpx;
   background: var(--primary-purple);
-  border-radius: 3rpx;
+  border: 2rpx solid #000;
   margin-right: 16rpx;
 }
 
 .group-title {
   font-size: 28rpx;
-  font-weight: 600;
-  color: var(--text-secondary);
+  font-weight: bold;
+  color: var(--text-primary);
+  text-shadow: var(--shadow-text);
 }
 
 .group-content {

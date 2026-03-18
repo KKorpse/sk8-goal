@@ -1,6 +1,6 @@
 /**
  * SkateGoal 全局样式
- * 荒野乱斗风格配色方案
+ * Minecraft 风格配色方案
  */
 
 @import "./styles/theme.wxss";
@@ -8,11 +8,19 @@
 /* Reset */
 page {
   background-color: var(--bg-dark);
+  /* 使用 CSS 绘制简单的泥土背景像素纹理 */
+  background-image: 
+    radial-gradient(#2d1e11 15%, transparent 16%),
+    radial-gradient(#2d1e11 15%, transparent 16%);
+  background-size: 32rpx 32rpx;
+  background-position: 0 0, 16rpx 16rpx;
   min-height: 100%;
   font-size: 28rpx;
   line-height: 1.6;
   color: var(--text-primary);
-  font-family: -apple-system, BlinkMacSystemFont, 'PingFang SC', 'Helvetica Neue', sans-serif;
+  /* MC 风格一般要有文字阴影 */
+  text-shadow: var(--shadow-text);
+  font-family: 'Courier New', Courier, monospace, 'PingFang SC', sans-serif; /* 替换为等宽或者方正像素字体 */
 }
 
 /* 通用容器 */
@@ -24,57 +32,73 @@ page {
   padding-bottom: env(safe-area-inset-bottom);
 }
 
-/* 卡片基础样式 */
+/* 卡片基础样式 - MC Stone UI */
 .card {
   background: var(--bg-card);
-  border-radius: 20rpx;
+  border: 4rpx solid var(--border-color);
+  border-radius: var(--radius-md);
   padding: 28rpx;
   margin: 20rpx;
-  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.3);
+  box-shadow: var(--shadow-md);
+  position: relative;
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  border: 4rpx solid #ffffff;
+  pointer-events: none;
+}
+
+.card::after {
+  content: "";
+  position: absolute;
+  top: 4rpx; left: 4rpx; right: 4rpx; bottom: 4rpx;
+  border: 4rpx solid #555555;
+  pointer-events: none;
 }
 
 .card-glow {
-  box-shadow: 0 8rpx 32rpx rgba(139, 92, 246, 0.2);
+  box-shadow: var(--shadow-purple);
 }
 
-/* 胶囊标签 */
+/* 胶囊标签 (改为 MC 按钮风格) */
 .pill {
   display: inline-flex;
   align-items: center;
   padding: 8rpx 20rpx;
-  border-radius: 999rpx;
-  background: var(--bg-card-light);
-  color: var(--text-secondary);
+  border: 4rpx solid var(--border-color);
+  background: var(--bg-surface);
+  color: var(--text-primary);
   font-size: 24rpx;
+  box-shadow: inset 4rpx 4rpx 0px 0px #ffffff, inset -4rpx -4rpx 0px 0px #555555;
 }
 
 .pill-active {
-  background: linear-gradient(135deg, var(--primary-purple), #6366F1);
-  color: var(--text-primary);
-  box-shadow: 0 4rpx 16rpx rgba(139, 92, 246, 0.4);
+  background: var(--bg-card);
+  color: var(--primary-yellow);
+  box-shadow: inset 4rpx 4rpx 0px 0px #555555, inset -4rpx -4rpx 0px 0px #ffffff;
 }
 
 /* 状态点 */
 .status-dot {
   width: 16rpx;
   height: 16rpx;
-  border-radius: 50%;
   background: var(--border-color);
+  border: 2rpx solid #000;
 }
 
 .status-dot.trial {
   background: var(--status-trial);
-  box-shadow: 0 0 8rpx var(--status-trial);
 }
 
 .status-dot.grinding {
   background: var(--status-grinding);
-  box-shadow: 0 0 8rpx var(--status-grinding);
 }
 
 .status-dot.mastered {
   background: var(--status-mastered);
-  box-shadow: 0 0 8rpx var(--status-mastered);
 }
 
 /* 文字样式 */

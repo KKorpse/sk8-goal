@@ -20,8 +20,9 @@
 
 .date-text {
   font-size: 22rpx;
-  color: var(--text-muted);
-  font-weight: 500;
+  color: var(--text-secondary);
+  font-weight: bold;
+  text-shadow: 2rpx 2rpx 0 #000;
 }
 
 /* 时间轴轨道 */
@@ -34,9 +35,10 @@
 
 .line-top,
 .line-bottom {
-  width: 4rpx;
-  background: linear-gradient(180deg, var(--primary-purple), var(--status-trial));
-  opacity: 0.5;
+  width: 6rpx;
+  background: var(--text-dark);
+  border-left: 2rpx solid #000;
+  border-right: 2rpx solid #000;
 }
 
 .line-top {
@@ -56,14 +58,14 @@
 .node {
   width: 40rpx;
   height: 40rpx;
-  border-radius: 50%;
-  background: var(--bg-card-light);
-  border: 3rpx solid var(--border-color);
+  border-radius: 0;
+  background: var(--bg-card);
+  border: 4rpx solid var(--border-color);
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: all 0.3s ease;
   z-index: 1;
+  box-shadow: inset 2rpx 2rpx 0px 0px #ffffff, inset -2rpx -2rpx 0px 0px #555555;
 }
 
 .node-emoji {
@@ -72,21 +74,17 @@
 
 /* 节点状态样式 */
 .node.trial {
-  border-color: var(--status-trial);
-  box-shadow: 0 0 12rpx var(--status-trial);
+  background: var(--status-trial);
 }
 
 .node.grinding {
-  border-color: var(--status-grinding);
-  box-shadow: 0 0 12rpx var(--status-grinding);
+  background: var(--status-grinding);
 }
 
 .node.mastered {
   width: 48rpx;
   height: 48rpx;
-  border-color: var(--status-mastered);
-  box-shadow: 0 0 16rpx var(--status-mastered);
-  background: rgba(251, 191, 36, 0.2);
+  background: var(--status-mastered);
 }
 
 .node.mastered .node-emoji {
@@ -101,25 +99,24 @@
 
 .content-card {
   background: var(--bg-card);
-  border-radius: 16rpx;
+  border-radius: 0;
   padding: 20rpx 24rpx;
-  border: 2rpx solid var(--border-color);
-  transition: all 0.3s ease;
+  border: 4rpx solid var(--border-color);
+  box-shadow: inset 4rpx 4rpx 0px 0px #ffffff, inset -4rpx -4rpx 0px 0px #555555;
 }
 
 /* 卡片状态样式 */
 .content-card.trial {
-  border-color: rgba(34, 211, 238, 0.3);
+  border-color: var(--status-trial);
 }
 
 .content-card.grinding {
-  border-color: rgba(249, 115, 22, 0.3);
+  border-color: var(--status-grinding);
 }
 
 .content-card.mastered {
   border-color: var(--status-mastered);
-  box-shadow: 0 4rpx 16rpx rgba(251, 191, 36, 0.2);
-  background: linear-gradient(135deg, var(--bg-card) 0%, rgba(251, 191, 36, 0.1) 100%);
+  background: var(--bg-card-light);
 }
 
 .card-header {
@@ -131,16 +128,18 @@
 
 .trick-name {
   font-size: 28rpx;
-  font-weight: 600;
+  font-weight: bold;
   color: var(--text-primary);
+  text-shadow: var(--shadow-text);
 }
 
 .stance-tag {
   font-size: 20rpx;
-  color: var(--text-secondary);
-  background: var(--bg-card-light);
+  color: var(--text-primary);
+  background: var(--bg-surface);
+  border: 2rpx solid var(--border-color);
   padding: 4rpx 12rpx;
-  border-radius: 999rpx;
+  border-radius: 0;
 }
 
 .card-status {
@@ -155,11 +154,12 @@
 
 .status-text {
   font-size: 24rpx;
-  color: var(--text-secondary);
+  color: var(--text-dark);
+  font-weight: bold;
 }
 
 /* mastered 状态的文字高亮 */
 .timeline-item.mastered .status-text {
   color: var(--status-mastered);
-  font-weight: 500;
+  text-shadow: 2rpx 2rpx 0 #000;
 }

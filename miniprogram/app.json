@@ -6,15 +6,15 @@
   "window": {
     "navigationBarTextStyle": "white",
     "navigationBarTitleText": "SkateGoal",
-    "navigationBarBackgroundColor": "#1A1A2E",
-    "backgroundColor": "#1A1A2E",
+    "navigationBarBackgroundColor": "#3b2818",
+    "backgroundColor": "#3b2818",
     "backgroundTextStyle": "light"
   },
   "tabBar": {
-    "color": "#64748B",
-    "selectedColor": "#FBBF24",
+    "color": "#e0e0e0",
+    "selectedColor": "#FFFF55",
     "borderStyle": "black",
-    "backgroundColor": "#16213E",
+    "backgroundColor": "#c6c6c6",
     "list": [
       {
         "pagePath": "pages/tricks/tricks",

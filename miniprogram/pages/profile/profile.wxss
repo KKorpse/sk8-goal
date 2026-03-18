@@ -2,17 +2,18 @@
 
 .profile-page {
   min-height: 100vh;
-  background: var(--bg-dark);
+  background: transparent;
   padding: 20rpx;
 }
 
 /* 个人信息卡片 */
 .profile-card {
-  background: linear-gradient(180deg, var(--bg-card) 0%, var(--bg-surface) 100%);
-  border-radius: 24rpx;
+  background: var(--bg-card);
+  border: 4rpx solid var(--border-color);
+  border-radius: 0;
   padding: 32rpx;
   margin-bottom: 24rpx;
-  box-shadow: 0 8rpx 32rpx rgba(0, 0, 0, 0.3);
+  box-shadow: inset 4rpx 4rpx 0px 0px #ffffff, inset -4rpx -4rpx 0px 0px #555555;
 }
 
 .card-header {
@@ -29,21 +30,14 @@
 .avatar {
   width: 120rpx;
   height: 120rpx;
-  border-radius: 50%;
-  border: 4rpx solid var(--primary-purple);
+  border-radius: 0;
+  border: 4rpx solid var(--border-color);
   background: var(--bg-card-light);
+  box-shadow: inset 4rpx 4rpx 0px 0px #ffffff, inset -4rpx -4rpx 0px 0px #555555;
 }
 
 .avatar-glow {
-  position: absolute;
-  top: -4rpx;
-  left: -4rpx;
-  right: -4rpx;
-  bottom: -4rpx;
-  border-radius: 50%;
-  box-shadow: 0 0 20rpx var(--primary-purple);
-  opacity: 0.5;
-  pointer-events: none;
+  display: none;
 }
 
 .user-info {
@@ -53,14 +47,16 @@
 
 .nickname {
   font-size: 40rpx;
-  font-weight: 700;
+  font-weight: bold;
   color: var(--text-primary);
+  text-shadow: var(--shadow-text);
   margin-bottom: 8rpx;
 }
 
 .user-id {
   font-size: 24rpx;
-  color: var(--text-secondary);
+  color: var(--text-dark);
+  font-weight: bold;
 }
 
 /* 标签 */
@@ -76,8 +72,10 @@
   align-items: center;
   gap: 8rpx;
   padding: 10rpx 20rpx;
-  background: var(--bg-card-light);
-  border-radius: 999rpx;
+  background: var(--bg-surface);
+  border-radius: 0;
+  border: 4rpx solid var(--border-color);
+  box-shadow: inset 2rpx 2rpx 0px 0px #ffffff, inset -2rpx -2rpx 0px 0px #555555;
 }
 
 .tag-icon {
@@ -86,7 +84,8 @@
 
 .tag-text {
   font-size: 24rpx;
-  color: var(--text-secondary);
+  color: var(--text-primary);
+  text-shadow: 2rpx 2rpx 0 #000;
 }
 
 /* 头衔 */
@@ -95,9 +94,10 @@
   align-items: center;
   justify-content: space-between;
   padding: 20rpx 24rpx;
-  background: rgba(251, 191, 36, 0.1);
-  border-radius: 16rpx;
-  border: 2rpx solid rgba(251, 191, 36, 0.3);
+  background: var(--bg-surface);
+  border-radius: 0;
+  border: 4rpx solid var(--border-color);
+  box-shadow: inset 4rpx 4rpx 0px 0px #555555, inset -4rpx -4rpx 0px 0px #ffffff;
 }
 
 .title-badge {
@@ -112,22 +112,25 @@
 
 .title-text {
   font-size: 28rpx;
-  font-weight: 600;
+  font-weight: bold;
   color: var(--primary-yellow);
+  text-shadow: var(--shadow-text);
 }
 
 .title-arrow {
   font-size: 32rpx;
-  color: var(--text-muted);
+  color: var(--text-primary);
+  font-weight: bold;
 }
 
 /* 统计卡片 */
 .stats-card {
   background: var(--bg-card);
-  border-radius: 24rpx;
+  border-radius: 0;
   padding: 28rpx;
   margin-bottom: 24rpx;
-  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.25);
+  border: 4rpx solid var(--border-color);
+  box-shadow: inset 4rpx 4rpx 0px 0px #ffffff, inset -4rpx -4rpx 0px 0px #555555;
 }
 
 .stats-header {
@@ -136,8 +139,9 @@
 
 .stats-title {
   font-size: 30rpx;
-  font-weight: 600;
+  font-weight: bold;
   color: var(--text-primary);
+  text-shadow: var(--shadow-text);
 }
 
 .stats-content {
@@ -159,8 +163,9 @@
 
 .stat-number {
   font-size: 56rpx;
-  font-weight: 700;
+  font-weight: bold;
   color: var(--primary-yellow);
+  text-shadow: var(--shadow-text);
   line-height: 1.2;
 }
 
@@ -182,12 +187,13 @@
 
 .stat-label {
   font-size: 22rpx;
-  color: var(--text-secondary);
+  color: var(--text-dark);
+  font-weight: bold;
   margin-top: 8rpx;
 }
 
 .stat-divider {
-  width: 2rpx;
+  width: 4rpx;
   height: 60rpx;
   background: var(--border-color);
 }
@@ -201,22 +207,26 @@
 
 .progress-bar {
   flex: 1;
-  height: 12rpx;
-  background: var(--bg-card-light);
-  border-radius: 6rpx;
+  height: 24rpx;
+  background: var(--bg-surface);
+  border: 4rpx solid var(--border-color);
+  border-radius: 0;
   overflow: hidden;
+  box-shadow: inset 4rpx 4rpx 0px 0px #555555, inset -4rpx -4rpx 0px 0px #ffffff;
 }
 
 .progress-fill {
   height: 100%;
-  background: linear-gradient(90deg, var(--primary-purple), var(--primary-yellow));
-  border-radius: 6rpx;
-  transition: width 0.5s ease;
+  background: var(--primary-green);
+  border-radius: 0;
+  border-right: 4rpx solid var(--border-color);
 }
 
 .progress-text {
   font-size: 24rpx;
-  color: var(--text-secondary);
+  color: var(--text-primary);
+  font-weight: bold;
+  text-shadow: 2rpx 2rpx 0 #000;
   min-width: 60rpx;
   text-align: right;
 }
@@ -224,10 +234,11 @@
 /* 时光轴卡片 */
 .timeline-card {
   background: var(--bg-card);
-  border-radius: 24rpx;
+  border-radius: 0;
   padding: 28rpx;
   margin-bottom: 24rpx;
-  box-shadow: 0 8rpx 24rpx rgba(0, 0, 0, 0.25);
+  border: 4rpx solid var(--border-color);
+  box-shadow: inset 4rpx 4rpx 0px 0px #ffffff, inset -4rpx -4rpx 0px 0px #555555;
 }
 
 .timeline-header {
@@ -236,8 +247,9 @@
 
 .timeline-title {
   font-size: 30rpx;
-  font-weight: 600;
+  font-weight: bold;
   color: var(--text-primary);
+  text-shadow: var(--shadow-text);
 }
 
 .timeline-list {
@@ -260,12 +272,15 @@
 .timeline-empty .empty-text {
   font-size: 28rpx;
   color: var(--text-primary);
+  font-weight: bold;
+  text-shadow: var(--shadow-text);
   margin-bottom: 12rpx;
 }
 
 .timeline-empty .empty-hint {
   font-size: 24rpx;
-  color: var(--text-muted);
+  color: var(--text-secondary);
+  font-weight: bold;
 }
 
 /* 底部信息 */
@@ -278,17 +293,18 @@
 
 .footer-text {
   font-size: 24rpx;
-  color: var(--text-muted);
+  color: var(--text-primary);
+  text-shadow: 2rpx 2rpx 0 #000;
   margin-bottom: 8rpx;
 }
 
 .footer-version {
   font-size: 20rpx;
-  color: var(--text-muted);
-  opacity: 0.6;
+  color: var(--text-secondary);
+  text-shadow: 2rpx 2rpx 0 #000;
 }
 
 /* 底部安全距离 */
 .bottom-safe {
-  height: calc(80rpx + env(safe-area-inset-bottom));
+  height: calc(80rpx + env(safe-area-bottom));
 }
