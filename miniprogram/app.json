@@ -1,7 +1,7 @@
 {
   "pages": [
-    "pages/tricks/tricks",
-    "pages/profile/profile"
+    "pages/profile/profile",
+    "pages/tricks/tricks"
   ],
   "window": {
     "navigationBarTextStyle": "white",
@@ -9,27 +9,6 @@
     "navigationBarBackgroundColor": "#3b2818",
     "backgroundColor": "#3b2818",
     "backgroundTextStyle": "light"
-  },
-  "tabBar": {
-    "custom": true,
-    "color": "#e0e0e0",
-    "selectedColor": "#FFFF55",
-    "borderStyle": "black",
-    "backgroundColor": "#c6c6c6",
-    "list": [
-      {
-        "pagePath": "pages/tricks/tricks",
-        "text": "动作库",
-        "iconPath": "images/icons/tricks.png",
-        "selectedIconPath": "images/icons/tricks-active.png"
-      },
-      {
-        "pagePath": "pages/profile/profile",
-        "text": "我的",
-        "iconPath": "images/icons/profile.png",
-        "selectedIconPath": "images/icons/profile-active.png"
-      }
-    ]
   },
   "networkTimeout": {
     "request": 10000,

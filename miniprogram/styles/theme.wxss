@@ -48,7 +48,8 @@ page {
   --shadow-purple: inset 4rpx 4rpx 0px 0px #FF55FF, inset -4rpx -4rpx 0px 0px #550055;
   --shadow-yellow: inset 4rpx 4rpx 0px 0px #FFFFaa, inset -4rpx -4rpx 0px 0px #aa5500;
   --shadow-cyan: inset 4rpx 4rpx 0px 0px #aaffff, inset -4rpx -4rpx 0px 0px #00aaaa;
-  --shadow-text: 4rpx 4rpx 0px #3f3f3f;
+  --shadow-text: none;
+  --shadow-text-bold: 2rpx 2rpx 0px #3f3f3f; /* Only for white/light text */
   
   /* 圆角 (MC 风格没有圆角) */
   --radius-sm: 0rpx;

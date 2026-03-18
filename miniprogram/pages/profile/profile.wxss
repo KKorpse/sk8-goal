@@ -114,7 +114,7 @@
   font-size: 28rpx;
   font-weight: bold;
   color: var(--primary-yellow);
-  text-shadow: var(--shadow-text);
+  text-shadow: var(--shadow-text-bold);
 }
 
 .title-arrow {
@@ -141,7 +141,7 @@
   font-size: 30rpx;
   font-weight: bold;
   color: var(--text-primary);
-  text-shadow: var(--shadow-text);
+  text-shadow: var(--shadow-text-bold);
 }
 
 .stats-content {
@@ -231,7 +231,128 @@
   text-align: right;
 }
 
-/* 时光轴卡片 */
+/* Ollie 卡片 */
+.ollie-card {
+  background: var(--bg-card);
+  border-radius: 0;
+  padding: 28rpx;
+  margin-bottom: 24rpx;
+  border: 4rpx solid var(--border-color);
+  box-shadow: inset 4rpx 4rpx 0px 0px #ffffff, inset -4rpx -4rpx 0px 0px #555555;
+}
+
+.ollie-header {
+  margin-bottom: 24rpx;
+  display: flex;
+  align-items: baseline;
+  gap: 16rpx;
+}
+
+.ollie-title {
+  font-size: 30rpx;
+  font-weight: bold;
+  color: var(--text-primary);
+  text-shadow: var(--shadow-text-bold);
+}
+
+.ollie-unit {
+  font-size: 22rpx;
+  color: var(--text-dark);
+}
+
+.ollie-content {
+  display: flex;
+  flex-direction: column;
+  gap: 24rpx;
+}
+
+.ollie-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.ollie-label {
+  font-size: 28rpx;
+  color: var(--text-primary);
+  font-weight: bold;
+  text-shadow: var(--shadow-text-bold);
+}
+
+.ollie-control {
+  display: flex;
+  align-items: center;
+  gap: 24rpx;
+}
+
+.ollie-btn {
+  width: 60rpx;
+  height: 60rpx;
+  background: var(--bg-surface);
+  border: 4rpx solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 36rpx;
+  font-weight: bold;
+  color: var(--text-primary);
+  box-shadow: inset 4rpx 4rpx 0px 0px #ffffff, inset -4rpx -4rpx 0px 0px #555555;
+}
+
+.ollie-btn:active {
+  background: var(--bg-card);
+  box-shadow: inset 4rpx 4rpx 0px 0px #555555, inset -4rpx -4rpx 0px 0px #ffffff;
+}
+
+.ollie-value {
+  font-size: 40rpx;
+  font-weight: bold;
+  color: var(--primary-yellow);
+  text-shadow: var(--shadow-text-bold);
+  min-width: 60rpx;
+  text-align: center;
+}
+
+.ollie-divider {
+  height: 4rpx;
+  background: var(--border-color);
+}
+
+/* 解锁新招按钮 */
+.action-card {
+  background: var(--bg-surface);
+  border-radius: 0;
+  padding: 32rpx;
+  margin-bottom: 24rpx;
+  border: 4rpx solid var(--border-color);
+  box-shadow: inset 4rpx 4rpx 0px 0px #ffffff, inset -4rpx -4rpx 0px 0px #555555;
+  display: flex;
+  align-items: center;
+}
+
+.action-card:active {
+  background: var(--bg-card);
+  box-shadow: inset 4rpx 4rpx 0px 0px #555555, inset -4rpx -4rpx 0px 0px #ffffff;
+}
+
+.action-emoji {
+  font-size: 40rpx;
+  margin-right: 16rpx;
+}
+
+.action-text {
+  flex: 1;
+  font-size: 32rpx;
+  font-weight: bold;
+  color: var(--primary-yellow);
+  text-shadow: var(--shadow-text-bold);
+}
+
+.action-arrow {
+  font-size: 40rpx;
+  color: var(--text-primary);
+  font-weight: bold;
+}
 .timeline-card {
   background: var(--bg-card);
   border-radius: 0;
@@ -249,7 +370,7 @@
   font-size: 30rpx;
   font-weight: bold;
   color: var(--text-primary);
-  text-shadow: var(--shadow-text);
+  text-shadow: var(--shadow-text-bold);
 }
 
 .timeline-list {

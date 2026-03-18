@@ -40,6 +40,33 @@
     </view>
   </view>
   
+  <!-- Ollie 专修 -->
+  <view class="ollie-card">
+    <view class="ollie-header">
+      <text class="ollie-title">🛹 Ollie 高度</text>
+      <text class="ollie-unit">(单位: 半立)</text>
+    </view>
+    <view class="ollie-content">
+      <view class="ollie-item">
+        <text class="ollie-label">{{userInfo.stance === 'regular' ? 'Regular' : 'Goofy'}}</text>
+        <view class="ollie-control">
+          <view class="ollie-btn" bindtap="adjustOllie" data-type="normal" data-delta="-0.5">-</view>
+          <text class="ollie-value">{{ollie.normal}}</text>
+          <view class="ollie-btn" bindtap="adjustOllie" data-type="normal" data-delta="0.5">+</view>
+        </view>
+      </view>
+      <view class="ollie-divider"></view>
+      <view class="ollie-item">
+        <text class="ollie-label">{{userInfo.stance === 'regular' ? 'Nollie/Fakie' : 'Nollie/Fakie'}}</text>
+        <view class="ollie-control">
+          <view class="ollie-btn" bindtap="adjustOllie" data-type="switch" data-delta="-0.5">-</view>
+          <text class="ollie-value">{{ollie.switch}}</text>
+          <view class="ollie-btn" bindtap="adjustOllie" data-type="switch" data-delta="0.5">+</view>
+        </view>
+      </view>
+    </view>
+  </view>
+  
   <!-- 统计概览 -->
   <view class="stats-card">
     <view class="stats-header">
@@ -71,6 +98,13 @@
       </view>
       <text class="progress-text">{{stats.progress || 0}}%</text>
     </view>
+  </view>
+  
+  <!-- 解锁新招 -->
+  <view class="action-card" bindtap="onGoToTricks">
+    <text class="action-emoji">🛹</text>
+    <text class="action-text">解锁新招</text>
+    <text class="action-arrow">›</text>
   </view>
   
   <!-- 成就时光轴 -->

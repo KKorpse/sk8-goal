@@ -8,6 +8,11 @@ Page({
   data: {
     // 用户信息
     userInfo: {},
+    // Ollie 数据
+    ollie: {
+      normal: 0,
+      switch: 0
+    },
     // 统计数据
     stats: {},
     // 时光轴数据
@@ -65,6 +70,25 @@ Page({
       timeline,
       loading: false
     })
+
+    // 加载 Ollie 数据
+    const ollieData = wx.getStorageSync('ollie_data') || { normal: 0, switch: 0 }
+    this.setData({ ollie: ollieData })
+  },
+
+  /**
+   * 调整 Ollie 高度
+   */
+  adjustOllie(e) {
+    const { type, delta } = e.currentTarget.dataset
+    let val = parseFloat(delta)
+    let current = this.data.ollie[type]
+    let newValue = current + val
+    if (newValue < 0) newValue = 0
+    
+    const newOllie = { ...this.data.ollie, [type]: newValue }
+    this.setData({ ollie: newOllie })
+    wx.setStorageSync('ollie_data', newOllie)
   },
 
   /**
@@ -93,6 +117,15 @@ Page({
     wx.showActionSheet({
       itemList: titleList,
       fail: () => {}
+    })
+  },
+
+  /**
+   * 跳转到动作库
+   */
+  onGoToTricks() {
+    wx.navigateTo({
+      url: '/pages/tricks/tricks',
     })
   },
 
