@@ -1,0 +1,165 @@
+/* 时光轴条目样式 */
+
+.timeline-item {
+  display: flex;
+  min-height: 140rpx;
+}
+
+/* 左侧 */
+.timeline-left {
+  display: flex;
+  align-items: flex-start;
+  width: 180rpx;
+  flex-shrink: 0;
+}
+
+.date-wrapper {
+  width: 120rpx;
+  padding-top: 20rpx;
+}
+
+.date-text {
+  font-size: 22rpx;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+
+/* 时间轴轨道 */
+.timeline-track {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 60rpx;
+}
+
+.line-top,
+.line-bottom {
+  width: 4rpx;
+  background: linear-gradient(180deg, var(--primary-purple), var(--status-trial));
+  opacity: 0.5;
+}
+
+.line-top {
+  height: 30rpx;
+}
+
+.line-bottom {
+  flex: 1;
+  min-height: 60rpx;
+}
+
+.line-top.hidden,
+.line-bottom.hidden {
+  opacity: 0;
+}
+
+.node {
+  width: 40rpx;
+  height: 40rpx;
+  border-radius: 50%;
+  background: var(--bg-card-light);
+  border: 3rpx solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  z-index: 1;
+}
+
+.node-emoji {
+  font-size: 20rpx;
+}
+
+/* 节点状态样式 */
+.node.trial {
+  border-color: var(--status-trial);
+  box-shadow: 0 0 12rpx var(--status-trial);
+}
+
+.node.grinding {
+  border-color: var(--status-grinding);
+  box-shadow: 0 0 12rpx var(--status-grinding);
+}
+
+.node.mastered {
+  width: 48rpx;
+  height: 48rpx;
+  border-color: var(--status-mastered);
+  box-shadow: 0 0 16rpx var(--status-mastered);
+  background: rgba(251, 191, 36, 0.2);
+}
+
+.node.mastered .node-emoji {
+  font-size: 24rpx;
+}
+
+/* 右侧内容 */
+.timeline-right {
+  flex: 1;
+  padding: 10rpx 20rpx 10rpx 0;
+}
+
+.content-card {
+  background: var(--bg-card);
+  border-radius: 16rpx;
+  padding: 20rpx 24rpx;
+  border: 2rpx solid var(--border-color);
+  transition: all 0.3s ease;
+}
+
+/* 卡片状态样式 */
+.content-card.trial {
+  border-color: rgba(34, 211, 238, 0.3);
+}
+
+.content-card.grinding {
+  border-color: rgba(249, 115, 22, 0.3);
+}
+
+.content-card.mastered {
+  border-color: var(--status-mastered);
+  box-shadow: 0 4rpx 16rpx rgba(251, 191, 36, 0.2);
+  background: linear-gradient(135deg, var(--bg-card) 0%, rgba(251, 191, 36, 0.1) 100%);
+}
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12rpx;
+}
+
+.trick-name {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.stance-tag {
+  font-size: 20rpx;
+  color: var(--text-secondary);
+  background: var(--bg-card-light);
+  padding: 4rpx 12rpx;
+  border-radius: 999rpx;
+}
+
+.card-status {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.status-emoji {
+  font-size: 24rpx;
+}
+
+.status-text {
+  font-size: 24rpx;
+  color: var(--text-secondary);
+}
+
+/* mastered 状态的文字高亮 */
+.timeline-item.mastered .status-text {
+  color: var(--status-mastered);
+  font-weight: 500;
+}

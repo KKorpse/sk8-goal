@@ -1,0 +1,109 @@
+/* 动作库页面样式 */
+
+.tricks-page {
+  min-height: 100vh;
+  background: var(--bg-dark);
+}
+
+/* 顶部固定区域 */
+.header-fixed {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: linear-gradient(180deg, var(--bg-dark) 0%, var(--bg-dark) 90%, transparent 100%);
+  padding-bottom: 10rpx;
+}
+
+/* 招式列表 */
+.tricks-list {
+  padding: 0 20rpx;
+}
+
+/* 加载状态 */
+.loading-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 100rpx 0;
+}
+
+.loading-spinner {
+  width: 60rpx;
+  height: 60rpx;
+  border: 4rpx solid var(--border-color);
+  border-top-color: var(--primary-purple);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.loading-text {
+  margin-top: 20rpx;
+  font-size: 26rpx;
+  color: var(--text-secondary);
+}
+
+/* 空状态 */
+.empty-wrapper {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 120rpx 0;
+}
+
+.empty-emoji {
+  font-size: 80rpx;
+  margin-bottom: 24rpx;
+}
+
+.empty-text {
+  font-size: 30rpx;
+  color: var(--text-primary);
+  margin-bottom: 12rpx;
+}
+
+.empty-hint {
+  font-size: 26rpx;
+  color: var(--text-muted);
+}
+
+/* 招式分组 */
+.trick-group {
+  margin-bottom: 32rpx;
+}
+
+.group-header {
+  display: flex;
+  align-items: center;
+  padding: 20rpx 8rpx;
+}
+
+.group-line {
+  width: 6rpx;
+  height: 32rpx;
+  background: var(--primary-purple);
+  border-radius: 3rpx;
+  margin-right: 16rpx;
+}
+
+.group-title {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--text-secondary);
+}
+
+.group-content {
+  /* 卡片间距由组件自身控制 */
+}
+
+/* 底部安全距离 */
+.bottom-safe {
+  height: calc(120rpx + env(safe-area-inset-bottom));
+}

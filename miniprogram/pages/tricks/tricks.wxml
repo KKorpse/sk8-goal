@@ -1,0 +1,72 @@
+<!--动作库页面-->
+<view class="tricks-page">
+  <!-- 顶部固定区域 -->
+  <view class="header-fixed">
+    <!-- 搜索栏 -->
+    <search-bar 
+      placeholder="🔍 搜个招..."
+      value="{{searchKeyword}}"
+      bind:search="onSearch"
+    />
+    
+    <!-- 分类筛选 -->
+    <filter-tabs 
+      tabs="{{categories}}"
+      activeId="{{activeCategory}}"
+      bind:change="onCategoryChange"
+    />
+  </view>
+  
+  <!-- 招式列表 -->
+  <view class="tricks-list">
+    <!-- 加载状态 -->
+    <view class="loading-wrapper" wx:if="{{loading}}">
+      <view class="loading-spinner"></view>
+      <text class="loading-text">加载中...</text>
+    </view>
+    
+    <!-- 空状态 -->
+    <view class="empty-wrapper" wx:elif="{{groupedTricks.length === 0}}">
+      <text class="empty-emoji">🔍</text>
+      <text class="empty-text">没有找到相关招式</text>
+      <text class="empty-hint">换个关键词试试？</text>
+    </view>
+    
+    <!-- 招式分组列表 -->
+    <block wx:else>
+      <view 
+        wx:for="{{groupedTricks}}" 
+        wx:key="group"
+        class="trick-group"
+      >
+        <!-- 分组标题 -->
+        <view class="group-header">
+          <view class="group-line"></view>
+          <text class="group-title">{{item.group}}</text>
+        </view>
+        
+        <!-- 招式卡片 -->
+        <view class="group-content">
+          <trick-card 
+            wx:for="{{item.tricks}}" 
+            wx:for-item="trick"
+            wx:key="id"
+            trick="{{trick}}"
+            bind:tap="onTrickTap"
+          />
+        </view>
+      </view>
+    </block>
+    
+    <!-- 底部安全距离 -->
+    <view class="bottom-safe"></view>
+  </view>
+  
+  <!-- 脚位矩阵面板 -->
+  <stance-panel 
+    visible="{{showStancePanel}}"
+    trick="{{selectedTrick}}"
+    bind:close="onStancePanelClose"
+    bind:statuschange="onStatusChange"
+  />
+</view>

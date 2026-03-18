@@ -1,0 +1,255 @@
+/* 脚位矩阵面板样式 */
+
+.panel-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 1000;
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  backdrop-filter: blur(10rpx);
+}
+
+.panel-mask.show {
+  opacity: 1;
+}
+
+/* 成就达成动画 */
+@keyframes celebrateGlow {
+  0% {
+    box-shadow: 0 0 0 rgba(251, 191, 36, 0);
+  }
+  50% {
+    box-shadow: 0 0 60rpx rgba(251, 191, 36, 0.8), 0 0 120rpx rgba(251, 191, 36, 0.4);
+  }
+  100% {
+    box-shadow: 0 0 20rpx rgba(251, 191, 36, 0.3);
+  }
+}
+
+.stance-cell.mastered.just-mastered {
+  animation: celebrateGlow 0.6s ease-out;
+}
+
+.panel-container {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: var(--bg-card);
+  border-radius: 32rpx 32rpx 0 0;
+  padding: 0 0 calc(40rpx + env(safe-area-inset-bottom));
+  transform: translateY(100%);
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+/* 拖拽条 */
+.drag-bar {
+  display: flex;
+  justify-content: center;
+  padding: 20rpx 0 10rpx;
+}
+
+.drag-indicator {
+  width: 60rpx;
+  height: 8rpx;
+  background: var(--text-muted);
+  border-radius: 4rpx;
+  opacity: 0.5;
+}
+
+/* 标题栏 */
+.panel-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 20rpx 32rpx;
+  border-bottom: 1rpx solid var(--border-color);
+}
+
+.header-left {
+  display: flex;
+  align-items: center;
+}
+
+.trick-icon {
+  font-size: 48rpx;
+  margin-right: 20rpx;
+}
+
+.trick-titles {
+  display: flex;
+  flex-direction: column;
+}
+
+.trick-name {
+  font-size: 36rpx;
+  font-weight: 700;
+  color: var(--primary-yellow);
+}
+
+.trick-name-cn {
+  font-size: 26rpx;
+  color: var(--text-secondary);
+  margin-top: 4rpx;
+}
+
+.close-btn {
+  width: 64rpx;
+  height: 64rpx;
+  background: var(--primary-purple);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4rpx 16rpx rgba(139, 92, 246, 0.4);
+}
+
+.close-icon {
+  font-size: 40rpx;
+  color: white;
+  font-weight: 300;
+  line-height: 1;
+}
+
+/* 脚位矩阵 */
+.stance-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20rpx;
+  padding: 28rpx;
+}
+
+.stance-cell {
+  background: var(--bg-card-light);
+  border-radius: 20rpx;
+  padding: 24rpx;
+  border: 2rpx solid var(--border-color);
+  transition: all 0.3s ease;
+}
+
+.stance-cell.expanded {
+  border-color: var(--primary-purple);
+  box-shadow: 0 4rpx 20rpx rgba(139, 92, 246, 0.3);
+}
+
+/* 状态高亮边框 */
+.stance-cell.trial {
+  border-color: var(--status-trial);
+}
+
+.stance-cell.grinding {
+  border-color: var(--status-grinding);
+}
+
+.stance-cell.mastered {
+  border-color: var(--status-mastered);
+  box-shadow: 0 4rpx 20rpx rgba(251, 191, 36, 0.3);
+}
+
+.stance-info {
+  margin-bottom: 16rpx;
+}
+
+.stance-name {
+  font-size: 28rpx;
+  font-weight: 600;
+  color: var(--text-primary);
+}
+
+.stance-name-cn {
+  font-size: 22rpx;
+  color: var(--text-secondary);
+  margin-left: 8rpx;
+}
+
+.current-status {
+  display: flex;
+  align-items: center;
+  gap: 8rpx;
+}
+
+.status-emoji {
+  font-size: 32rpx;
+}
+
+.status-text {
+  font-size: 24rpx;
+  color: var(--text-secondary);
+}
+
+/* 状态选择器 */
+.status-selector {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12rpx;
+  margin-top: 20rpx;
+  padding-top: 20rpx;
+  border-top: 1rpx solid var(--border-color);
+}
+
+.status-option {
+  display: flex;
+  align-items: center;
+  gap: 6rpx;
+  padding: 12rpx 20rpx;
+  border-radius: 999rpx;
+  background: var(--bg-surface);
+  border: 2rpx solid var(--border-color);
+  transition: all 0.2s ease;
+}
+
+.status-option.active {
+  border-width: 3rpx;
+}
+
+.status-option.trial {
+  border-color: var(--status-trial);
+}
+
+.status-option.trial.active {
+  background: rgba(34, 211, 238, 0.2);
+  box-shadow: 0 0 12rpx var(--status-trial);
+}
+
+.status-option.grinding {
+  border-color: var(--status-grinding);
+}
+
+.status-option.grinding.active {
+  background: rgba(249, 115, 22, 0.2);
+  box-shadow: 0 0 12rpx var(--status-grinding);
+}
+
+.status-option.mastered {
+  border-color: var(--status-mastered);
+}
+
+.status-option.mastered.active {
+  background: rgba(251, 191, 36, 0.2);
+  box-shadow: 0 0 12rpx var(--status-mastered);
+}
+
+.option-emoji {
+  font-size: 24rpx;
+}
+
+.option-text {
+  font-size: 22rpx;
+  color: var(--text-primary);
+}
+
+/* 底部提示 */
+.panel-footer {
+  text-align: center;
+  padding: 20rpx;
+}
+
+.footer-hint {
+  font-size: 22rpx;
+  color: var(--text-muted);
+}

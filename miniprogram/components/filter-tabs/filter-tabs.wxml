@@ -1,0 +1,16 @@
+<!--筛选标签组件-->
+<scroll-view class="filter-tabs" scroll-x enable-flex>
+  <view class="tabs-wrapper">
+    <view 
+      wx:for="{{tabs}}" 
+      wx:key="id"
+      class="tab-item {{activeId === item.id ? 'active' : ''}}"
+      data-id="{{item.id}}"
+      bindtap="onTabTap"
+      hover-class="tab-hover"
+    >
+      <text class="tab-icon" wx:if="{{item.icon}}">{{item.icon}}</text>
+      <text class="tab-name">{{item.name}}</text>
+    </view>
+  </view>
+</scroll-view>

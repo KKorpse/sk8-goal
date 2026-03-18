@@ -1,0 +1,110 @@
+<!--我的页面-->
+<view class="profile-page">
+  <!-- 个人信息卡片 -->
+  <view class="profile-card">
+    <!-- 头像和基本信息 -->
+    <view class="card-header">
+      <view class="avatar-wrapper">
+        <image 
+          class="avatar" 
+          src="{{userInfo.avatar || '/images/icons/default-avatar.png'}}"
+          mode="aspectFill"
+        />
+        <view class="avatar-glow"></view>
+      </view>
+      <view class="user-info">
+        <text class="nickname">{{userInfo.nickname || '滑板玩家'}}</text>
+        <text class="user-id">ID: {{userInfo.id}}</text>
+      </view>
+    </view>
+    
+    <!-- 标签信息 -->
+    <view class="user-tags">
+      <view class="tag">
+        <text class="tag-icon">🛹</text>
+        <text class="tag-text">{{stanceText[userInfo.stance] || 'Regular'}}</text>
+      </view>
+      <view class="tag">
+        <text class="tag-icon">📅</text>
+        <text class="tag-text">板龄 {{userInfo.yearsSkating || 1}} 年</text>
+      </view>
+    </view>
+    
+    <!-- 头衔 -->
+    <view class="title-wrapper" bindtap="onTitleTap">
+      <view class="title-badge">
+        <text class="title-emoji">{{userInfo.titleEmoji || '🐣'}}</text>
+        <text class="title-text">{{userInfo.title || '板场萌新'}}</text>
+      </view>
+      <text class="title-arrow">›</text>
+    </view>
+  </view>
+  
+  <!-- 统计概览 -->
+  <view class="stats-card">
+    <view class="stats-header">
+      <text class="stats-title">🎯 修练进度</text>
+    </view>
+    <view class="stats-content">
+      <view class="stat-item main">
+        <text class="stat-number">{{stats.litCount || 0}}</text>
+        <text class="stat-label">已点亮</text>
+      </view>
+      <view class="stat-divider"></view>
+      <view class="stat-item">
+        <text class="stat-number small mastered">{{stats.masteredCount || 0}}</text>
+        <text class="stat-label">🦶 一脚一个</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-number small trial">{{stats.trialCount || 0}}</text>
+        <text class="stat-label">🎫 体验卡</text>
+      </view>
+      <view class="stat-item">
+        <text class="stat-number small grinding">{{stats.grindingCount || 0}}</text>
+        <text class="stat-label">🔥 死磕中</text>
+      </view>
+    </view>
+    <!-- 进度条 -->
+    <view class="progress-wrapper">
+      <view class="progress-bar">
+        <view class="progress-fill" style="width: {{stats.progress || 0}}%"></view>
+      </view>
+      <text class="progress-text">{{stats.progress || 0}}%</text>
+    </view>
+  </view>
+  
+  <!-- 成就时光轴 -->
+  <view class="timeline-card">
+    <view class="timeline-header">
+      <text class="timeline-title">📅 成就时光轴</text>
+    </view>
+    
+    <!-- 时光轴列表 -->
+    <view class="timeline-list" wx:if="{{timeline.length > 0}}">
+      <timeline-item 
+        wx:for="{{timeline}}" 
+        wx:key="id"
+        record="{{item}}"
+        isFirst="{{index === 0}}"
+        isLast="{{index === timeline.length - 1}}"
+        bind:tap="onTimelineItemTap"
+      />
+    </view>
+    
+    <!-- 空状态 -->
+    <view class="timeline-empty" wx:else>
+      <text class="empty-emoji">🎯</text>
+      <text class="empty-text">还没有成就记录</text>
+      <text class="empty-hint">去动作库点亮你的第一个招式吧！</text>
+    </view>
+  </view>
+  
+  <!-- 底部信息 -->
+  <view class="footer">
+    <text class="footer-text">Made with 🛹 by SkateGoal</text>
+    <text class="footer-version">v1.0.0</text>
+  </view>
+  
+  <!-- 底部安全距离 -->
+  <view class="bottom-safe"></view>
+</view>

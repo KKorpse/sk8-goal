@@ -1,0 +1,71 @@
+<!--脚位矩阵面板组件-->
+<view class="panel-mask {{showMask ? 'show' : ''}}" bindtap="onClose" wx:if="{{showMask}}">
+  <view 
+    class="panel-container" 
+    animation="{{animationData}}"
+    catchtap="preventClose"
+  >
+    <!-- 拖拽条 -->
+    <view class="drag-bar">
+      <view class="drag-indicator"></view>
+    </view>
+    
+    <!-- 标题栏 -->
+    <view class="panel-header">
+      <view class="header-left">
+        <text class="trick-icon">{{trick.icon || '🛹'}}</text>
+        <view class="trick-titles">
+          <text class="trick-name">{{trick.name}}</text>
+          <text class="trick-name-cn">{{trick.nameCn}}</text>
+        </view>
+      </view>
+      <view class="close-btn" bindtap="onClose">
+        <text class="close-icon">×</text>
+      </view>
+    </view>
+    
+    <!-- 脚位矩阵 -->
+    <view class="stance-grid">
+      <view 
+        wx:for="{{stances}}" 
+        wx:key="*this"
+        class="stance-cell {{expandedStance === item ? 'expanded' : ''}} {{(trick.stances[item] || 'none')}}"
+        data-stance="{{item}}"
+        bindtap="onStanceTap"
+      >
+        <!-- 脚位信息 -->
+        <view class="stance-info">
+          <text class="stance-name">{{stanceConfig[item].name}}</text>
+          <text class="stance-name-cn">{{stanceConfig[item].nameCn}}</text>
+        </view>
+        
+        <!-- 当前状态 -->
+        <view class="current-status">
+          <text class="status-emoji">{{statusConfig[trick.stances[item] || 'none'].emoji}}</text>
+          <text class="status-text">{{statusConfig[trick.stances[item] || 'none'].text}}</text>
+        </view>
+        
+        <!-- 状态选择器（展开时显示） -->
+        <view class="status-selector" wx:if="{{expandedStance === item}}">
+          <view 
+            wx:for="{{statusList}}" 
+            wx:for-item="status"
+            wx:key="*this"
+            class="status-option {{(trick.stances[item] || 'none') === status ? 'active' : ''}} {{status}}"
+            data-stance="{{item}}"
+            data-status="{{status}}"
+            catchtap="onStatusSelect"
+          >
+            <text class="option-emoji">{{statusConfig[status].emoji}}</text>
+            <text class="option-text">{{statusConfig[status].text}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+    
+    <!-- 底部提示 -->
+    <view class="panel-footer">
+      <text class="footer-hint">点击脚位切换状态</text>
+    </view>
+  </view>
+</view>

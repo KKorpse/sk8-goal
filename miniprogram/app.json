@@ -1,0 +1,43 @@
+{
+  "pages": [
+    "pages/tricks/tricks",
+    "pages/profile/profile"
+  ],
+  "window": {
+    "navigationBarTextStyle": "white",
+    "navigationBarTitleText": "SkateGoal",
+    "navigationBarBackgroundColor": "#1A1A2E",
+    "backgroundColor": "#1A1A2E",
+    "backgroundTextStyle": "light"
+  },
+  "tabBar": {
+    "color": "#64748B",
+    "selectedColor": "#FBBF24",
+    "borderStyle": "black",
+    "backgroundColor": "#16213E",
+    "list": [
+      {
+        "pagePath": "pages/tricks/tricks",
+        "text": "动作库",
+        "iconPath": "images/icons/tricks.png",
+        "selectedIconPath": "images/icons/tricks-active.png"
+      },
+      {
+        "pagePath": "pages/profile/profile",
+        "text": "我的",
+        "iconPath": "images/icons/profile.png",
+        "selectedIconPath": "images/icons/profile-active.png"
+      }
+    ]
+  },
+  "networkTimeout": {
+    "request": 10000,
+    "connectSocket": 10000,
+    "uploadFile": 10000,
+    "downloadFile": 10000
+  },
+  "debug": false,
+  "style": "v2",
+  "sitemapLocation": "sitemap.json",
+  "lazyCodeLoading": "requiredComponents"
+}

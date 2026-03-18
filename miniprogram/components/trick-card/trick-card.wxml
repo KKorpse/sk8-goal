@@ -1,0 +1,27 @@
+<!--招式卡片组件-->
+<view class="trick-card" bindtap="onTap" hover-class="trick-card-hover">
+  <!-- 左侧：图标和名称 -->
+  <view class="card-left">
+    <view class="trick-icon">
+      <text class="icon-text">{{trick.icon || '🛹'}}</text>
+    </view>
+    <view class="trick-info">
+      <text class="trick-name">{{trick.name}}</text>
+      <text class="trick-name-cn">{{trick.nameCn}}</text>
+    </view>
+  </view>
+  
+  <!-- 右侧：脚位状态点 -->
+  <view class="card-right">
+    <view class="stance-dots">
+      <view 
+        wx:for="{{stances}}" 
+        wx:key="*this"
+        class="stance-item"
+      >
+        <view class="stance-dot {{trick.stances[item] || 'none'}}"></view>
+        <text class="stance-abbr">{{stanceConfig[item].abbr}}</text>
+      </view>
+    </view>
+  </view>
+</view>

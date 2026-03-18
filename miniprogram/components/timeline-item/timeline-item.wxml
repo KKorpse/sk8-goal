@@ -1,0 +1,33 @@
+<!--时光轴条目组件-->
+<view class="timeline-item {{record.status}}" bindtap="onTap">
+  <!-- 左侧时间轴 -->
+  <view class="timeline-left">
+    <!-- 日期 -->
+    <view class="date-wrapper">
+      <text class="date-text">{{record.date}}</text>
+    </view>
+    
+    <!-- 连接线和节点 -->
+    <view class="timeline-track">
+      <view class="line-top {{isFirst ? 'hidden' : ''}}"></view>
+      <view class="node {{record.status}}">
+        <text class="node-emoji">{{statusConfig[record.status].emoji}}</text>
+      </view>
+      <view class="line-bottom {{isLast ? 'hidden' : ''}}"></view>
+    </view>
+  </view>
+  
+  <!-- 右侧内容卡片 -->
+  <view class="timeline-right">
+    <view class="content-card {{record.status}}">
+      <view class="card-header">
+        <text class="trick-name">{{record.trickName}}</text>
+        <text class="stance-tag">{{stanceConfig[record.stance].nameCn}}</text>
+      </view>
+      <view class="card-status">
+        <text class="status-emoji">{{statusConfig[record.status].emoji}}</text>
+        <text class="status-text">{{statusConfig[record.status].text}}</text>
+      </view>
+    </view>
+  </view>
+</view>

@@ -1,0 +1,79 @@
+/**
+ * SkateGoal 主题变量
+ * 荒野乱斗风格配色方案
+ */
+
+page {
+  /* 主色调 */
+  --primary-purple: #8B5CF6;
+  --primary-yellow: #FBBF24;
+  --primary-cyan: #22D3EE;
+  --primary-orange: #F97316;
+  --primary-green: #10B981;
+  
+  /* 背景色 */
+  --bg-dark: #1A1A2E;
+  --bg-card: #16213E;
+  --bg-card-light: #1F2A48;
+  --bg-surface: #0F3460;
+  
+  /* 文字色 */
+  --text-primary: #FFFFFF;
+  --text-secondary: #94A3B8;
+  --text-muted: #64748B;
+  
+  /* 状态色 */
+  --status-trial: #22D3EE;
+  --status-grinding: #F97316;
+  --status-mastered: #FBBF24;
+  --status-none: #334155;
+  
+  /* 强调色 */
+  --accent-glow: #E94560;
+  --accent-success: #10B981;
+  --border-color: #334155;
+  
+  /* 渐变 */
+  --gradient-purple: linear-gradient(135deg, #8B5CF6 0%, #6366F1 100%);
+  --gradient-yellow: linear-gradient(135deg, #FBBF24 0%, #F59E0B 100%);
+  --gradient-cyan: linear-gradient(135deg, #22D3EE 0%, #06B6D4 100%);
+  --gradient-card: linear-gradient(180deg, #16213E 0%, #0F3460 100%);
+  
+  /* 阴影 */
+  --shadow-sm: 0 4rpx 12rpx rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 8rpx 24rpx rgba(0, 0, 0, 0.3);
+  --shadow-lg: 0 12rpx 40rpx rgba(0, 0, 0, 0.4);
+  --shadow-purple: 0 4rpx 20rpx rgba(139, 92, 246, 0.3);
+  --shadow-yellow: 0 4rpx 20rpx rgba(251, 191, 36, 0.3);
+  --shadow-cyan: 0 4rpx 20rpx rgba(34, 211, 238, 0.3);
+  
+  /* 圆角 */
+  --radius-sm: 8rpx;
+  --radius-md: 16rpx;
+  --radius-lg: 24rpx;
+  --radius-xl: 32rpx;
+  --radius-full: 999rpx;
+  
+  /* 间距 */
+  --spacing-xs: 8rpx;
+  --spacing-sm: 12rpx;
+  --spacing-md: 20rpx;
+  --spacing-lg: 28rpx;
+  --spacing-xl: 40rpx;
+  
+  /* 字号 */
+  --font-xs: 22rpx;
+  --font-sm: 26rpx;
+  --font-base: 28rpx;
+  --font-lg: 32rpx;
+  --font-xl: 36rpx;
+  --font-2xl: 40rpx;
+  --font-3xl: 48rpx;
+  --font-4xl: 56rpx;
+  
+  /* 过渡动画 */
+  --transition-fast: all 0.15s ease;
+  --transition-normal: all 0.25s ease;
+  --transition-slow: all 0.35s ease;
+  --transition-bounce: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}

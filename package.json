@@ -1,0 +1,14 @@
+{
+  "name": "skategoal",
+  "version": "1.0.0",
+  "description": "SkateGoal - 滑板招式成就系统，滑板人的打怪升级记录工具",
+  "scripts": {
+    "lint": "eslint ."
+  },
+  "author": "SkateGoal Team",
+  "license": "MIT",
+  "private": true,
+  "devDependencies": {
+    "eslint": "^8.0.0"
+  }
+}

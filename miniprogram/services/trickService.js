@@ -1,0 +1,232 @@
+/**
+ * SkateGoal 招式服务
+ * 处理招式数据的获取、搜索、状态更新等
+ */
+
+const mockTricks = require('../mock/tricks')
+const storageService = require('./storageService')
+const config = require('../config')
+const util = require('../utils/util')
+
+/**
+ * 获取所有招式（带用户进度）
+ * @returns {Array}
+ */
+function getAllTricks() {
+  const tricks = mockTricks.getAllTricks()
+  const progress = storageService.getUserProgress()
+  
+  return tricks.map(trick => ({
+    ...trick,
+    stances: progress[trick.id] || {
+      normal: 'none',
+      fakie: 'none',
+      switch: 'none',
+      nollie: 'none'
+    }
+  }))
+}
+
+/**
+ * 按分类获取招式（带用户进度）
+ * @param {string} category - 分类 ID
+ * @returns {Array}
+ */
+function getTricksByCategory(category) {
+  const tricks = mockTricks.getTricksByCategory(category)
+  const progress = storageService.getUserProgress()
+  
+  return tricks.map(trick => ({
+    ...trick,
+    stances: progress[trick.id] || {
+      normal: 'none',
+      fakie: 'none',
+      switch: 'none',
+      nollie: 'none'
+    }
+  }))
+}
+
+/**
+ * 按分组整理招式
+ * @param {Array} tricks - 招式列表
+ * @returns {Array} - [{ group: string, tricks: Array }]
+ */
+function groupTricks(tricks) {
+  return mockTricks.groupTricks(tricks)
+}
+
+/**
+ * 搜索招式
+ * @param {string} query - 搜索词
+ * @returns {Array}
+ */
+function searchTricks(query) {
+  if (!query || !query.trim()) {
+    return getAllTricks()
+  }
+  
+  const tricks = mockTricks.searchTricks(query)
+  const progress = storageService.getUserProgress()
+  
+  return tricks.map(trick => ({
+    ...trick,
+    stances: progress[trick.id] || {
+      normal: 'none',
+      fakie: 'none',
+      switch: 'none',
+      nollie: 'none'
+    }
+  }))
+}
+
+/**
+ * 模糊搜索招式
+ * @param {string} query - 搜索词
+ * @returns {Array}
+ */
+function fuzzySearchTricks(query) {
+  if (!query || !query.trim()) {
+    return getAllTricks()
+  }
+  
+  const allTricks = getAllTricks()
+  return allTricks.filter(trick => 
+    util.fuzzyMatch(query, trick.name) ||
+    util.fuzzyMatch(query, trick.nameCn) ||
+    util.fuzzyMatch(query, trick.id)
+  )
+}
+
+/**
+ * 获取单个招式详情
+ * @param {string} trickId - 招式 ID
+ * @returns {Object|null}
+ */
+function getTrickById(trickId) {
+  const trick = mockTricks.getTrickById(trickId)
+  if (!trick) return null
+  
+  const progress = storageService.getUserProgress()
+  return {
+    ...trick,
+    stances: progress[trickId] || {
+      normal: 'none',
+      fakie: 'none',
+      switch: 'none',
+      nollie: 'none'
+    }
+  }
+}
+
+/**
+ * 更新招式状态
+ * @param {string} trickId - 招式 ID
+ * @param {string} stance - 脚位
+ * @param {string} status - 新状态
+ * @returns {Object} - { success: boolean, timeline?: Object }
+ */
+function updateTrickStatus(trickId, stance, status) {
+  const trick = mockTricks.getTrickById(trickId)
+  if (!trick) {
+    return { success: false, error: 'Trick not found' }
+  }
+  
+  // 获取旧状态
+  const progress = storageService.getUserProgress()
+  const oldStatus = progress[trickId]?.[stance] || 'none'
+  
+  // 如果状态没有变化，直接返回
+  if (oldStatus === status) {
+    return { success: true, changed: false }
+  }
+  
+  // 更新状态
+  const updated = storageService.updateTrickStatus(trickId, stance, status)
+  if (!updated) {
+    return { success: false, error: 'Storage failed' }
+  }
+  
+  // 如果是有效的进度（非 none 且非降级到 grinding），添加时光轴记录
+  let timelineRecord = null
+  if (status !== 'none' && (status === 'trial' || status === 'mastered')) {
+    // 只记录 trial 和 mastered（死磕中不记录到时光轴）
+    timelineRecord = {
+      id: util.generateId(),
+      trickId: trickId,
+      trickName: trick.name,
+      stance: stance,
+      status: status,
+      date: util.formatDate(new Date()),
+      timestamp: Date.now()
+    }
+    storageService.addTimelineRecord(timelineRecord)
+  }
+  
+  return { 
+    success: true, 
+    changed: true,
+    oldStatus,
+    newStatus: status,
+    timeline: timelineRecord
+  }
+}
+
+/**
+ * 获取统计数据
+ * @returns {Object}
+ */
+function getStats() {
+  const progress = storageService.getUserProgress()
+  const totalTricks = mockTricks.getAllTricks().length
+  
+  let masteredCount = 0  // 一脚一个
+  let trialCount = 0     // 体验卡
+  let grindingCount = 0  // 死磕中
+  let totalStances = 0   // 总脚位数（每个招式4个脚位）
+  
+  Object.values(progress).forEach(stances => {
+    Object.values(stances).forEach(status => {
+      if (status === 'mastered') {
+        masteredCount++
+      } else if (status === 'trial') {
+        trialCount++
+      } else if (status === 'grinding') {
+        grindingCount++
+      }
+    })
+  })
+  
+  // 已点亮 = 一脚一个 + 体验卡
+  const litCount = masteredCount + trialCount
+  
+  return {
+    totalTricks,
+    totalStances: totalTricks * 4,
+    masteredCount,
+    trialCount,
+    grindingCount,
+    litCount, // 已点亮数量
+    progress: Math.round((litCount / (totalTricks * 4)) * 100) // 进度百分比
+  }
+}
+
+/**
+ * 获取分类列表
+ * @returns {Array}
+ */
+function getCategories() {
+  return config.categories
+}
+
+module.exports = {
+  getAllTricks,
+  getTricksByCategory,
+  groupTricks,
+  searchTricks,
+  fuzzySearchTricks,
+  getTrickById,
+  updateTrickStatus,
+  getStats,
+  getCategories
+}
