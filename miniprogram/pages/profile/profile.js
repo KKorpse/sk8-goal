@@ -37,6 +37,9 @@ Page({
     // 徽章详情弹窗
     showBadgeModal: false,
     selectedBadge: {},
+    // 新成就弹窗
+    showNewBadgesModal: false,
+    newBadges: [],
     // 招式列表弹窗
     showTrickListModal: false,
     trickListTitle: '',
@@ -113,6 +116,17 @@ Page({
       unlockedBadges: badges.unlocked,
       loading: false
     })
+    
+    // 检查是否有未读徽章，自动弹出成就窗口
+    const unreadBadges = badges.unlocked.filter(b => !b.read)
+    if (unreadBadges.length > 0) {
+      setTimeout(() => {
+        this.setData({
+          showNewBadgesModal: true,
+          newBadges: unreadBadges
+        })
+      }, 500) // 延迟500ms，等待页面渲染完成
+    }
   },
 
   /**
@@ -166,6 +180,9 @@ Page({
       trickStances[record.trickId].add(record.stance)
     })
     
+    // 从存储中读取已读状态
+    const readStatus = wx.getStorageSync('badge_read_status') || {}
+    
     // 徽章定义
     const badgeDefs = [
       // === Ollie 高度成就 ===
@@ -181,7 +198,7 @@ Page({
             unlocked: height >= 0.5,
             progress: height,
             progressMax: 0.5,
-            progressText: `${height} / 0.5 半立`
+            progressText: `${height} / 0.5 立`
           }
         }
       },
@@ -197,7 +214,23 @@ Page({
             unlocked: height >= 3,
             progress: Math.min(height, 3),
             progressMax: 3,
-            progressText: `${height} / 3 半立`
+            progressText: `${height} / 3 立`
+          }
+        }
+      },
+      {
+        id: 'big-talk',
+        name: '就爱吹牛逼',
+        emoji: '🐮',
+        description: 'Ollie 达到六立，你是传说中的滑手！',
+        type: 'ollie',
+        check: () => {
+          const height = ollieData.normal || 0
+          return {
+            unlocked: height >= 6,
+            progress: Math.min(height, 6),
+            progressMax: 6,
+            progressText: `${height} / 6 立`
           }
         }
       },
@@ -360,6 +393,9 @@ Page({
     // 计算每个徽章的状态
     const allBadges = badgeDefs.map(def => {
       const result = def.check()
+      const wasUnlocked = readStatus[def.id]?.unlocked || false
+      const isRead = readStatus[def.id]?.read || false
+      
       const badge = {
         id: def.id,
         name: def.name,
@@ -367,7 +403,9 @@ Page({
         description: def.description,
         type: def.type,
         unlocked: result.unlocked,
-        unlockDate: result.unlockDate || null
+        unlockDate: result.unlockDate || null,
+        // 新解锁且未标记为已读，则为未读状态
+        read: !result.unlocked ? true : (isRead || !wasUnlocked ? isRead : false)
       }
       
       // 添加进度信息
@@ -381,14 +419,29 @@ Page({
       return badge
     })
     
-    // 已解锁的排在前面
+    // 已解锁的排在前面，未读的排在最前面
     allBadges.sort((a, b) => {
       if (a.unlocked && !b.unlocked) return -1
       if (!a.unlocked && b.unlocked) return 1
+      if (a.unlocked && b.unlocked) {
+        if (!a.read && b.read) return -1
+        if (a.read && !b.read) return 1
+      }
       return 0
     })
     
     const unlocked = allBadges.filter(b => b.unlocked)
+    
+    // 更新存储中的解锁状态
+    const newReadStatus = {}
+    unlocked.forEach(b => {
+      newReadStatus[b.id] = {
+        unlocked: true,
+        read: b.read
+      }
+    })
+    wx.setStorageSync('badge_read_status', newReadStatus)
+    
     return { all: allBadges, unlocked }
   },
 
@@ -542,6 +595,7 @@ Page({
     let current = this.data.ollie[type]
     let newValue = current + val
     if (newValue < 0) newValue = 0
+    if (newValue > 6) newValue = 6  // 最大高度限制为 6 立
     
     const newOllie = { ...this.data.ollie, [type]: newValue }
     this.setData({ ollie: newOllie })
@@ -553,6 +607,17 @@ Page({
       allBadges: badges.all,
       unlockedBadges: badges.unlocked
     })
+    
+    // 检查是否有新解锁的未读徽章，自动弹出成就窗口
+    const unreadBadges = badges.unlocked.filter(b => !b.read)
+    if (unreadBadges.length > 0) {
+      setTimeout(() => {
+        this.setData({
+          showNewBadgesModal: true,
+          newBadges: unreadBadges
+        })
+      }, 300)
+    }
   },
 
   /**
@@ -567,10 +632,67 @@ Page({
   },
 
   /**
+   * 关闭新成就弹窗
+   */
+  closeNewBadgesModal() {
+    const { newBadges, allBadges } = this.data
+    
+    // 将所有新成就标记为已读
+    const updatedBadges = allBadges.map(b => {
+      const isNewBadge = newBadges.find(nb => nb.id === b.id)
+      if (isNewBadge) {
+        return { ...b, read: true }
+      }
+      return b
+    })
+    
+    // 更新存储
+    const readStatus = wx.getStorageSync('badge_read_status') || {}
+    newBadges.forEach(badge => {
+      if (readStatus[badge.id]) {
+        readStatus[badge.id].read = true
+      }
+    })
+    wx.setStorageSync('badge_read_status', readStatus)
+    
+    this.setData({
+      allBadges: updatedBadges,
+      unlockedBadges: updatedBadges.filter(b => b.unlocked),
+      showNewBadgesModal: false,
+      newBadges: []
+    })
+  },
+
+  /**
    * 关闭徽章详情弹窗
    */
   closeBadgeModal() {
-    this.setData({ showBadgeModal: false })
+    const { selectedBadge, allBadges } = this.data
+    
+    // 如果徽章已解锁且未读，标记为已读
+    if (selectedBadge.unlocked && !selectedBadge.read) {
+      const updatedBadges = allBadges.map(b => {
+        if (b.id === selectedBadge.id) {
+          return { ...b, read: true }
+        }
+        return b
+      })
+      
+      // 更新存储
+      const readStatus = wx.getStorageSync('badge_read_status') || {}
+      if (readStatus[selectedBadge.id]) {
+        readStatus[selectedBadge.id].read = true
+        wx.setStorageSync('badge_read_status', readStatus)
+      }
+      
+      this.setData({
+        allBadges: updatedBadges,
+        unlockedBadges: updatedBadges.filter(b => b.unlocked),
+        showBadgeModal: false
+      })
+    } else {
+      this.setData({ showBadgeModal: false })
+    }
   },
 
   /**
@@ -589,63 +711,89 @@ Page({
 
   /**
    * 点击统计数据
+   * 同一个招式（trickId + stance）只显示最高等级的记录
+   * 优先级：mastered > grinding > trial
    */
   onStatTap(e) {
     const { type } = e.currentTarget.dataset
     const timeline = storageService.getTimeline()
     const allTricks = require('../../mock/tricks').getAllTricks()
-    
+
     // 构建招式 ID 到名称的映射
     const trickMap = {}
     allTricks.forEach(t => {
       trickMap[t.id] = t
     })
-    
+
+    // 按 trickId + stance 分组，保留最高等级的记录
+    const statusPriority = { mastered: 3, grinding: 2, trial: 1 }
+    const trickStanceMap = {}
+
+    timeline.forEach(r => {
+      const key = `${r.trickId}_${r.stance}`
+      if (!trickStanceMap[key]) {
+        trickStanceMap[key] = r
+      } else {
+        // 比较优先级，保留更高的
+        const existingPriority = statusPriority[trickStanceMap[key].status] || 0
+        const currentPriority = statusPriority[r.status] || 0
+        if (currentPriority > existingPriority) {
+          trickStanceMap[key] = r
+        }
+      }
+    })
+
+    // 筛选指定状态的记录
     let trickList = []
     let title = ''
-    
-    // 所有三种状态都从 timeline 筛选
+
     if (type === 'mastered') {
       title = '一脚一个'
-      timeline.filter(r => r.status === 'mastered').forEach(r => {
-        const trick = trickMap[r.trickId] || {}
-        trickList.push({
-          id: r.id,
-          trickId: r.trickId,
-          name: r.trickName,
-          emoji: trick.emoji,
-          stance: r.stance,
-          date: r.date
+      Object.values(trickStanceMap)
+        .filter(r => r.status === 'mastered')
+        .forEach(r => {
+          const trick = trickMap[r.trickId] || {}
+          trickList.push({
+            id: r.id,
+            trickId: r.trickId,
+            name: r.trickName,
+            emoji: trick.emoji,
+            stance: r.stance,
+            date: r.date
+          })
         })
-      })
-    } else if (type === 'trial') {
-      title = '体验卡'
-      timeline.filter(r => r.status === 'trial').forEach(r => {
-        const trick = trickMap[r.trickId] || {}
-        trickList.push({
-          id: r.id,
-          trickId: r.trickId,
-          name: r.trickName,
-          emoji: trick.emoji,
-          stance: r.stance,
-          date: r.date
-        })
-      })
     } else if (type === 'grinding') {
       title = '死磕中'
-      timeline.filter(r => r.status === 'grinding').forEach(r => {
-        const trick = trickMap[r.trickId] || {}
-        trickList.push({
-          id: r.id,
-          trickId: r.trickId,
-          name: r.trickName,
-          emoji: trick.emoji,
-          stance: r.stance,
-          date: r.date
+      Object.values(trickStanceMap)
+        .filter(r => r.status === 'grinding')
+        .forEach(r => {
+          const trick = trickMap[r.trickId] || {}
+          trickList.push({
+            id: r.id,
+            trickId: r.trickId,
+            name: r.trickName,
+            emoji: trick.emoji,
+            stance: r.stance,
+            date: r.date
+          })
         })
-      })
+    } else if (type === 'trial') {
+      title = '体验卡'
+      Object.values(trickStanceMap)
+        .filter(r => r.status === 'trial')
+        .forEach(r => {
+          const trick = trickMap[r.trickId] || {}
+          trickList.push({
+            id: r.id,
+            trickId: r.trickId,
+            name: r.trickName,
+            emoji: trick.emoji,
+            stance: r.stance,
+            date: r.date
+          })
+        })
     }
-    
+
     this.setData({
       showTrickListModal: true,
       trickListTitle: title,

@@ -23,21 +23,16 @@
         </view>
         <text class="user-id">ID: {{userInfo.id}}</text>
       </view>
-    </view>
-    
-    <!-- 标签信息 -->
-    <view class="user-tags">
-      <!-- 脚位标签 - 可点击展开 -->
-      <view class="tag tag-clickable" bindtap="toggleStanceExpand">
-        <text class="tag-icon">🦶</text>
-        <text class="tag-text">{{stanceText[userInfo.stance] || 'Regular'}}</text>
-        <text class="tag-arrow {{stanceExpanded ? 'expanded' : ''}}">▼</text>
-      </view>
-      <!-- 板龄标签 - 可点击跳转 -->
-      <view class="tag tag-clickable" bindtap="onSkatingHistoryTap">
-        <text class="tag-icon"></text>
-        <text class="tag-text">板龄 {{yearsSkating}} 年</text>
-        <text class="tag-arrow">›</text>
+      <!-- 右侧信息区：脚位和板龄 -->
+      <view class="header-right">
+        <view class="header-tag tag-clickable" bindtap="toggleStanceExpand">
+          <text class="header-tag-text">脚位 {{userInfo.stance === 'regular' ? 'Regular' : 'Goofy'}}</text>
+          <text class="tag-arrow {{stanceExpanded ? 'expanded' : ''}}">▼</text>
+        </view>
+        <view class="header-tag tag-clickable" bindtap="onSkatingHistoryTap">
+          <text class="header-tag-text">板龄 {{yearsSkating}} 年</text>
+          <text class="tag-arrow">›</text>
+        </view>
       </view>
     </view>
     
@@ -58,24 +53,24 @@
     <!-- 成就徽章 -->
     <view class="badges-wrapper">
       <view class="badges-header">
-        <text class="badges-title">🏆 成就徽章</text>
+        <text class="badges-title">成就徽章</text>
         <text class="badges-count">{{unlockedBadges.length}}/{{allBadges.length}}</text>
       </view>
       <view class="badges-list">
-        <view 
-          class="badge-item {{item.unlocked ? '' : 'locked'}}" 
-          wx:for="{{allBadges}}" 
+        <view
+          class="badge-item {{item.unlocked ? '' : 'locked'}}"
+          wx:for="{{allBadges}}"
           wx:key="id"
           wx:if="{{index < 7}}"
           bindtap="onBadgeTap"
           data-badge="{{item}}"
           data-index="{{index}}"
         >
-          <text class="badge-emoji">{{item.unlocked ? item.emoji : '🔒'}}</text>
+          <text class="badge-emoji">{{item.emoji}}</text>
         </view>
         <!-- 更多徽章提示 -->
-        <view 
-          class="badge-item badge-more" 
+        <view
+          class="badge-item badge-more"
           wx:if="{{allBadges.length > 7}}"
           bindtap="onBadgeTap"
           data-badge="{{allBadges[7]}}"
@@ -88,21 +83,18 @@
   
   <!-- 统计概览 -->
   <view class="stats-card">
-    <view class="stats-header">
-      <text class="stats-title"> 我的招式</text>
-    </view>
     <view class="stats-grid">
       <view class="stat-box mastered stat-clickable" bindtap="onStatTap" data-type="mastered">
         <text class="stat-num">{{stats.masteredCount || 0}}</text>
         <text class="stat-label">一脚一个</text>
       </view>
-      <view class="stat-box trial stat-clickable" bindtap="onStatTap" data-type="trial">
-        <text class="stat-num">{{stats.trialCount || 0}}</text>
-        <text class="stat-label">体验卡</text>
-      </view>
       <view class="stat-box grinding stat-clickable" bindtap="onStatTap" data-type="grinding">
         <text class="stat-num">{{stats.grindingCount || 0}}</text>
         <text class="stat-label">死磕中</text>
+      </view>
+      <view class="stat-box trial stat-clickable" bindtap="onStatTap" data-type="trial">
+        <text class="stat-num">{{stats.trialCount || 0}}</text>
+        <text class="stat-label">体验卡</text>
       </view>
     </view>
   </view>
@@ -111,7 +103,7 @@
   <view class="ollie-card">
     <view class="ollie-display" bindtap="toggleOllieExpand">
       <view class="ollie-main">
-        <text class="ollie-title">🦘 Ollie 高度</text>
+        <text class="ollie-title">Ollie 高度</text>
         <view class="ollie-values">
           <text class="ollie-val-main">{{ollie.normal}}</text>
           <text class="ollie-val-sub">/ {{ollie.switch}}</text>
@@ -248,24 +240,41 @@
   <view class="bottom-safe"></view>
 </view>
 
+<!-- 新成就弹窗 -->
+<view class="badge-modal-mask {{showNewBadgesModal ? 'show' : ''}}" bindtap="closeNewBadgesModal" wx:if="{{showNewBadgesModal}}">
+  <view class="new-badges-modal" catchtap="preventClose">
+    <view class="new-badges-header">
+      <text class="new-badges-title">🎉 恭喜解锁新成就！</text>
+    </view>
+    <scroll-view scroll-y class="new-badges-list">
+      <view class="new-badge-item" wx:for="{{newBadges}}" wx:key="id">
+        <view class="new-badge-icon">
+          <text class="new-badge-emoji">{{item.emoji}}</text>
+        </view>
+        <view class="new-badge-info">
+          <text class="new-badge-name">{{item.name}}</text>
+          <text class="new-badge-desc">{{item.description}}</text>
+        </view>
+      </view>
+    </scroll-view>
+    <view class="new-badges-footer">
+      <view class="new-badges-btn" bindtap="closeNewBadgesModal">太棒了！</view>
+    </view>
+  </view>
+</view>
+
 <!-- 徽章详情弹窗 -->
 <view class="badge-modal-mask {{showBadgeModal ? 'show' : ''}}" bindtap="closeBadgeModal" wx:if="{{showBadgeModal}}">
   <view class="badge-modal" catchtap="preventClose">
     <view class="badge-modal-header">
       <view class="badge-modal-icon {{selectedBadge.unlocked ? '' : 'locked'}}">
-        <text class="badge-modal-emoji">{{selectedBadge.unlocked ? selectedBadge.emoji : '🔒'}}</text>
+        <text class="badge-modal-emoji">{{selectedBadge.emoji}}</text>
       </view>
       <text class="badge-modal-name">{{selectedBadge.name}}</text>
     </view>
     <view class="badge-modal-body">
       <view class="badge-desc">
         <text class="badge-desc-text">{{selectedBadge.description}}</text>
-      </view>
-      <view class="badge-status">
-        <text class="badge-status-label">状态：</text>
-        <text class="badge-status-value {{selectedBadge.unlocked ? 'unlocked' : 'locked'}}">
-          {{selectedBadge.unlocked ? '已解锁 ✓' : '未解锁'}}
-        </text>
       </view>
       <view class="badge-progress" wx:if="{{!selectedBadge.unlocked && selectedBadge.progress !== undefined}}">
         <text class="badge-progress-label">进度：</text>

@@ -12,12 +12,12 @@
       </view>
       <view class="summary-divider"></view>
       <view class="summary-item">
-        <text class="summary-value">{{history.length}}</text>
-        <text class="summary-label">个节点</text>
+        <text class="summary-value">{{periods.length}}</text>
+        <text class="summary-label">个阶段</text>
       </view>
     </view>
   </view>
-  
+
   <!-- 操作按钮（单一切换按钮） -->
   <view class="action-bar">
     <view class="action-btn {{actionType}}" bindtap="toggleSkating">
@@ -25,42 +25,64 @@
       <text class="action-text">{{actionType === 'start' ? '开始滑板' : '暂停滑板'}}</text>
     </view>
   </view>
-  
+
   <!-- 时间线 -->
   <view class="timeline-section">
     <view class="timeline-header">
       <text class="timeline-title">时间线</text>
     </view>
-    
-    <view class="timeline-list" wx:if="{{history.length > 0}}">
-      <view class="timeline-node" wx:for="{{history}}" wx:key="id">
-        <view class="node-line {{index === 0 ? 'first' : ''}}">
-          <view class="node-dot {{item.type === 'start' ? 'start' : 'pause'}}"></view>
+
+    <!-- 区间展示模式 -->
+    <view class="periods-list" wx:if="{{periods.length > 0}}">
+      <view class="period-item {{item.type}}" wx:for="{{periods}}" wx:key="id">
+        <!-- 时间轴线条 -->
+        <view class="period-timeline">
+          <view class="timeline-bar {{item.type}}"></view>
         </view>
-        <view class="node-content">
-          <view class="node-header">
-            <text class="node-type">{{item.type === 'start' ? '▶️ 开始' : '⏸️ 暂停'}}</text>
-            <text class="node-date">{{item.dateStr}}</text>
+        
+        <!-- 区间内容 -->
+        <view class="period-content">
+          <!-- 区间标题 -->
+          <view class="period-header">
+            <view class="period-badge {{item.type}}">
+              <text class="badge-icon">{{item.type === 'skating' ? '🛹' : '💤'}}</text>
+              <text class="badge-text">{{item.type === 'skating' ? '滑板中' : '暂停中'}}</text>
+            </view>
+            <text class="period-duration">{{item.durationText}}</text>
+            <!-- 编辑按钮 -->
+            <view class="period-edit-btn" catchtap="showPeriodMenu" data-id="{{item.startId}}" data-end-id="{{item.endId}}" data-type="{{item.type}}">
+              <text class="edit-icon">🖊️</text>
+            </view>
           </view>
-          <view class="node-duration" wx:if="{{item.duration}}">
-            <text class="duration-text">持续 {{item.duration}}</text>
-          </view>
-          <view class="node-actions">
-            <text class="node-action" catchtap="editNode" data-id="{{item.id}}" data-index="{{index}}">编辑</text>
-            <text class="node-action delete" catchtap="deleteNode" data-id="{{item.id}}" data-index="{{index}}">删除</text>
+          
+          <!-- 时间区间 -->
+          <view class="period-time-range">
+            <view class="time-point start">
+              <text class="time-label">{{item.type === 'skating' ? '开始' : '暂停'}}</text>
+              <text class="time-value">{{item.startDate}}</text>
+            </view>
+            <view class="time-arrow">
+              <view class="arrow-line"></view>
+              <text class="arrow-days">{{item.days}}天</text>
+              <view class="arrow-line"></view>
+            </view>
+            <view class="time-point end">
+              <text class="time-label">{{item.isCurrent ? '至今' : (item.type === 'skating' ? '暂停' : '恢复')}}</text>
+              <text class="time-value">{{item.endDate}}</text>
+            </view>
           </view>
         </view>
       </view>
     </view>
-    
+
     <!-- 空状态 -->
-    <view class="empty-state" wx:else>
+    <view class="empty-state" wx:if="{{periods.length === 0}}">
       <text class="empty-emoji">🛹</text>
       <text class="empty-text">还没有滑板记录</text>
       <text class="empty-hint">点击上方按钮添加你的滑板历程</text>
     </view>
   </view>
-  
+
   <!-- 底部安全距离 -->
   <view class="bottom-safe"></view>
 </view>
@@ -74,14 +96,32 @@
     <view class="modal-body">
       <view class="date-picker-row">
         <text class="picker-label">日期：</text>
-        <picker mode="date" value="{{selectedDate}}" start="1990-01-01" end="{{today}}" bindchange="onDateChange">
+        <picker mode="date" value="{{selectedDate}}" start="{{dateRangeStart}}" end="{{dateRangeEnd}}" bindchange="onDateChange">
           <view class="picker-value">{{selectedDate}}</view>
         </picker>
+      </view>
+      <view class="date-range-hint" wx:if="{{editingNode}}">
+        <text class="hint-text">📅 可选范围: {{dateRangeStart}} ~ {{dateRangeEnd}}</text>
       </view>
     </view>
     <view class="modal-footer">
       <view class="modal-btn cancel" bindtap="closeModal">取消</view>
       <view class="modal-btn confirm" bindtap="confirmNode">确定</view>
     </view>
+  </view>
+</view>
+
+<!-- 操作菜单弹窗 -->
+<view class="action-menu-mask {{showActionMenu ? 'show' : ''}}" bindtap="closeActionMenu" wx:if="{{showActionMenu}}">
+  <view class="action-menu-content" catchtap="preventClose">
+    <view class="action-menu-item" bindtap="editPeriod">
+      <text class="menu-icon">✏️</text>
+      <text class="menu-text">编辑</text>
+    </view>
+    <view class="action-menu-item delete" bindtap="deletePeriod">
+      <text class="menu-icon">🗑️</text>
+      <text class="menu-text">删除</text>
+    </view>
+    <view class="action-menu-cancel" bindtap="closeActionMenu">取消</view>
   </view>
 </view>

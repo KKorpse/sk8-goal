@@ -97,6 +97,7 @@
 .user-info {
   display: flex;
   flex-direction: column;
+  flex: 1;
 }
 
 .nickname {
@@ -125,42 +126,37 @@
   font-weight: bold;
 }
 
-/* 标签 */
-.user-tags {
+/* 右侧信息区 */
+.header-right {
   display: flex;
-  flex-wrap: wrap;
-  gap: var(--spacing-md);
-  margin-bottom: var(--spacing-lg);
+  flex-direction: column;
+  align-items: flex-end;
+  gap: var(--spacing-sm);
+  margin-left: var(--spacing-md);
 }
 
-.tag {
+.header-tag {
   display: flex;
   align-items: center;
-  gap: 8rpx;
-  padding: 10rpx 20rpx;
+  justify-content: space-between;
+  gap: 6rpx;
+  padding: 8rpx 16rpx;
   background: var(--bg-surface);
-  border-radius: 0;
-  border: 4rpx solid var(--border-color);
+  border: 3rpx solid var(--border-color);
   box-shadow: var(--shadow-sm);
   transition: all var(--transition-fast);
+  min-width: 150rpx;
 }
 
-.tag-clickable {
-  cursor: pointer;
-}
-
-.tag-clickable:active {
+.header-tag:active {
   background: var(--bg-card);
   box-shadow: var(--shadow-pressed);
 }
 
-.tag-icon {
+.header-tag-text {
   font-size: var(--font-xs);
-}
-
-.tag-text {
-  font-size: var(--font-sm);
   color: var(--text-primary-light);
+  font-weight: bold;
   text-shadow: none;
 }
 
@@ -279,10 +275,16 @@
   border: 4rpx solid var(--border-color);
   box-shadow: var(--shadow-sm);
   transition: all var(--transition-fast);
+  position: relative;
 }
 
 .badge-item.locked {
-  opacity: 0.5;
+  background: var(--bg-surface-dark);
+}
+
+.badge-item.locked .badge-emoji {
+  opacity: 0.4;
+  filter: grayscale(1);
 }
 
 .badge-item.badge-more {
@@ -324,17 +326,18 @@
 .stats-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: var(--spacing-md);
+  gap: var(--spacing-lg);
+  padding: var(--spacing-md) 0;
 }
 
 .stat-box {
   display: flex;
   flex-direction: column;
   align-items: center;
-  padding: var(--spacing-lg) var(--spacing-md);
-  background: var(--bg-surface);
-  border: 4rpx solid var(--border-color);
-  box-shadow: var(--shadow-pressed);
+  justify-content: center;
+  padding: var(--spacing-md) var(--spacing-sm);
+  border: 2rpx solid rgba(0, 0, 0, 0.15);
+  background: rgba(139, 139, 139, 0.1);
   transition: all var(--transition-fast);
 }
 
@@ -343,46 +346,38 @@
 }
 
 .stat-clickable:active {
-  box-shadow: var(--shadow-sm);
+  opacity: 0.7;
 }
 
 .stat-num {
-  font-size: var(--font-2xl);
+  font-size: 44rpx;
   font-weight: bold;
-  text-shadow: none;
+  text-shadow: 2rpx 2rpx 0 #000;
   line-height: 1.2;
+  margin-bottom: 8rpx;
+  font-variant-numeric: tabular-nums;
+  min-width: 48rpx;
+  text-align: center;
 }
 
 .stat-label {
-  font-size: var(--font-xs);
-  color: var(--text-secondary);
+  font-size: var(--font-lg);
   font-weight: bold;
-  margin-top: 8rpx;
+  color: var(--text-primary);
+  text-shadow: none;
 }
 
-/* 不同状态的颜色 - Minecraft 风格 */
-.stat-box.mastered {
-  border-color: var(--primary-green);
-}
+/* 不同状态的颜色 */
 .stat-box.mastered .stat-num {
   color: var(--primary-green);
-  text-shadow: 2rpx 2rpx 0 #000;
 }
 
-.stat-box.trial {
-  border-color: var(--primary-cyan);
-}
 .stat-box.trial .stat-num {
   color: var(--primary-cyan);
-  text-shadow: 2rpx 2rpx 0 #000;
 }
 
-.stat-box.grinding {
-  border-color: var(--primary-orange);
-}
 .stat-box.grinding .stat-num {
   color: var(--primary-orange);
-  text-shadow: 2rpx 2rpx 0 #000;
 }
 
 /* Ollie 卡片 */
@@ -448,12 +443,20 @@
   font-weight: bold;
   color: var(--primary-yellow);
   text-shadow: 2rpx 2rpx 0 #000;
+  font-variant-numeric: tabular-nums;
+  min-width: 48rpx;
+  text-align: right;
+  display: inline-block;
 }
 
 .ollie-val-sub {
   font-size: var(--font-base);
   color: var(--text-secondary);
   font-weight: bold;
+  font-variant-numeric: tabular-nums;
+  min-width: 48rpx;
+  text-align: right;
+  display: inline-block;
 }
 
 .ollie-unit {
@@ -1153,6 +1156,11 @@
   background: var(--bg-surface-dark);
 }
 
+.badge-modal-icon.locked .badge-modal-emoji {
+  opacity: 0.4;
+  filter: grayscale(1);
+}
+
 .badge-modal-emoji {
   font-size: 56rpx;
 }
@@ -1162,6 +1170,116 @@
   font-weight: bold;
   color: var(--text-primary);
   text-shadow: none;
+}
+
+/* ========== 新成就弹窗 ========== */
+.new-badges-modal {
+  width: 85%;
+  max-width: 600rpx;
+  max-height: 70vh;
+  background: var(--bg-card);
+  border: 6rpx solid var(--border-color);
+  box-shadow:
+    var(--shadow-lg),
+    0 0 40rpx rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+  animation: modalIn var(--transition-normal) ease-out;
+}
+
+.new-badges-header {
+  padding: var(--spacing-xl) var(--spacing-inner);
+  background: var(--primary-yellow);
+  border-bottom: 4rpx solid var(--border-color);
+  text-align: center;
+}
+
+.new-badges-title {
+  font-size: var(--font-xl);
+  font-weight: bold;
+  color: var(--text-primary);
+  text-shadow: 2rpx 2rpx 0 #000;
+}
+
+.new-badges-list {
+  flex: 1;
+  max-height: 400rpx;
+  overflow-y: auto;
+}
+
+.new-badge-item {
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-lg) var(--spacing-inner);
+  border-bottom: 4rpx solid var(--border-color);
+  background: var(--bg-surface);
+  margin: var(--spacing-md);
+  border: 4rpx solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+}
+
+.new-badge-item:last-child {
+  border-bottom: none;
+}
+
+.new-badge-icon {
+  width: 64rpx;
+  height: 64rpx;
+  background: var(--primary-green);
+  border: 4rpx solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: var(--spacing-md);
+  flex-shrink: 0;
+}
+
+.new-badge-emoji {
+  font-size: 36rpx;
+}
+
+.new-badge-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+}
+
+.new-badge-name {
+  font-size: var(--font-lg);
+  font-weight: bold;
+  color: var(--text-primary);
+  text-shadow: none;
+}
+
+.new-badge-desc {
+  font-size: var(--font-sm);
+  color: var(--text-secondary);
+  text-shadow: none;
+  line-height: 1.4;
+}
+
+.new-badges-footer {
+  border-top: 4rpx solid var(--border-color);
+  padding: var(--spacing-sm);
+}
+
+.new-badges-btn {
+  padding: var(--spacing-lg);
+  text-align: center;
+  font-size: var(--font-lg);
+  font-weight: bold;
+  color: var(--text-primary);
+  text-shadow: 2rpx 2rpx 0 #000;
+  background: var(--primary-green);
+  border: 4rpx solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-fast);
+}
+
+.new-badges-btn:active {
+  box-shadow: var(--shadow-pressed);
+  transform: scale(0.98);
 }
 
 .badge-modal-body {
@@ -1186,12 +1304,14 @@
   display: flex;
   align-items: center;
   margin-bottom: var(--spacing-md);
+  line-height: 1;
 }
 
 .badge-status-label {
   font-size: var(--font-sm);
   color: var(--text-secondary);
   margin-right: var(--spacing-md);
+  line-height: 1;
 }
 
 .badge-status-value {
@@ -1200,6 +1320,10 @@
   padding: 8rpx 20rpx;
   border: 4rpx solid var(--border-color);
   box-shadow: var(--shadow-sm);
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .badge-status-value.unlocked {

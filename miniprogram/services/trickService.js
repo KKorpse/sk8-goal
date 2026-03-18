@@ -174,36 +174,56 @@ function updateTrickStatus(trickId, stance, status) {
 /**
  * 获取统计数据
  * 所有统计都基于 timeline（成招记录）
+ * 同一个招式（trickId + stance）只保留最高等级的记录
+ * 优先级：mastered > grinding > trial
  * @returns {Object}
  */
 function getStats() {
   const timeline = storageService.getTimeline()
   const totalTricks = mockTricks.getAllTricks().length
-  
-  // 从成招记录统计三种状态
-  let masteredCount = 0  // 一脚一个
-  let trialCount = 0     // 体验卡
-  let grindingCount = 0  // 死磕中
-  
+
+  // 按 trickId + stance 分组，保留最高等级的记录
+  const statusPriority = { mastered: 3, grinding: 2, trial: 1 }
+  const trickStanceMap = {}
+
   timeline.forEach(record => {
-    if (record.status === 'mastered') {
-      masteredCount++
-    } else if (record.status === 'trial') {
-      trialCount++
-    } else if (record.status === 'grinding') {
-      grindingCount++
+    const key = `${record.trickId}_${record.stance}`
+    if (!trickStanceMap[key]) {
+      trickStanceMap[key] = record
+    } else {
+      // 比较优先级，保留更高的
+      const existingPriority = statusPriority[trickStanceMap[key].status] || 0
+      const currentPriority = statusPriority[record.status] || 0
+      if (currentPriority > existingPriority) {
+        trickStanceMap[key] = record
+      }
     }
   })
-  
+
+  // 从去重后的记录统计三种状态
+  let masteredCount = 0  // 一脚一个
+  let grindingCount = 0  // 死磕中
+  let trialCount = 0     // 体验卡
+
+  Object.values(trickStanceMap).forEach(record => {
+    if (record.status === 'mastered') {
+      masteredCount++
+    } else if (record.status === 'grinding') {
+      grindingCount++
+    } else if (record.status === 'trial') {
+      trialCount++
+    }
+  })
+
   // 已点亮 = 全部三种状态
-  const litCount = masteredCount + trialCount + grindingCount
-  
+  const litCount = masteredCount + grindingCount + trialCount
+
   return {
     totalTricks,
     totalStances: totalTricks * 4,
     masteredCount,
-    trialCount,
     grindingCount,
+    trialCount,
     litCount, // 已点亮数量
     progress: Math.round((litCount / (totalTricks * 4)) * 100) // 进度百分比
   }
