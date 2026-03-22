@@ -20,6 +20,14 @@ Page({
     stanceExpanded: false,
     // 统计数据
     stats: {},
+    // 统计展开状态：'mastered' | 'grinding' | 'trial' | ''
+    statExpanded: '',
+    // 统计展开列表数据
+    statTrickLists: {
+      mastered: [],
+      grinding: [],
+      trial: []
+    },
     // 时光轴数据
     timeline: [],
     // 是否正在加载
@@ -108,6 +116,9 @@ Page({
     // 获取成就徽章
     const badges = this.getBadges(stats, ollieData)
 
+    // 构建按熟练度分组的招式列表（用于展开下拉）
+    const statTrickLists = this.buildStatTrickLists()
+
     this.setData({
       userInfo,
       stats,
@@ -116,6 +127,7 @@ Page({
       ollie: ollieData,
       allBadges: badges.all,
       unlockedBadges: badges.unlocked,
+      statTrickLists,
       loading: false
     })
     
@@ -586,6 +598,71 @@ Page({
     this.setData({
       ollieExpanded: !this.data.ollieExpanded
     })
+  },
+
+  /**
+   * 构建/刷新按熟练度分组的招式列表
+   */
+  buildStatTrickLists() {
+    const timeline = storageService.getTimeline()
+    const allTricks = require('../../mock/tricks').getAllTricks()
+
+    const trickMap = {}
+    allTricks.forEach(t => { trickMap[t.id] = t })
+
+    // 按 trickId + stance 分组，保留最高等级
+    const statusPriority = { mastered: 3, grinding: 2, trial: 1 }
+    const trickStanceMap = {}
+
+    timeline.forEach(r => {
+      const key = `${r.trickId}_${r.stance}`
+      if (!trickStanceMap[key]) {
+        trickStanceMap[key] = r
+      } else {
+        const existingPriority = statusPriority[trickStanceMap[key].status] || 0
+        const currentPriority = statusPriority[r.status] || 0
+        if (currentPriority > existingPriority) {
+          trickStanceMap[key] = r
+        }
+      }
+    })
+
+    // 按熟练度分组
+    const result = { mastered: [], grinding: [], trial: [] }
+    Object.values(trickStanceMap).forEach(r => {
+      const trick = trickMap[r.trickId] || {}
+      const item = {
+        id: r.id,
+        name: r.trickName,
+        emoji: trick.emoji || '🛹',
+        stance: r.stance
+      }
+      if (r.status === 'mastered') {
+        result.mastered.push(item)
+      } else if (r.status === 'grinding') {
+        result.grinding.push(item)
+      } else if (r.status === 'trial') {
+        result.trial.push(item)
+      }
+    })
+
+    return result
+  },
+
+  /**
+   * 展开/收起统计列表
+   */
+  toggleStatExpand(e) {
+    const { type } = e.currentTarget.dataset
+    const { statExpanded, statTrickLists } = this.data
+
+    if (statExpanded === type) {
+      // 收起
+      this.setData({ statExpanded: '' })
+    } else {
+      // 展开（如果是首次展开则刷新列表数据）
+      this.setData({ statExpanded: type, statTrickLists: this.buildStatTrickLists() })
+    }
   },
 
   /**
