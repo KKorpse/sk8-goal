@@ -603,7 +603,7 @@
 }
 
 .progress-ollie-label {
-  font-size: 16rpx;
+  font-size: var(--font-xl);
   color: var(--text-secondary);
   width: 120rpx;
   text-align: center;
