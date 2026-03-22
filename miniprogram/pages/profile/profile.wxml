@@ -83,10 +83,12 @@
   
   <!-- 合并进度卡片: Ollie + 统计概览 -->
   <view class="progress-card">
+    <!-- 卡片标题 -->
+    <view class="progress-card-title">滑手数据</view>
     <!-- Ollie 高度区 -->
     <view class="progress-ollie" bindtap="toggleOllieExpand">
       <view class="progress-ollie-left">
-        <text class="progress-ollie-title">Ollie 高度</text>
+        <text class="progress-ollie-label">Ollie 高度</text>
         <view class="progress-ollie-values">
           <text class="progress-ollie-main">{{ollie.normal}}</text>
           <text class="progress-ollie-sep">/</text>

@@ -513,6 +513,14 @@
   box-shadow: var(--shadow-md);
 }
 
+.progress-card-title {
+  font-size: var(--font-lg);
+  font-weight: bold;
+  color: var(--text-primary);
+  text-shadow: none;
+  margin-bottom: var(--spacing-lg);
+}
+
 .progress-ollie {
   display: flex;
   align-items: center;
@@ -521,14 +529,17 @@
 
 .progress-ollie-left {
   display: flex;
-  flex-direction: column;
-  gap: 4rpx;
+  flex-direction: row;
+  align-items: center;
+  gap: 12rpx;
+  flex: 1;
 }
 
-.progress-ollie-title {
-  font-size: 20rpx;
+.progress-ollie-label {
+  font-size: var(--font-lg);
   color: var(--text-secondary);
   font-weight: bold;
+  white-space: nowrap;
 }
 
 .progress-ollie-values {
@@ -538,7 +549,7 @@
 }
 
 .progress-ollie-main {
-  font-size: var(--font-lg);
+  font-size: var(--font-xl);
   font-weight: bold;
   color: var(--primary-yellow);
   text-shadow: 2rpx 2rpx 0 #000;
@@ -546,19 +557,19 @@
 }
 
 .progress-ollie-sep {
-  font-size: 24rpx;
+  font-size: var(--font-lg);
   color: var(--text-secondary);
 }
 
 .progress-ollie-sub {
-  font-size: var(--font-lg);
+  font-size: var(--font-xl);
   color: var(--primary-cyan);
   font-weight: bold;
   font-variant-numeric: tabular-nums;
 }
 
 .progress-ollie-unit {
-  font-size: 20rpx;
+  font-size: var(--font-sm);
   color: var(--text-secondary);
   margin-left: 4rpx;
 }
