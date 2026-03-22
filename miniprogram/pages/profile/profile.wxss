@@ -322,61 +322,59 @@
   text-shadow: none;
 }
 
-/* 统计网格布局 */
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: var(--spacing-lg);
-  padding: var(--spacing-md) 0;
+/* 统计汇总布局 - 分割线风格 */
+.stats-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
 }
 
-.stat-box {
+.summary-item {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  padding: var(--spacing-md) var(--spacing-sm);
-  border: 2rpx solid rgba(0, 0, 0, 0.15);
-  background: rgba(139, 139, 139, 0.1);
-  transition: all var(--transition-fast);
+  gap: 4rpx;
 }
 
-.stat-clickable {
+.summary-item.stat-clickable {
   cursor: pointer;
 }
 
-.stat-clickable:active {
+.summary-item.stat-clickable:active {
   opacity: 0.7;
 }
 
-.stat-num {
-  font-size: 44rpx;
+.summary-num {
+  font-size: var(--font-xl);
   font-weight: bold;
+  color: var(--primary-yellow);
   text-shadow: 2rpx 2rpx 0 #000;
-  line-height: 1.2;
-  margin-bottom: 8rpx;
   font-variant-numeric: tabular-nums;
-  min-width: 48rpx;
-  text-align: center;
+  line-height: 1.2;
 }
 
-.stat-label {
-  font-size: var(--font-lg);
+.summary-label {
+  font-size: 20rpx;
+  color: var(--text-secondary);
   font-weight: bold;
-  color: var(--text-primary);
-  text-shadow: none;
+}
+
+.summary-divider {
+  width: 4rpx;
+  height: 60rpx;
+  background: var(--border-color);
 }
 
 /* 不同状态的颜色 */
-.stat-box.mastered .stat-num {
+.summary-item.mastered .summary-num {
   color: var(--primary-green);
 }
 
-.stat-box.trial .stat-num {
+.summary-item.trial .summary-num {
   color: var(--primary-cyan);
 }
 
-.stat-box.grinding .stat-num {
+.summary-item.grinding .summary-num {
   color: var(--primary-orange);
 }
 
@@ -810,6 +808,7 @@
   width: 120rpx;
   cursor: pointer;
   transition: transform var(--transition-fast);
+  position: relative;
 }
 
 .trick-block:active {
@@ -889,15 +888,6 @@
 
 .status-star {
   font-size: 16rpx;
-}
-
-/* 日期 */
-.block-date {
-  font-size: 16rpx;
-  font-weight: bold;
-  color: #fff;
-  text-shadow: 1rpx 1rpx 0 #000;
-  margin-top: 8rpx;
 }
 
 /* 招式名 */

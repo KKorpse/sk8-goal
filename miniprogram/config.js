@@ -82,7 +82,19 @@ const config = {
   storageKeys: {
     USER_INFO: 'userInfo',
     USER_PROGRESS: 'userProgress',
-    TIMELINE: 'timeline'
+    TIMELINE: 'timeline',
+    CHECKIN_RECORDS: 'checkinRecords' // 打卡记录
+  },
+
+  // 打卡配置
+  checkin: {
+    displayDays: 30, // 显示最近30天
+    maxDays: 365, // 最多保存365天
+    levels: {
+      0: { color: '#2d3748', name: '未打卡', minCount: 0 },
+      1: { color: '#276749', name: '已打卡', minCount: 1 },
+      2: { color: '#38a169', name: '多次打卡', minCount: 2 }
+    }
   }
 }
 

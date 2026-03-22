@@ -7,9 +7,6 @@
 
 /* 顶部固定区域 */
 .header-fixed {
-  position: sticky;
-  top: 0;
-  z-index: 100;
   /* 泥土背景 */
   background-image: 
     radial-gradient(circle at 25% 25%, rgba(74, 53, 32, 0.8) 2rpx, transparent 2rpx),

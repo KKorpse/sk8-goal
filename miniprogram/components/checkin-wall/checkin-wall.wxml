@@ -1,0 +1,137 @@
+<!--滑板打卡墙组件 - 游戏风格-->
+<view class="checkin-wall-card">
+  <!-- 标题栏 -->
+  <view class="checkin-header">
+    <text class="checkin-title">滑板打卡</text>
+    <view class="checkin-stats">
+      <text class="consecutive-badge">🔥 {{consecutiveDays}}</text>
+    </view>
+  </view>
+
+  <!-- 游戏场景 -->
+  <view class="checkin-game-scene">
+    <!-- 天空背景 -->
+    <view class="checkin-sky-bg">
+      <view class="checkin-cloud cloud-1">☁️</view>
+      <view class="checkin-cloud cloud-2">☁️</view>
+    </view>
+
+    <!-- 打卡网格区域 -->
+    <view class="checkin-grid-wrapper">
+      <!-- 星期标签 -->
+      <view class="weekday-column">
+        <!-- 月份标签行占位 -->
+        <view class="weekday-spacer"></view>
+        <text class="weekday-text">日</text>
+        <text class="weekday-text">一</text>
+        <text class="weekday-text"></text>
+        <text class="weekday-text">三</text>
+        <text class="weekday-text"></text>
+        <text class="weekday-text">五</text>
+        <text class="weekday-text"></text>
+      </view>
+
+      <!-- 可滑动的打卡网格 -->
+      <scroll-view scroll-x class="checkin-scroll" enhanced show-scrollbar="{{false}}" scroll-left="{{scrollLeft}}" scroll-with-animation="{{false}}">
+        <view class="checkin-scroll-content">
+          <!-- 月份标签行：与网格列一一对应 -->
+          <view class="month-labels-row">
+            <view class="month-cell" wx:for="{{checkinWeeks}}" wx:key="index">
+              <text class="month-label" wx:if="{{monthMap[index]}}">{{monthMap[index]}}</text>
+            </view>
+          </view>
+          
+          <!-- 打卡网格 -->
+          <view class="checkin-grid">
+            <!-- 按周渲染 -->
+            <view class="grid-week" wx:for="{{checkinWeeks}}" wx:key="index">
+              <view 
+                class="checkin-cell {{day.level}}"
+                wx:for="{{item}}"
+                wx:for-item="day"
+                wx:key="date"
+                data-date="{{day.date}}"
+                data-count="{{day.count}}"
+                bindtap="onCellTap"
+              >
+                <view class="cell-block">
+                  <view class="block-shine"></view>
+                </view>
+              </view>
+            </view>
+          </view>
+        </view>
+      </scroll-view>
+    </view>
+
+    <!-- 地面 -->
+    <view class="checkin-ground">
+      <view class="grass"></view>
+      <view class="dirt"></view>
+    </view>
+
+    <!-- 滑板小人 -->
+    <view class="checkin-skater">
+      <text class="skater-emoji">🛹</text>
+    </view>
+  </view>
+
+  <!-- 今日打卡按钮 -->
+  <view class="checkin-action">
+    <view 
+      class="checkin-btn {{todayChecked ? 'checked' : ''}}" 
+      bindtap="onCheckinTap"
+    >
+      <text class="btn-emoji">{{todayChecked ? '✓' : '🎯'}}</text>
+      <text class="btn-text">{{todayChecked ? '今日已打卡' : '今日打卡'}}</text>
+    </view>
+  </view>
+
+  <!-- 统计信息 -->
+  <view class="checkin-summary">
+    <view class="summary-item">
+      <text class="summary-num">{{monthCheckins}}</text>
+      <text class="summary-label">本月</text>
+    </view>
+    <view class="summary-divider"></view>
+    <view class="summary-item">
+      <text class="summary-num">{{yearCheckins}}</text>
+      <text class="summary-label">今年</text>
+    </view>
+    <view class="summary-divider"></view>
+    <view class="summary-item">
+      <text class="summary-num">{{totalCheckins}}</text>
+      <text class="summary-label">总计</text>
+    </view>
+  </view>
+</view>
+
+<!-- 打卡详情弹窗 -->
+<view class="checkin-modal-mask {{showModal ? 'show' : ''}}" bindtap="closeModal" wx:if="{{showModal}}">
+  <view class="checkin-modal" catchtap="preventClose">
+    <view class="modal-header">
+      <text class="modal-title">{{selectedDate}}</text>
+      <view class="modal-close" bindtap="closeModal">
+        <text class="close-icon">×</text>
+      </view>
+    </view>
+    
+    <view class="modal-content">
+      <view class="modal-info">
+        <text class="info-emoji">{{selectedCount > 0 ? '✅' : '❌'}}</text>
+        <text class="info-text">
+          {{selectedCount > 0 ? '已打卡 ' + selectedCount + ' 次' : '未打卡'}}
+        </text>
+      </view>
+      
+      <view class="modal-actions">
+        <view 
+          class="modal-btn {{selectedCount > 0 ? 'btn-remove' : 'btn-add'}}"
+          bindtap="onModalAction"
+        >
+          <text class="btn-text">{{selectedCount > 0 ? '取消打卡' : '补打卡'}}</text>
+        </view>
+      </view>
+    </view>
+  </view>
+</view>

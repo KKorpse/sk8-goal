@@ -49,7 +49,9 @@ Page({
     selectedTimeline: {},
     // 昵称修改弹窗
     showNicknameModal: false,
-    tempNickname: ''
+    tempNickname: '',
+    // 滚动同步
+    timelineScrollLeft: 9999
   },
 
   onLoad() {

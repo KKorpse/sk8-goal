@@ -156,6 +156,126 @@ function addTimelineRecord(record) {
   return setTimeline(timeline)
 }
 
+// ========== 打卡相关 ==========
+
+/**
+ * 获取打卡记录
+ * @returns {Object} { '2024-01-01': { count: 2, timestamps: [timestamp1, timestamp2] } }
+ */
+function getCheckinRecords() {
+  return get(KEYS.CHECKIN_RECORDS, {})
+}
+
+/**
+ * 保存打卡记录
+ * @param {Object} records
+ * @returns {boolean}
+ */
+function setCheckinRecords(records) {
+  return set(KEYS.CHECKIN_RECORDS, records)
+}
+
+/**
+ * 添加打卡记录
+ * @param {string} date - 日期字符串 'YYYY-MM-DD'
+ * @returns {boolean}
+ */
+function addCheckin(date) {
+  const records = getCheckinRecords()
+  
+  if (!records[date]) {
+    records[date] = {
+      count: 0,
+      timestamps: []
+    }
+  }
+  
+  records[date].count++
+  records[date].timestamps.push(Date.now())
+  
+  // 清理超过365天的记录
+  cleanOldCheckinRecords(records)
+  
+  return setCheckinRecords(records)
+}
+
+/**
+ * 移除打卡记录（取消打卡）
+ * @param {string} date - 日期字符串 'YYYY-MM-DD'
+ * @returns {boolean}
+ */
+function removeCheckin(date) {
+  const records = getCheckinRecords()
+  
+  if (records[date] && records[date].count > 0) {
+    records[date].count--
+    records[date].timestamps.pop()
+    
+    // 如果打卡次数为0，删除该日期记录
+    if (records[date].count === 0) {
+      delete records[date]
+    }
+    
+    return setCheckinRecords(records)
+  }
+  
+  return false
+}
+
+/**
+ * 清理过期的打卡记录
+ * @param {Object} records
+ */
+function cleanOldCheckinRecords(records) {
+  const config = require('../config')
+  const maxDays = config.checkin.maxDays
+  const cutoffDate = new Date()
+  cutoffDate.setDate(cutoffDate.getDate() - maxDays)
+  
+  Object.keys(records).forEach(date => {
+    const recordDate = new Date(date)
+    if (recordDate < cutoffDate) {
+      delete records[date]
+    }
+  })
+}
+
+/**
+ * 获取连续打卡天数
+ * @returns {number}
+ */
+function getConsecutiveDays() {
+  const records = getCheckinRecords()
+  const today = new Date()
+  let consecutive = 0
+  
+  for (let i = 0; i < 365; i++) {
+    const date = new Date(today)
+    date.setDate(date.getDate() - i)
+    const dateStr = formatDate(date)
+    
+    if (records[dateStr] && records[dateStr].count > 0) {
+      consecutive++
+    } else {
+      break
+    }
+  }
+  
+  return consecutive
+}
+
+/**
+ * 格式化日期为 YYYY-MM-DD
+ * @param {Date} date
+ * @returns {string}
+ */
+function formatDate(date) {
+  const year = date.getFullYear()
+  const month = String(date.getMonth() + 1).padStart(2, '0')
+  const day = String(date.getDate()).padStart(2, '0')
+  return `${year}-${month}-${day}`
+}
+
 module.exports = {
   get,
   set,
@@ -168,5 +288,11 @@ module.exports = {
   updateTrickStatus,
   getTimeline,
   setTimeline,
-  addTimelineRecord
+  addTimelineRecord,
+  getCheckinRecords,
+  setCheckinRecords,
+  addCheckin,
+  removeCheckin,
+  getConsecutiveDays,
+  formatDate
 }

@@ -3,6 +3,7 @@
   "enablePullDownRefresh": true,
   "backgroundColor": "#1A1A2E",
   "usingComponents": {
-    "timeline-item": "/components/timeline-item/timeline-item"
+    "timeline-item": "/components/timeline-item/timeline-item",
+    "checkin-wall": "/components/checkin-wall/checkin-wall"
   }
 }

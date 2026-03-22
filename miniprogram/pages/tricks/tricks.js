@@ -135,12 +135,21 @@ Page({
     const result = trickService.updateTrickStatus(trickId, stance, newStatus)
     
     if (result.success && result.changed) {
-      // 刷新当前选中招式的数据
+      // 更新当前选中招式的数据
       const updatedTrick = trickService.getTrickById(trickId)
       this.setData({ selectedTrick: updatedTrick })
       
-      // 刷新列表
-      this.loadTricks()
+      // 更新列表中对应的招式数据（避免整个列表刷新导致滚动位置重置）
+      const groupedTricks = this.data.groupedTricks.map(group => {
+        const tricks = group.tricks.map(trick => {
+          if (trick.id === trickId) {
+            return updatedTrick
+          }
+          return trick
+        })
+        return { ...group, tricks }
+      })
+      this.setData({ groupedTricks })
       
       // 如果是达成"一脚一个"，显示庆祝提示
       if (newStatus === 'mastered') {

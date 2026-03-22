@@ -1,0 +1,477 @@
+/* 滑板打卡墙组件样式 - 游戏风格 */
+
+.checkin-wall-card {
+  background: var(--bg-card);
+  border: 4rpx solid var(--border-color);
+  border-radius: 0;
+  padding: var(--spacing-inner);
+  margin-bottom: var(--spacing-card);
+  box-shadow: var(--shadow-md);
+  overflow: hidden;
+}
+
+/* 标题栏 */
+.checkin-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--spacing-md);
+}
+
+.checkin-title {
+  font-size: var(--font-lg);
+  font-weight: bold;
+  color: var(--text-primary);
+  text-shadow: none;
+}
+
+.checkin-stats {
+  display: flex;
+  align-items: center;
+}
+
+.consecutive-badge {
+  font-size: var(--font-sm);
+  color: var(--primary-orange);
+  font-weight: bold;
+  background: rgba(255, 170, 0, 0.15);
+  padding: 8rpx 16rpx;
+  border: 3rpx solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+}
+
+/* 游戏场景 */
+.checkin-game-scene {
+  position: relative;
+  background: linear-gradient(180deg, #87CEEB 0%, #E0F6FF 100%);
+  border: 4rpx solid var(--border-color);
+  margin-bottom: var(--spacing-md);
+  overflow: hidden;
+}
+
+/* 天空背景 */
+.checkin-sky-bg {
+  position: relative;
+  height: 80rpx;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+.checkin-cloud {
+  position: absolute;
+  font-size: 48rpx;
+  opacity: 0.8;
+  animation: floatCheckinCloud 20s ease-in-out infinite;
+}
+
+.checkin-cloud.cloud-1 {
+  top: 16rpx;
+  left: 40rpx;
+  animation-delay: 0s;
+}
+
+.checkin-cloud.cloud-2 {
+  top: 32rpx;
+  left: 200rpx;
+  animation-delay: 7s;
+}
+
+@keyframes floatCheckinCloud {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(20rpx); }
+}
+
+/* 打卡网格容器 */
+.checkin-grid-wrapper {
+  display: flex;
+  padding: 16rpx var(--spacing-sm) var(--spacing-md);
+  position: relative;
+  z-index: 1;
+}
+
+/* 左侧星期标签 */
+.weekday-column {
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+  padding-right: var(--spacing-xs);
+  flex-shrink: 0;
+}
+
+/* 月份标签行占位，与 month-labels-row 等高 */
+.weekday-spacer {
+  height: 36rpx;
+  margin-bottom: 4rpx;
+  flex-shrink: 0;
+}
+
+.weekday-text {
+  font-size: 18rpx;
+  color: var(--text-secondary);
+  line-height: 24rpx;
+  height: 24rpx;
+  text-align: right;
+  font-weight: bold;
+}
+
+/* 滚动容器 */
+.checkin-scroll {
+  flex: 1;
+  overflow: hidden;
+}
+
+.checkin-scroll-content {
+  display: inline-block;
+  min-width: 100%;
+}
+
+/* 月份标签行：flex 布局与网格列对齐 */
+.month-labels-row {
+  display: flex;
+  gap: 4rpx;
+  height: 36rpx;
+  margin-bottom: 4rpx;
+}
+
+/* 每个月份标签占一列宽度，与 grid-week 等宽 */
+.month-cell {
+  width: 24rpx;
+  height: 36rpx;
+  flex-shrink: 0;
+  position: relative;
+}
+
+.month-label {
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-size: 18rpx;
+  line-height: 36rpx;
+  color: #333;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+/* 打卡网格 */
+.checkin-grid {
+  display: flex;
+  gap: 4rpx;
+}
+
+.grid-week {
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+}
+
+.checkin-cell {
+  width: 24rpx;
+  height: 24rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: all var(--transition-fast);
+}
+
+/* 日期标签行 */
+.date-labels-row {
+  display: flex;
+  gap: 4rpx;
+  margin-top: 4rpx;
+  padding-left: 4rpx;
+}
+
+.date-label {
+  width: 24rpx;
+  font-size: 14rpx;
+  color: var(--text-secondary);
+  text-align: center;
+  font-weight: bold;
+}
+
+.cell-block {
+  width: 20rpx;
+  height: 20rpx;
+  border: 2rpx solid #000;
+  position: relative;
+  transition: all var(--transition-fast);
+  background: #8b8b8b;
+  box-shadow: inset 2rpx 2rpx 0px 0px #c6c6c6, inset -2rpx -2rpx 0px 0px #555555;
+}
+
+.block-shine {
+  position: absolute;
+  top: 2rpx;
+  left: 2rpx;
+  right: 2rpx;
+  bottom: 2rpx;
+  background: rgba(255, 255, 255, 0.2);
+  pointer-events: none;
+}
+
+/* 未打卡 - 灰色方块 */
+.checkin-cell.level-0 .cell-block {
+  background: #8b8b8b;
+  box-shadow: inset 2rpx 2rpx 0px 0px #c6c6c6, inset -2rpx -2rpx 0px 0px #555555;
+}
+
+/* 已打卡 - 深绿色方块 */
+.checkin-cell.level-1 .cell-block {
+  background: #276749;
+  box-shadow: inset 2rpx 2rpx 0px 0px #38a169, inset -2rpx -2rpx 0px 0px #1a4d2e;
+}
+
+/* 多次打卡 - 亮绿色方块 */
+.checkin-cell.level-2 .cell-block {
+  background: #38a169;
+  box-shadow: inset 2rpx 2rpx 0px 0px #48bb78, inset -2rpx -2rpx 0px 0px #276749;
+}
+
+/* 点击效果 */
+.checkin-cell:active .cell-block {
+  transform: scale(0.85);
+  box-shadow: inset 2rpx 2rpx 0px 0px #555555, inset -2rpx -2rpx 0px 0px #c6c6c6;
+}
+
+/* 地面 */
+.checkin-ground {
+  position: relative;
+  height: 48rpx;
+}
+
+.checkin-ground .grass {
+  height: 16rpx;
+  background: linear-gradient(180deg, #4a7c23 0%, #3d6b1e 100%);
+  border-top: 4rpx solid #2d5016;
+}
+
+.checkin-ground .dirt {
+  height: 32rpx;
+  background: linear-gradient(180deg, #8B4513 0%, #654321 100%);
+  border-top: 2rpx solid #5a3a1a;
+}
+
+/* 滑板小人 */
+.checkin-skater {
+  position: absolute;
+  bottom: 32rpx;
+  right: 40rpx;
+  z-index: 2;
+  animation: skaterMove 3s ease-in-out infinite;
+}
+
+.checkin-skater .skater-emoji {
+  font-size: 48rpx;
+  filter: drop-shadow(0 2rpx 4rpx rgba(0, 0, 0, 0.3));
+}
+
+@keyframes skaterMove {
+  0%, 100% { transform: translateX(0) rotate(0deg); }
+  25% { transform: translateX(-10rpx) rotate(-5deg); }
+  75% { transform: translateX(10rpx) rotate(5deg); }
+}
+
+/* 今日打卡按钮 */
+.checkin-action {
+  margin-bottom: var(--spacing-md);
+}
+
+.checkin-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-sm);
+  padding: var(--spacing-md);
+  background: var(--primary-green);
+  border: 4rpx solid var(--border-color);
+  box-shadow: inset 4rpx 4rpx 0px 0px #48bb78, inset -4rpx -4rpx 0px 0px #276749;
+  transition: all var(--transition-fast);
+}
+
+.checkin-btn:active {
+  box-shadow: inset -4rpx -4rpx 0px 0px #48bb78, inset 4rpx 4rpx 0px 0px #276749;
+  transform: scale(0.98);
+}
+
+.checkin-btn.checked {
+  background: var(--bg-surface);
+  box-shadow: inset 4rpx 4rpx 0px 0px #4a5568, inset -4rpx -4rpx 0px 0px #1a202c;
+}
+
+.btn-emoji {
+  font-size: var(--font-lg);
+}
+
+.btn-text {
+  font-size: var(--font-base);
+  font-weight: bold;
+  color: var(--text-primary-light);
+  text-shadow: 2rpx 2rpx 0 #000;
+}
+
+/* 统计信息 */
+.checkin-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding-top: var(--spacing-md);
+  border-top: 4rpx solid var(--border-color);
+}
+
+.summary-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4rpx;
+}
+
+.summary-num {
+  font-size: var(--font-xl);
+  font-weight: bold;
+  color: var(--primary-yellow);
+  text-shadow: 2rpx 2rpx 0 #000;
+  font-variant-numeric: tabular-nums;
+}
+
+.summary-label {
+  font-size: 20rpx;
+  color: var(--text-secondary);
+  font-weight: bold;
+}
+
+.summary-divider {
+  width: 4rpx;
+  height: 60rpx;
+  background: var(--border-color);
+}
+
+/* 弹窗样式 */
+.checkin-modal-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity var(--transition-normal);
+}
+
+.checkin-modal-mask.show {
+  opacity: 1;
+}
+
+.checkin-modal {
+  width: 80%;
+  max-width: 600rpx;
+  background: var(--bg-card);
+  border: 4rpx solid var(--border-color);
+  box-shadow: var(--shadow-lg);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--spacing-md) var(--spacing-inner);
+  border-bottom: 4rpx solid var(--border-color);
+  background: var(--bg-surface);
+}
+
+.modal-title {
+  font-size: var(--font-base);
+  font-weight: bold;
+  color: var(--primary-yellow);
+  text-shadow: 2rpx 2rpx 0 #000;
+}
+
+.modal-close {
+  width: 48rpx;
+  height: 48rpx;
+  background: var(--primary-red);
+  border: 3rpx solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: inset 2rpx 2rpx 0px 0px #ffaaaa, inset -2rpx -2rpx 0px 0px #aa0000;
+}
+
+.modal-close:active {
+  box-shadow: inset -2rpx -2rpx 0px 0px #ffaaaa, inset 2rpx 2rpx 0px 0px #aa0000;
+}
+
+.close-icon {
+  font-size: 32rpx;
+  color: white;
+  font-weight: bold;
+}
+
+.modal-content {
+  padding: var(--spacing-inner);
+}
+
+.modal-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md) 0;
+}
+
+.info-emoji {
+  font-size: 60rpx;
+}
+
+.info-text {
+  font-size: var(--font-base);
+  font-weight: bold;
+  color: var(--text-primary);
+  text-shadow: 2rpx 2rpx 0 #000;
+}
+
+.modal-actions {
+  margin-top: var(--spacing-md);
+}
+
+.modal-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-md);
+  border: 4rpx solid var(--border-color);
+  transition: all var(--transition-fast);
+}
+
+.modal-btn:active {
+  transform: scale(0.98);
+}
+
+.modal-btn.btn-add {
+  background: var(--primary-green);
+  box-shadow: inset 4rpx 4rpx 0px 0px #48bb78, inset -4rpx -4rpx 0px 0px #276749;
+}
+
+.modal-btn.btn-add:active {
+  box-shadow: inset -4rpx -4rpx 0px 0px #48bb78, inset 4rpx 4rpx 0px 0px #276749;
+}
+
+.modal-btn.btn-remove {
+  background: var(--primary-red);
+  box-shadow: inset 4rpx 4rpx 0px 0px #ffaaaa, inset -4rpx -4rpx 0px 0px #aa0000;
+}
+
+.modal-btn.btn-remove:active {
+  box-shadow: inset -4rpx -4rpx 0px 0px #ffaaaa, inset 4rpx 4rpx 0px 0px #aa0000;
+}
+
+.modal-btn .btn-text {
+  font-size: var(--font-sm);
+  font-weight: bold;
+  color: var(--text-primary-light);
+  text-shadow: 2rpx 2rpx 0 #000;
+}

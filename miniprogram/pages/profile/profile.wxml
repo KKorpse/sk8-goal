@@ -83,18 +83,20 @@
   
   <!-- 统计概览 -->
   <view class="stats-card">
-    <view class="stats-grid">
-      <view class="stat-box mastered stat-clickable" bindtap="onStatTap" data-type="mastered">
-        <text class="stat-num">{{stats.masteredCount || 0}}</text>
-        <text class="stat-label">一脚一个</text>
+    <view class="stats-summary">
+      <view class="summary-item mastered stat-clickable" bindtap="onStatTap" data-type="mastered">
+        <text class="summary-num">{{stats.masteredCount || 0}}</text>
+        <text class="summary-label">一脚一个</text>
       </view>
-      <view class="stat-box grinding stat-clickable" bindtap="onStatTap" data-type="grinding">
-        <text class="stat-num">{{stats.grindingCount || 0}}</text>
-        <text class="stat-label">死磕中</text>
+      <view class="summary-divider"></view>
+      <view class="summary-item grinding stat-clickable" bindtap="onStatTap" data-type="grinding">
+        <text class="summary-num">{{stats.grindingCount || 0}}</text>
+        <text class="summary-label">死磕中</text>
       </view>
-      <view class="stat-box trial stat-clickable" bindtap="onStatTap" data-type="trial">
-        <text class="stat-num">{{stats.trialCount || 0}}</text>
-        <text class="stat-label">体验卡</text>
+      <view class="summary-divider"></view>
+      <view class="summary-item trial stat-clickable" bindtap="onStatTap" data-type="trial">
+        <text class="summary-num">{{stats.trialCount || 0}}</text>
+        <text class="summary-label">体验卡</text>
       </view>
     </view>
   </view>
@@ -188,8 +190,6 @@
             <view class="block-status {{item.status}}">
               <text class="status-star">{{item.status === 'mastered' ? '⭐' : item.status === 'trial' ? '✨' : '🔥'}}</text>
             </view>
-            <!-- 日期 -->
-            <text class="block-date">{{item.date}}</text>
             <!-- 招式名 -->
             <text class="block-name">{{item.trickName}}</text>
             <!-- 脚位标签 -->
@@ -211,11 +211,6 @@
         <view class="grass"></view>
         <view class="dirt"></view>
       </view>
-
-      <!-- 滑板小人 -->
-      <view class="skater">
-        <text class="skater-emoji">🛹</text>
-      </view>
     </view>
 
     <!-- 空状态 -->
@@ -230,9 +225,12 @@
     </view>
   </view>
   
+  <!-- 滑板打卡墙 - 游戏风格 -->
+  <checkin-wall />
+  
   <!-- 底部信息 -->
   <view class="footer">
-    <text class="footer-text">Made with 🛹 by SkateGoal</text>
+    <text class="footer-text">Made with 🛹 by Korpse</text>
     <text class="footer-version">v1.0.0</text>
   </view>
   
