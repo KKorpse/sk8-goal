@@ -8,7 +8,7 @@
 /* 顶部固定区域 */
 .header-fixed {
   /* 泥土背景 */
-  background-image:
+  background-image: 
     radial-gradient(circle at 25% 25%, rgba(74, 53, 32, 0.8) 2rpx, transparent 2rpx),
     radial-gradient(circle at 75% 75%, rgba(45, 30, 17, 0.6) 2rpx, transparent 2rpx);
   background-size: 24rpx 24rpx;
@@ -82,143 +82,7 @@
   font-weight: bold;
 }
 
-/* ===== 熟练度分组区域 ===== */
-.status-section {
-  padding: var(--spacing-lg) 0 var(--spacing-md);
-}
-
-.status-group {
-  margin-bottom: var(--spacing-card);
-}
-
-/* 分组标题行 */
-.status-group-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: var(--bg-card);
-  border: 4rpx solid var(--border-color);
-  padding: var(--spacing-lg) var(--spacing-inner);
-  box-shadow: var(--shadow-sm);
-  transition: all var(--transition-fast);
-}
-
-.status-group-header.expanded {
-  box-shadow: var(--shadow-pressed);
-  background: var(--bg-card-hover);
-}
-
-.status-group-left {
-  display: flex;
-  align-items: center;
-}
-
-/* 图标容器 - MC 风格像素边框 */
-.status-group-icon-wrapper {
-  width: 72rpx;
-  height: 72rpx;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: var(--bg-surface);
-  border: 4rpx solid var(--border-color);
-  box-shadow: var(--shadow-sm);
-  margin-right: var(--spacing-lg);
-}
-
-.status-group-emoji {
-  font-size: var(--icon-lg);
-}
-
-/* 分组文字 */
-.status-group-info {
-  display: flex;
-  flex-direction: column;
-}
-
-.status-group-label {
-  font-size: var(--font-lg);
-  font-weight: bold;
-  color: var(--text-primary);
-  text-shadow: none;
-}
-
-.status-group-count {
-  font-size: var(--font-xs);
-  color: var(--text-secondary);
-  margin-top: 4rpx;
-  text-shadow: none;
-}
-
-/* 箭头 */
-.status-group-arrow {
-  transition: transform var(--transition-normal);
-}
-
-.status-group-arrow.rotated {
-  transform: rotate(180deg);
-}
-
-.arrow-icon {
-  font-size: 24rpx;
-  color: var(--text-secondary);
-}
-
-/* 可展开的列表体 - max-height 限制最多显示5个，超出可滚动 */
-.status-group-body {
-  max-height: 0;
-  overflow: hidden;
-  transition: max-height var(--transition-normal);
-}
-
-.status-group-body.show {
-  /* 5个卡片高度 + 间距 + padding，约 5 * (120rpx + 24rpx) = 720rpx */
-  max-height: 800rpx;
-  overflow-y: auto;
-  margin-top: var(--spacing-sm);
-}
-
-/* 列表容器 */
-.status-group-list {
-  padding: var(--spacing-sm) 0;
-}
-
-/* 分组内空状态 */
-.status-group-empty {
-  padding: var(--spacing-xl) 0;
-  text-align: center;
-}
-
-.status-group-empty-text {
-  font-size: var(--font-sm);
-  color: var(--text-muted);
-  text-shadow: none;
-  font-style: italic;
-}
-
-/* ===== 分隔线 ===== */
-.section-divider {
-  display: flex;
-  align-items: center;
-  padding: var(--spacing-md) 0;
-  margin-bottom: var(--spacing-sm);
-}
-
-.divider-line {
-  flex: 1;
-  height: 4rpx;
-  background: var(--border-light);
-}
-
-.divider-text {
-  padding: 0 var(--spacing-lg);
-  font-size: var(--font-xs);
-  color: var(--text-muted);
-  font-weight: bold;
-  text-shadow: none;
-}
-
-/* ===== 招式系列分组 ===== */
+/* 招式分组 */
 .trick-group {
   margin-bottom: var(--spacing-section);
 }

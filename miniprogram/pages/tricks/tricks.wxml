@@ -3,20 +3,20 @@
   <!-- 顶部固定区域 -->
   <view class="header-fixed">
     <!-- 搜索栏 -->
-    <search-bar
+    <search-bar 
       placeholder="搜个招..."
       value="{{searchKeyword}}"
       bind:search="onSearch"
     />
-
+    
     <!-- 分类筛选 -->
-    <filter-tabs
+    <filter-tabs 
       tabs="{{categories}}"
       activeId="{{activeCategory}}"
       bind:change="onCategoryChange"
     />
   </view>
-
+  
   <!-- 招式列表 -->
   <view class="tricks-list">
     <!-- 加载状态 -->
@@ -24,71 +24,18 @@
       <view class="loading-spinner"></view>
       <text class="loading-text">加载中...</text>
     </view>
-
+    
     <!-- 空状态 -->
     <view class="empty-wrapper" wx:elif="{{groupedTricks.length === 0}}">
       <text class="empty-emoji">🔍</text>
       <text class="empty-text">没有找到相关招式</text>
       <text class="empty-hint">换个关键词试试？</text>
     </view>
-
-    <!-- 招式列表 -->
+    
+    <!-- 招式分组列表 -->
     <block wx:else>
-      <!-- 熟练度分组（mastered/grinding/trial）- 可展开收起 -->
-      <view class="status-section">
-        <view
-          wx:for="{{statusGroups}}"
-          wx:key="key"
-          class="status-group"
-        >
-          <!-- 分组标题（点击展开/收起） -->
-          <view
-            class="status-group-header {{expandedGroups[item.key] ? 'expanded' : ''}}"
-            data-key="{{item.key}}"
-            bindtap="onToggleStatusGroup"
-          >
-            <view class="status-group-left">
-              <view class="status-group-icon-wrapper" style="border-color: {{item.color}};">
-                <text class="status-group-emoji">{{item.emoji}}</text>
-              </view>
-              <view class="status-group-info">
-                <text class="status-group-label">{{item.label}}</text>
-                <text class="status-group-count">{{item.count}} 个招式</text>
-              </view>
-            </view>
-            <view class="status-group-arrow {{expandedGroups[item.key] ? 'rotated' : ''}}">
-              <text class="arrow-icon">▼</text>
-            </view>
-          </view>
-
-          <!-- 可展开的招式列表（最多显示5个，超出滚动） -->
-          <view class="status-group-body {{expandedGroups[item.key] ? 'show' : ''}}">
-            <view class="status-group-list" wx:if="{{item.tricks.length > 0}}">
-              <trick-card
-                wx:for="{{item.tricks}}"
-                wx:for-item="trick"
-                wx:key="id"
-                trick="{{trick}}"
-                bind:tap="onTrickTap"
-              />
-            </view>
-            <view class="status-group-empty" wx:else>
-              <text class="status-group-empty-text">还没有招式，快去练一个吧！</text>
-            </view>
-          </view>
-        </view>
-      </view>
-
-      <!-- 分隔线 -->
-      <view class="section-divider">
-        <view class="divider-line"></view>
-        <text class="divider-text">全部招式</text>
-        <view class="divider-line"></view>
-      </view>
-
-      <!-- 按招式系列分组列表 -->
-      <view
-        wx:for="{{groupedTricks}}"
+      <view 
+        wx:for="{{groupedTricks}}" 
         wx:key="group"
         class="trick-group"
       >
@@ -97,11 +44,11 @@
           <view class="group-line"></view>
           <text class="group-title">{{item.group}}</text>
         </view>
-
+        
         <!-- 招式卡片 -->
         <view class="group-content">
-          <trick-card
-            wx:for="{{item.tricks}}"
+          <trick-card 
+            wx:for="{{item.tricks}}" 
             wx:for-item="trick"
             wx:key="id"
             trick="{{trick}}"
@@ -110,13 +57,13 @@
         </view>
       </view>
     </block>
-
+    
     <!-- 底部安全距离 -->
     <view class="bottom-safe"></view>
   </view>
-
+  
   <!-- 脚位矩阵面板 -->
-  <stance-panel
+  <stance-panel 
     visible="{{showStancePanel}}"
     trick="{{selectedTrick}}"
     bind:close="onStancePanelClose"
