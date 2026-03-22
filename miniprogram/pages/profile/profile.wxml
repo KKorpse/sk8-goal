@@ -273,6 +273,7 @@
   <!-- 底部信息 -->
   <view class="footer">
     <text class="footer-text">Made with 🛹 by Korpse</text>
+    <text class="footer-author-link" bindtap="goAuthor">作者信息</text>
     <text class="footer-version">v1.0.0</text>
   </view>
   

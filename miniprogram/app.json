@@ -2,7 +2,8 @@
   "pages": [
     "pages/profile/profile",
     "pages/tricks/tricks",
-    "pages/skating-history/skating-history"
+    "pages/skating-history/skating-history",
+    "pages/author/author"
   ],
   "window": {
     "navigationBarTextStyle": "white",

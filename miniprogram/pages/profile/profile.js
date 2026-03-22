@@ -780,6 +780,15 @@ Page({
   preventClose() {},
 
   /**
+   * 跳转到作者信息页
+   */
+  goAuthor() {
+    wx.navigateTo({
+      url: '/pages/author/author'
+    })
+  },
+
+  /**
    * 跳转到动作库
    */
   onGoToTricks() {

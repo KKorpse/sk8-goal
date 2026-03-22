@@ -1,0 +1,336 @@
+/* pages/author/author.wxss */
+
+/* 页面背景 */
+.author-page {
+  min-height: 100vh;
+  background-color: var(--bg-dark);
+  background-image:
+    radial-gradient(circle at 25% 25%, rgba(74, 53, 32, 0.8) 2rpx, transparent 2rpx),
+    radial-gradient(circle at 75% 75%, rgba(45, 30, 17, 0.6) 2rpx, transparent 2rpx);
+  background-size: 24rpx 24rpx;
+  padding: 32rpx 24rpx 0;
+  position: relative;
+  overflow: hidden;
+}
+
+/* 装饰云朵 */
+.cloud {
+  position: absolute;
+  font-size: 60rpx;
+  opacity: 0.25;
+  pointer-events: none;
+  z-index: 0;
+  animation: cloudFloat 12s ease-in-out infinite;
+}
+
+.cloud-1 {
+  top: 60rpx;
+  right: 40rpx;
+  animation-delay: 0s;
+}
+
+.cloud-2 {
+  top: 200rpx;
+  left: 20rpx;
+  font-size: 48rpx;
+  animation-delay: -4s;
+}
+
+.cloud-3 {
+  top: 380rpx;
+  right: 80rpx;
+  font-size: 40rpx;
+  opacity: 0.15;
+  animation-delay: -8s;
+}
+
+@keyframes cloudFloat {
+  0%, 100% { transform: translateX(0); }
+  50% { transform: translateX(20rpx); }
+}
+
+/* ===== 卡片基础 ===== */
+.author-card,
+.social-card {
+  background: var(--bg-card);
+  border: 4rpx solid var(--border-color);
+  position: relative;
+  margin-bottom: 24rpx;
+  z-index: 1;
+  box-shadow: var(--shadow-md);
+}
+
+/* MC 双层边框效果 */
+.author-card::before,
+.social-card::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0; bottom: 0;
+  border: 4rpx solid rgba(255, 255, 255, 0.3);
+  pointer-events: none;
+}
+
+.author-card::after,
+.social-card::after {
+  content: "";
+  position: absolute;
+  top: 4rpx; left: 4rpx; right: 4rpx; bottom: 4rpx;
+  border: 4rpx solid #555555;
+  pointer-events: none;
+}
+
+/* ===== 卡片头部 ===== */
+.card-header {
+  display: flex;
+  align-items: center;
+  padding: 24rpx 28rpx 20rpx;
+  border-bottom: 4rpx solid #555555;
+  background: var(--bg-surface);
+  position: relative;
+  z-index: 1;
+}
+
+.header-icon {
+  width: 56rpx;
+  height: 56rpx;
+  background: var(--bg-card);
+  border: 4rpx solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 16rpx;
+  box-shadow: var(--shadow-sm);
+}
+
+.header-icon.red {
+  background: var(--bg-card);
+}
+
+.header-emoji {
+  font-size: 30rpx;
+}
+
+.card-title {
+  font-size: var(--font-lg);
+  color: var(--text-primary-light);
+  font-weight: 700;
+  text-shadow: 2rpx 2rpx 0 #000;
+  letter-spacing: 4rpx;
+}
+
+/* ===== 作者信息区 ===== */
+.author-info-row {
+  display: flex;
+  align-items: center;
+  padding: 28rpx 28rpx 20rpx;
+  position: relative;
+  z-index: 1;
+}
+
+.author-avatar-frame {
+  width: 96rpx;
+  height: 96rpx;
+  background: #8b5e3c;
+  border: 4rpx solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 24rpx;
+  box-shadow: var(--shadow-sm);
+  position: relative;
+}
+
+.author-avatar-frame::after {
+  content: "";
+  position: absolute;
+  top: 4rpx; left: 4rpx; right: 4rpx; bottom: 4rpx;
+  border: 3rpx solid rgba(255, 255, 255, 0.2);
+}
+
+.author-avatar-emoji {
+  font-size: 52rpx;
+}
+
+.author-name-block {
+  display: flex;
+  flex-direction: column;
+}
+
+.author-name {
+  font-size: var(--font-2xl);
+  color: var(--text-primary);
+  font-weight: 700;
+  text-shadow: 2rpx 2rpx 0 rgba(255, 255, 255, 0.5);
+  margin-bottom: 6rpx;
+}
+
+.author-tag {
+  font-size: var(--font-sm);
+  color: var(--text-secondary);
+  background: var(--bg-surface);
+  padding: 4rpx 16rpx;
+  border: 3rpx solid var(--border-color);
+  box-shadow: var(--shadow-pressed);
+  display: inline-block;
+  width: fit-content;
+}
+
+/* ===== 个人介绍 ===== */
+.intro-box {
+  padding: 0 28rpx 28rpx;
+  position: relative;
+  z-index: 1;
+}
+
+.intro-text {
+  font-size: var(--font-base);
+  color: var(--text-primary);
+  line-height: 1.8;
+  padding: 20rpx;
+  background: rgba(0, 0, 0, 0.08);
+  border: 3rpx solid #999999;
+  box-shadow: var(--shadow-pressed);
+}
+
+/* ===== 社交账号列表 ===== */
+.social-item {
+  display: flex;
+  align-items: center;
+  padding: 24rpx 28rpx;
+  position: relative;
+  z-index: 1;
+  transition: background var(--transition-fast);
+}
+
+.social-item:active {
+  background: rgba(0, 0, 0, 0.08);
+}
+
+.item-divider {
+  height: 3rpx;
+  background: #999999;
+  margin: 0 28rpx;
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 1rpx 0 rgba(255, 255, 255, 0.3);
+}
+
+.social-icon-box {
+  width: 72rpx;
+  height: 72rpx;
+  border: 4rpx solid var(--border-color);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 20rpx;
+  flex-shrink: 0;
+}
+
+.social-icon-box.redstone {
+  background: #e89b3c;
+  box-shadow: inset 4rpx 4rpx 0 #f0b860, inset -4rpx -4rpx 0 #a06020;
+}
+
+.social-icon-box.note {
+  background: #222222;
+  box-shadow: inset 4rpx 4rpx 0 #444444, inset -4rpx -4rpx 0 #000000;
+}
+
+.social-icon-box.diamond {
+  background: #55cccc;
+  box-shadow: inset 4rpx 4rpx 0 #88eeee, inset -4rpx -4rpx 0 #228888;
+}
+
+.social-icon {
+  font-size: 36rpx;
+}
+
+.social-info {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+
+.social-name {
+  font-size: var(--font-lg);
+  color: var(--text-primary);
+  font-weight: 700;
+  text-shadow: 2rpx 2rpx 0 rgba(255, 255, 255, 0.5);
+  margin-bottom: 4rpx;
+}
+
+.social-id {
+  font-size: var(--font-sm);
+  color: var(--text-secondary);
+}
+
+.social-action {
+  flex-shrink: 0;
+  margin-left: 16rpx;
+}
+
+.action-text {
+  font-size: var(--font-sm);
+  color: var(--text-secondary);
+  background: var(--bg-surface);
+  padding: 8rpx 20rpx;
+  border: 3rpx solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+}
+
+.social-item:active .action-text {
+  box-shadow: var(--shadow-pressed);
+}
+
+/* ===== 底部提示 ===== */
+.tip-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 40rpx 24rpx 60rpx;
+  position: relative;
+  z-index: 1;
+}
+
+.tip-text {
+  font-size: var(--font-base);
+  color: var(--primary-yellow);
+  text-shadow: 2rpx 2rpx 0 #000;
+  margin-bottom: 8rpx;
+}
+
+.tip-sub {
+  font-size: var(--font-xs);
+  color: var(--text-secondary-light);
+  text-shadow: 2rpx 2rpx 0 #000;
+  opacity: 0.7;
+}
+
+/* ===== 底部像素地面 ===== */
+.pixel-ground {
+  position: relative;
+  z-index: 1;
+  margin-top: -10rpx;
+}
+
+.ground-grass {
+  height: 16rpx;
+  background: repeating-linear-gradient(
+    90deg,
+    #5cb85c 0rpx,
+    #5cb85c 12rpx,
+    #4a9f4a 12rpx,
+    #4a9f4a 24rpx
+  );
+}
+
+.ground-dirt {
+  height: 32rpx;
+  background: repeating-linear-gradient(
+    90deg,
+    #8b5a2b 0rpx,
+    #8b5a2b 12rpx,
+    #6b4423 12rpx,
+    #6b4423 24rpx
+  );
+}

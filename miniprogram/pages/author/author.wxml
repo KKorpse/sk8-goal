@@ -1,0 +1,103 @@
+<!--pages/author/author.wxml-->
+<view class="author-page">
+  <!-- 装饰性云朵 -->
+  <view class="cloud cloud-1">☁️</view>
+  <view class="cloud cloud-2">☁️</view>
+  <view class="cloud cloud-3">☁️</view>
+
+  <!-- 作者卡片 - MC 物品栏风格 -->
+  <view class="author-card">
+    <view class="card-header">
+      <view class="header-icon">
+        <text class="header-emoji">⚔️</text>
+      </view>
+      <text class="card-title">关于作者</text>
+    </view>
+
+    <!-- 作者头像 & 昵称 -->
+    <view class="author-info-row">
+      <view class="author-avatar-frame">
+        <text class="author-avatar-emoji">🛹</text>
+      </view>
+      <view class="author-name-block">
+        <text class="author-name">Korpse</text>
+        <text class="author-tag">开发者 / 滑手</text>
+      </view>
+    </view>
+
+    <!-- 个人介绍 -->
+    <view class="intro-box">
+      <text class="intro-text">一个喜欢滑板和写代码的人。做这个小程序是因为想记录自己学动作的过程，顺便帮到更多滑手。希望能把喜欢的两件事结合在一起 🤙</text>
+    </view>
+  </view>
+
+  <!-- 社交账号 - MC 物品栏风格 -->
+  <view class="social-card">
+    <view class="card-header">
+      <view class="header-icon red">
+        <text class="header-emoji">📡</text>
+      </view>
+      <text class="card-title">找到我</text>
+    </view>
+
+    <!-- 小红书 -->
+    <view class="social-item" bindtap="copyText" data-text="Korpse">
+      <view class="social-icon-box redstone">
+        <text class="social-icon">📕</text>
+      </view>
+      <view class="social-info">
+        <text class="social-name">小红书</text>
+        <text class="social-id">账号名: Korpse</text>
+      </view>
+      <view class="social-action">
+        <text class="action-text">复制</text>
+      </view>
+    </view>
+
+    <!-- 分割线 -->
+    <view class="item-divider"></view>
+
+    <!-- 抖音 -->
+    <view class="social-item" bindtap="copyText" data-text="Korpse">
+      <view class="social-icon-box note">
+        <text class="social-icon">🎵</text>
+      </view>
+      <view class="social-info">
+        <text class="social-name">抖音</text>
+        <text class="social-id">抖音号: Korpse</text>
+      </view>
+      <view class="social-action">
+        <text class="action-text">复制</text>
+      </view>
+    </view>
+
+    <!-- 分割线 -->
+    <view class="item-divider"></view>
+
+    <!-- GitHub -->
+    <view class="social-item" bindtap="goExternal" data-url="https://github.com/korpse">
+      <view class="social-icon-box diamond">
+        <text class="social-icon">💎</text>
+      </view>
+      <view class="social-info">
+        <text class="social-name">GitHub</text>
+        <text class="social-id">github.com/korpse</text>
+      </view>
+      <view class="social-action">
+        <text class="action-text">复制链接</text>
+      </view>
+    </view>
+  </view>
+
+  <!-- 底部提示 -->
+  <view class="tip-box">
+    <text class="tip-text">💡 可在小红书给我提意见和反馈</text>
+    <text class="tip-sub">你的建议会让这个工具变得更好</text>
+  </view>
+
+  <!-- 底部像素装饰 -->
+  <view class="pixel-ground">
+    <view class="ground-grass"></view>
+    <view class="ground-dirt"></view>
+  </view>
+</view>
