@@ -507,8 +507,8 @@
 .progress-card {
   background: var(--bg-card);
   border-radius: 0;
-  padding: var(--spacing-inner);
-  margin-bottom: var(--spacing-card);
+  padding: calc(var(--spacing-inner) * 5 / 6);
+  margin-bottom: calc(var(--spacing-card) * 5 / 6);
   border: 4rpx solid var(--border-color);
   box-shadow: var(--shadow-md);
 }
