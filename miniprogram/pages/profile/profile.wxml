@@ -81,40 +81,32 @@
     </view>
   </view>
   
-  <!-- 统计概览 -->
-  <view class="stats-card">
-    <view class="stats-summary">
-      <view class="summary-item mastered stat-clickable" bindtap="onStatTap" data-type="mastered">
-        <text class="summary-num">{{stats.masteredCount || 0}}</text>
-        <text class="summary-label">一脚一个</text>
-      </view>
-      <view class="summary-divider"></view>
-      <view class="summary-item grinding stat-clickable" bindtap="onStatTap" data-type="grinding">
-        <text class="summary-num">{{stats.grindingCount || 0}}</text>
-        <text class="summary-label">死磕中</text>
-      </view>
-      <view class="summary-divider"></view>
-      <view class="summary-item trial stat-clickable" bindtap="onStatTap" data-type="trial">
-        <text class="summary-num">{{stats.trialCount || 0}}</text>
-        <text class="summary-label">体验卡</text>
-      </view>
-    </view>
-  </view>
-  
-  <!-- Ollie 展示 (可展开设置) -->
-  <view class="ollie-card">
-    <view class="ollie-display" bindtap="toggleOllieExpand">
-      <view class="ollie-main">
-        <text class="ollie-title">Ollie 高度</text>
-        <view class="ollie-values">
-          <text class="ollie-val-main">{{ollie.normal}}</text>
-          <text class="ollie-val-sub">/ {{ollie.switch}}</text>
-          <text class="ollie-unit"> 立</text>
+  <!-- 合并进度卡片: Ollie + 统计概览 -->
+  <view class="progress-card">
+    <!-- Ollie 高度区 -->
+    <view class="progress-ollie" bindtap="toggleOllieExpand">
+      <view class="progress-ollie-left">
+        <text class="progress-ollie-title">Ollie 高度</text>
+        <view class="progress-ollie-values">
+          <text class="progress-ollie-main">{{ollie.normal}}</text>
+          <text class="progress-ollie-sep">/</text>
+          <text class="progress-ollie-sub">{{ollie.switch}}</text>
+          <text class="progress-ollie-unit">立</text>
         </view>
       </view>
-      <text class="ollie-expand-arrow {{ollieExpanded ? 'expanded' : ''}}">▼</text>
+      <view class="progress-ollie-right">
+        <view class="progress-ollie-bar">
+          <view class="progress-ollie-fill" style="width: {{ollie.normal / 10 * 100}}%"></view>
+        </view>
+        <text class="progress-ollie-label">正</text>
+        <view class="progress-ollie-bar">
+          <view class="progress-ollie-fill progress-ollie-fill-switch" style="width: {{ollie.switch / 10 * 100}}%"></view>
+        </view>
+        <text class="progress-ollie-label">反</text>
+      </view>
+      <text class="progress-expand-arrow {{ollieExpanded ? 'expanded' : ''}}">▼</text>
     </view>
-    <!-- 展开的设置面板 -->
+    <!-- Ollie 展开设置面板 -->
     <view class="ollie-settings {{ollieExpanded ? 'show' : ''}}">
       <view class="ollie-setting-item">
         <view class="ollie-label-wrapper">
@@ -138,6 +130,25 @@
           <text class="ollie-value">{{ollie.switch}}</text>
           <view class="ollie-btn" bindtap="adjustOllie" data-type="switch" data-delta="0.5">+</view>
         </view>
+      </view>
+    </view>
+    <!-- 分割线 -->
+    <view class="progress-divider"></view>
+    <!-- 统计概览区 -->
+    <view class="stats-summary">
+      <view class="summary-item mastered stat-clickable" bindtap="onStatTap" data-type="mastered">
+        <text class="summary-num">{{stats.masteredCount || 0}}</text>
+        <text class="summary-label">一脚一个</text>
+      </view>
+      <view class="summary-divider"></view>
+      <view class="summary-item grinding stat-clickable" bindtap="onStatTap" data-type="grinding">
+        <text class="summary-num">{{stats.grindingCount || 0}}</text>
+        <text class="summary-label">死磕中</text>
+      </view>
+      <view class="summary-divider"></view>
+      <view class="summary-item trial stat-clickable" bindtap="onStatTap" data-type="trial">
+        <text class="summary-num">{{stats.trialCount || 0}}</text>
+        <text class="summary-label">体验卡</text>
       </view>
     </view>
   </view>

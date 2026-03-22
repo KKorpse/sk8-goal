@@ -378,6 +378,118 @@
   color: var(--primary-orange);
 }
 
+/* 合并进度卡片: Ollie + 统计 */
+.progress-card {
+  background: var(--bg-card);
+  border-radius: 0;
+  padding: var(--spacing-inner);
+  margin-bottom: var(--spacing-card);
+  border: 4rpx solid var(--border-color);
+  box-shadow: var(--shadow-md);
+}
+
+.progress-ollie {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.progress-ollie-left {
+  display: flex;
+  flex-direction: column;
+  gap: 4rpx;
+}
+
+.progress-ollie-title {
+  font-size: 20rpx;
+  color: var(--text-secondary);
+  font-weight: bold;
+}
+
+.progress-ollie-values {
+  display: flex;
+  align-items: baseline;
+  gap: 4rpx;
+}
+
+.progress-ollie-main {
+  font-size: var(--font-xl);
+  font-weight: bold;
+  color: var(--primary-yellow);
+  text-shadow: 2rpx 2rpx 0 #000;
+  font-variant-numeric: tabular-nums;
+}
+
+.progress-ollie-sep {
+  font-size: 24rpx;
+  color: var(--text-secondary);
+}
+
+.progress-ollie-sub {
+  font-size: 24rpx;
+  color: var(--primary-cyan);
+  font-weight: bold;
+  font-variant-numeric: tabular-nums;
+}
+
+.progress-ollie-unit {
+  font-size: 20rpx;
+  color: var(--text-secondary);
+  margin-left: 4rpx;
+}
+
+.progress-ollie-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6rpx;
+  flex: 1;
+  margin-left: 24rpx;
+}
+
+.progress-ollie-bar {
+  width: 120rpx;
+  height: 12rpx;
+  background: rgba(255,255,255,0.1);
+  border: 2rpx solid var(--border-color);
+  border-radius: 6rpx;
+  overflow: hidden;
+}
+
+.progress-ollie-fill {
+  height: 100%;
+  background: var(--primary-yellow);
+  transition: width 0.3s;
+}
+
+.progress-ollie-fill-switch {
+  background: var(--primary-cyan);
+}
+
+.progress-ollie-label {
+  font-size: 16rpx;
+  color: var(--text-secondary);
+  width: 120rpx;
+  text-align: center;
+}
+
+.progress-expand-arrow {
+  font-size: 24rpx;
+  color: var(--text-secondary);
+  margin-left: 16rpx;
+  transition: transform 0.2s;
+}
+
+.progress-expand-arrow.expanded {
+  transform: rotate(180deg);
+}
+
+.progress-divider {
+  height: 4rpx;
+  background: var(--border-color);
+  margin: var(--spacing-lg) 0;
+}
+
 /* Ollie 卡片 */
 .ollie-card {
   background: var(--bg-card);
