@@ -22,7 +22,7 @@
   font-size: var(--font-xs);
   color: var(--text-secondary-light);
   font-weight: bold;
-  text-shadow: 2rpx 2rpx 0 #000;
+  text-shadow: none;
 }
 
 /* 时间轴轨道 */
@@ -58,9 +58,9 @@
 .node {
   width: 40rpx;
   height: 40rpx;
-  border-radius: 0;
+  border-radius: var(--radius-md);
   background: var(--bg-card);
-  border: 4rpx solid var(--border-color);
+  border: 2rpx solid #FFFFFF;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -109,9 +109,9 @@
 
 .content-card {
   background: var(--bg-card);
-  border-radius: 0;
+  border-radius: var(--radius-md);
   padding: var(--spacing-lg) var(--spacing-inner);
-  border: 4rpx solid var(--border-color);
+  border: 2rpx solid #FFFFFF;
   box-shadow: var(--shadow-sm);
   transition: all var(--transition-fast);
 }
@@ -159,7 +159,7 @@
   background: var(--bg-surface);
   border: 2rpx solid var(--border-color);
   padding: 4rpx var(--spacing-md);
-  border-radius: 0;
+  border-radius: var(--radius-md);
 }
 
 .card-status {
@@ -181,15 +181,15 @@
 /* mastered 状态的文字高亮 */
 .timeline-item.mastered .status-text {
   color: var(--status-mastered);
-  text-shadow: 2rpx 2rpx 0 #000;
+  text-shadow: none;
 }
 
 .timeline-item.trial .status-text {
   color: var(--status-trial);
-  text-shadow: 2rpx 2rpx 0 #000;
+  text-shadow: none;
 }
 
 .timeline-item.grinding .status-text {
   color: var(--status-grinding);
-  text-shadow: 2rpx 2rpx 0 #000;
+  text-shadow: none;
 }

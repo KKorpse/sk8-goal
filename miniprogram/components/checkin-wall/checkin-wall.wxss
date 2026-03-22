@@ -2,8 +2,8 @@
 
 .checkin-wall-card {
   background: var(--bg-card);
-  border: 4rpx solid var(--border-color);
-  border-radius: 0;
+  border: 2rpx solid #FFFFFF;
+  border-radius: var(--radius-md);
   padding: var(--spacing-inner);
   margin-bottom: var(--spacing-card);
   box-shadow: var(--shadow-md);
@@ -36,7 +36,7 @@
   font-weight: bold;
   background: rgba(255, 170, 0, 0.15);
   padding: 8rpx 16rpx;
-  border: 3rpx solid var(--border-color);
+  border: 2rpx solid #FFFFFF;
   box-shadow: var(--shadow-sm);
 }
 
@@ -44,7 +44,7 @@
 .checkin-game-scene {
   position: relative;
   background: linear-gradient(180deg, #87CEEB 0%, #E0F6FF 100%);
-  border: 4rpx solid var(--border-color);
+  border: 2rpx solid #FFFFFF;
   margin-bottom: var(--spacing-md);
   overflow: hidden;
 }
@@ -284,7 +284,7 @@
   gap: var(--spacing-sm);
   padding: var(--spacing-md);
   background: var(--primary-green);
-  border: 4rpx solid var(--border-color);
+  border: 2rpx solid #FFFFFF;
   box-shadow: inset 4rpx 4rpx 0px 0px #48bb78, inset -4rpx -4rpx 0px 0px #276749;
   transition: all var(--transition-fast);
 }
@@ -306,8 +306,8 @@
 .btn-text {
   font-size: var(--font-base);
   font-weight: bold;
-  color: var(--text-primary-light);
-  text-shadow: 2rpx 2rpx 0 #000;
+  color: var(--text-primary);
+  text-shadow: none;
 }
 
 /* 统计信息 */
@@ -330,7 +330,7 @@
   font-size: var(--font-xl);
   font-weight: bold;
   color: var(--primary-yellow);
-  text-shadow: 2rpx 2rpx 0 #000;
+  text-shadow: none;
   font-variant-numeric: tabular-nums;
 }
 
@@ -370,7 +370,7 @@
   width: 80%;
   max-width: 600rpx;
   background: var(--bg-card);
-  border: 4rpx solid var(--border-color);
+  border: 2rpx solid #FFFFFF;
   box-shadow: var(--shadow-lg);
 }
 
@@ -387,14 +387,14 @@
   font-size: var(--font-base);
   font-weight: bold;
   color: var(--primary-yellow);
-  text-shadow: 2rpx 2rpx 0 #000;
+  text-shadow: none;
 }
 
 .modal-close {
   width: 48rpx;
   height: 48rpx;
   background: var(--primary-red);
-  border: 3rpx solid var(--border-color);
+  border: 2rpx solid #FFFFFF;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -431,7 +431,7 @@
   font-size: var(--font-base);
   font-weight: bold;
   color: var(--text-primary);
-  text-shadow: 2rpx 2rpx 0 #000;
+  text-shadow: none;
 }
 
 .modal-actions {
@@ -443,7 +443,7 @@
   align-items: center;
   justify-content: center;
   padding: var(--spacing-md);
-  border: 4rpx solid var(--border-color);
+  border: 2rpx solid #FFFFFF;
   transition: all var(--transition-fast);
 }
 
@@ -472,6 +472,6 @@
 .modal-btn .btn-text {
   font-size: var(--font-sm);
   font-weight: bold;
-  color: var(--text-primary-light);
-  text-shadow: 2rpx 2rpx 0 #000;
+  color: var(--text-primary);
+  text-shadow: none;
 }

@@ -15,9 +15,9 @@
   align-items: center;
   gap: 8rpx;
   padding: var(--spacing-md) var(--spacing-lg);
-  border-radius: 0;
+  border-radius: var(--radius-md);
   background: var(--bg-card);
-  border: 4rpx solid var(--border-color);
+  border: 2rpx solid #FFFFFF;
   box-shadow: var(--shadow-sm);
   flex-shrink: 0;
   transition: all var(--transition-fast);
@@ -47,5 +47,5 @@
 
 .tab-item.active .tab-name {
   color: var(--primary-yellow);
-  text-shadow: 2rpx 2rpx 0 #000;
+  text-shadow: none;
 }

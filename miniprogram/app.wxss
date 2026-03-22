@@ -1,6 +1,6 @@
 /**
  * SkateGoal 全局样式
- * Minecraft 风格配色方案 - 优化版
+ * 柔和3D风格配色方案
  */
 
 @import "./styles/theme.wxss";
@@ -8,16 +8,11 @@
 /* Reset */
 page {
   background-color: var(--bg-dark);
-  /* 使用 CSS 绘制优化后的泥土背景像素纹理 */
-  background-image: 
-    radial-gradient(circle at 25% 25%, rgba(74, 53, 32, 0.8) 2rpx, transparent 2rpx),
-    radial-gradient(circle at 75% 75%, rgba(45, 30, 17, 0.6) 2rpx, transparent 2rpx);
-  background-size: 24rpx 24rpx;
   min-height: 100%;
   font-size: 28rpx;
   line-height: 1.6;
   color: var(--text-primary);
-  font-family: 'Courier New', Courier, monospace, 'PingFang SC', sans-serif;
+  font-family: 'PingFang SC', 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
 /* 通用容器 */
@@ -29,78 +24,65 @@ page {
   padding-bottom: env(safe-area-inset-bottom);
 }
 
-/* 卡片基础样式 - MC Stone UI */
+/* 卡片基础样式 - 柔和3D */
 .card {
   background: var(--bg-card);
-  border: 4rpx solid var(--border-color);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-lg);
   padding: var(--spacing-inner);
   margin: var(--spacing-card);
   box-shadow: var(--shadow-md);
   position: relative;
-}
-
-.card::before {
-  content: "";
-  position: absolute;
-  top: 0; left: 0; right: 0; bottom: 0;
-  border: 4rpx solid rgba(255, 255, 255, 0.3);
-  pointer-events: none;
-}
-
-.card::after {
-  content: "";
-  position: absolute;
-  top: 4rpx; left: 4rpx; right: 4rpx; bottom: 4rpx;
-  border: 4rpx solid #555555;
-  pointer-events: none;
+  border: 2rpx solid #FDFDFD;
 }
 
 .card-glow {
   box-shadow: var(--shadow-purple);
 }
 
-/* 胶囊标签 (改为 MC 按钮风格) */
+/* 胶囊标签 (改为 柔和3D 按钮风格) */
 .pill {
   display: inline-flex;
   align-items: center;
-  padding: 8rpx 20rpx;
-  border: 4rpx solid var(--border-color);
-  background: var(--bg-surface);
-  color: var(--text-primary-light);
+  padding: 8rpx 24rpx;
+  border-radius: var(--radius-sm);
+  background: var(--bg-card);
+  color: var(--text-primary);
   font-size: var(--font-sm);
   box-shadow: var(--shadow-sm);
   transition: all var(--transition-fast);
+  font-weight: 500;
+  border: 1rpx solid #FFFFFF;
 }
 
 .pill-active {
-  background: var(--bg-card);
+  background: var(--bg-surface);
   color: var(--text-primary);
   box-shadow: var(--shadow-pressed);
 }
 
 /* 状态点 - 优化辨识度 */
 .status-dot {
-  width: 18rpx;
-  height: 18rpx;
+  width: 16rpx;
+  height: 16rpx;
+  border-radius: 50%;
   background: var(--status-none);
-  border: 3rpx solid var(--border-color);
   transition: all var(--transition-fast);
+  box-shadow: inset 1rpx 1rpx 2rpx rgba(0,0,0,0.2), 1rpx 1rpx 2rpx rgba(255,255,255,0.8);
 }
 
 .status-dot.trial {
   background: var(--status-trial);
-  box-shadow: 0 0 8rpx var(--status-trial);
+  box-shadow: 0 0 8rpx var(--status-trial), inset 1rpx 1rpx 2rpx rgba(255,255,255,0.5);
 }
 
 .status-dot.grinding {
   background: var(--status-grinding);
-  box-shadow: 0 0 8rpx var(--status-grinding);
+  box-shadow: 0 0 8rpx var(--status-grinding), inset 1rpx 1rpx 2rpx rgba(255,255,255,0.5);
 }
 
 .status-dot.mastered {
   background: var(--status-mastered);
-  box-shadow: 0 0 10rpx var(--status-mastered);
+  box-shadow: 0 0 10rpx var(--status-mastered), inset 1rpx 1rpx 2rpx rgba(255,255,255,0.5);
 }
 
 /* 文字样式 - 优化对比度 */
@@ -109,7 +91,7 @@ page {
 }
 
 .text-primary-light {
-  color: var(--text-primary-light);
+  color: var(--text-primary);
 }
 
 .text-secondary {
@@ -122,27 +104,22 @@ page {
 
 .text-yellow {
   color: var(--primary-yellow);
-  text-shadow: 2rpx 2rpx 0 #000;
 }
 
 .text-purple {
   color: var(--primary-purple);
-  text-shadow: 2rpx 2rpx 0 #000;
 }
 
 .text-cyan {
   color: var(--status-trial);
-  text-shadow: 2rpx 2rpx 0 #000;
 }
 
 .text-orange {
   color: var(--status-grinding);
-  text-shadow: 2rpx 2rpx 0 #000;
 }
 
 .text-green {
   color: var(--status-mastered);
-  text-shadow: 2rpx 2rpx 0 #000;
 }
 
 /* 卡片内文字样式 */

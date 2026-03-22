@@ -5,11 +5,11 @@
   align-items: center;
   justify-content: space-between;
   background: var(--bg-card);
-  border-radius: 0;
+  border-radius: var(--radius-md);
   padding: var(--spacing-lg) var(--spacing-inner);
   margin-bottom: var(--spacing-card);
   box-shadow: var(--shadow-sm);
-  border: 4rpx solid var(--border-color);
+  border: 2rpx solid #FFFFFF;
   transition: all var(--transition-fast);
 }
 
@@ -30,8 +30,8 @@
   width: 80rpx;
   height: 80rpx;
   background: var(--bg-card-light);
-  border-radius: 0;
-  border: 4rpx solid var(--border-color);
+  border-radius: var(--radius-md);
+  border: 2rpx solid #FFFFFF;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -85,8 +85,8 @@
 .stance-dot {
   width: 18rpx;
   height: 18rpx;
-  border-radius: 0;
-  border: 3rpx solid var(--border-color);
+  border-radius: var(--radius-md);
+  border: 2rpx solid #FFFFFF;
   background: var(--status-none);
   transition: all var(--transition-fast);
 }

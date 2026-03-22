@@ -1,74 +1,74 @@
 /**
  * SkateGoal 主题变量
- * Minecraft 风格配色方案 - 优化版
+ * 柔和3D风格 (Soft 3D / Claymorphism)
  */
 
 page {
-  /* 主色调 (Minecraft) - 柔和版 */
-  --primary-purple: #AA00AA; /* MC Purple */
-  --primary-yellow: #FFFF55; /* MC Yellow */
-  --primary-cyan: #00CCCC;   /* MC Aqua - 降低亮度 */
-  --primary-orange: #FFAA00; /* MC Gold */
-  --primary-green: #44DD44;  /* MC Green - 降低亮度 */
-  --primary-red: #FF5555;    /* MC Red */
+  /* 主色调 - 柔和版 */
+  --primary-purple: #9D74FF;
+  --primary-yellow: #FFD23F;
+  --primary-cyan: #3DD1E7;
+  --primary-orange: #FF8A3D;
+  --primary-green: #4ade80;
+  --primary-red: #f87171;
   
-  /* 背景色 - 优化层次 */
-  --bg-dark: #3b2818; /* Dirt background color */
-  --bg-darker: #2d1e11; /* 更深的泥土色 */
-  --bg-card: #c6c6c6; /* Stone/UI background */
-  --bg-card-light: #d8d8d8;
-  --bg-card-hover: #b8b8b8; /* 卡片悬停态 */
-  --bg-surface: #8b8b8b; /* Darker stone */
-  --bg-surface-dark: #6b6b6b; /* 更深的surface */
+  /* 背景色 - 深棕色 */
+  --bg-dark: #3A2E24; 
+  --bg-darker: #2A2018;
+  --bg-card: #E8E8E8; /* 卡片底色 */
+  --bg-card-light: #F5F5F5;
+  --bg-card-hover: #DCDCDC;
+  --bg-surface: #D1D1D1;
+  --bg-surface-dark: #A3A3A3;
   
-  /* 文字色 - 优化对比度 */
-  --text-primary: #2a2a2a;      /* 深色文字用于浅色背景 */
-  --text-primary-light: #ffffff; /* 浅色文字用于深色背景 */
-  --text-secondary: #555555;    /* 次要文字 - 深色背景用 */
-  --text-secondary-light: #cccccc; /* 次要文字 - 浅色背景用 */
-  --text-muted: #888888;        /* 弱化文字 */
-  --text-dark: #3f3f3f;         /* 深色文字 */
+  /* 文字色 - 柔和 */
+  --text-primary: #333333;
+  --text-primary-light: #ffffff;
+  --text-secondary: #666666;
+  --text-secondary-light: #dddddd;
+  --text-muted: #999999;
+  --text-dark: #1f1f1f;
   
-  /* 状态色 - 优化辨识度（柔和版） */
-  --status-trial: #00AAAA;      /* 青色 - 体验卡 */
-  --status-grinding: #FF8800;   /* 橙色 - 死磕中 */
-  --status-mastered: #22AA44;   /* 绿色 - 一脚一个 */
-  --status-none: #666666;       /* 灰色 - 未解锁 */
+  /* 状态色 - 柔和版 */
+  --status-trial: #3b82f6;      
+  --status-grinding: #FF8A3D;   
+  --status-mastered: #4ade80;   
+  --status-none: #9ca3af;       
   
   /* 状态色柔和版 - 用于背景 */
-  --status-trial-bg: rgba(0, 170, 170, 0.15);
-  --status-grinding-bg: rgba(255, 136, 0, 0.15);
-  --status-mastered-bg: rgba(34, 170, 68, 0.15);
+  --status-trial-bg: rgba(59, 130, 246, 0.15);
+  --status-grinding-bg: rgba(255, 138, 61, 0.15);
+  --status-mastered-bg: rgba(74, 222, 128, 0.15);
   
   /* 强调色 */
-  --accent-glow: #FF5555;
-  --accent-success: #55FF55;
-  --border-color: #000000; /* True black for MC borders */
-  --border-light: #555555; /* 浅边框 */
+  --accent-glow: #f87171;
+  --accent-success: #4ade80;
+  --border-color: #D1D1D1; /* 柔和边框 */
+  --border-light: #E8E8E8;
   
   /* 渐变 */
-  --gradient-purple: #AA00AA;
-  --gradient-yellow: #FFFF55;
-  --gradient-cyan: #00CCCC;
-  --gradient-card: #c6c6c6;
+  --gradient-purple: #9D74FF;
+  --gradient-yellow: #FFD23F;
+  --gradient-cyan: #3DD1E7;
+  --gradient-card: #E8E8E8;
   
-  /* 阴影 (MC 风格 3D 边框) */
-  --shadow-sm: inset 4rpx 4rpx 0px 0px #ffffff, inset -4rpx -4rpx 0px 0px #555555;
-  --shadow-md: inset 6rpx 6rpx 0px 0px #ffffff, inset -6rpx -6rpx 0px 0px #555555, 4rpx 4rpx 0px 0px #000000;
-  --shadow-lg: inset 8rpx 8rpx 0px 0px #ffffff, inset -8rpx -8rpx 0px 0px #555555, 8rpx 8rpx 0px 0px #000000;
-  --shadow-purple: inset 4rpx 4rpx 0px 0px #FF55FF, inset -4rpx -4rpx 0px 0px #550055;
-  --shadow-yellow: inset 4rpx 4rpx 0px 0px #FFFFaa, inset -4rpx -4rpx 0px 0px #aa5500;
-  --shadow-cyan: inset 4rpx 4rpx 0px 0px #66eeee, inset -4rpx -4rpx 0px 0px #008888;
-  --shadow-pressed: inset 4rpx 4rpx 0px 0px #555555, inset -4rpx -4rpx 0px 0px #ffffff;
+  /* 阴影 (柔和3D 风格) */
+  --shadow-sm: inset 2rpx 2rpx 4rpx rgba(255,255,255,0.8), inset -2rpx -2rpx 4rpx rgba(0,0,0,0.1), 2rpx 4rpx 8rpx rgba(0,0,0,0.15);
+  --shadow-md: inset 4rpx 4rpx 8rpx rgba(255,255,255,0.9), inset -4rpx -4rpx 8rpx rgba(0,0,0,0.15), 0 8rpx 16rpx rgba(0,0,0,0.3);
+  --shadow-lg: inset 6rpx 6rpx 12rpx rgba(255,255,255,0.9), inset -6rpx -6rpx 12rpx rgba(0,0,0,0.15), 0 12rpx 24rpx rgba(0,0,0,0.4);
+  --shadow-purple: inset 4rpx 4rpx 8rpx rgba(255,255,255,0.4), inset -4rpx -4rpx 8rpx rgba(157,116,255,0.4), 0 8rpx 16rpx rgba(157,116,255,0.4);
+  --shadow-yellow: inset 4rpx 4rpx 8rpx rgba(255,255,255,0.4), inset -4rpx -4rpx 8rpx rgba(255,210,63,0.4), 0 8rpx 16rpx rgba(255,210,63,0.4);
+  --shadow-cyan: inset 4rpx 4rpx 8rpx rgba(255,255,255,0.4), inset -4rpx -4rpx 8rpx rgba(61,209,231,0.4), 0 8rpx 16rpx rgba(61,209,231,0.4);
+  --shadow-pressed: inset 4rpx 4rpx 8rpx rgba(0,0,0,0.15), inset -4rpx -4rpx 8rpx rgba(255,255,255,0.8);
   --shadow-text: none;
-  --shadow-text-bold: 2rpx 2rpx 0px #ffffff;
+  --shadow-text-bold: none;
   
-  /* 圆角 (MC 风格没有圆角) */
-  --radius-sm: 0rpx;
-  --radius-md: 0rpx;
-  --radius-lg: 0rpx;
-  --radius-xl: 0rpx;
-  --radius-full: 0rpx;
+  /* 圆角 (柔和3D 风格) */
+  --radius-sm: 8rpx;
+  --radius-md: 16rpx;
+  --radius-lg: 24rpx;
+  --radius-xl: 32rpx;
+  --radius-full: 9999rpx;
   
   /* 间距 - 统一系统 */
   --spacing-xs: 8rpx;
