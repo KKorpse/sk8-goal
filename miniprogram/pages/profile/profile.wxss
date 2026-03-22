@@ -301,27 +301,6 @@
   font-size: var(--icon-md);
 }
 
-/* 统计卡片 */
-.stats-card {
-  background: var(--bg-card);
-  border-radius: 0;
-  padding: var(--spacing-inner);
-  margin-bottom: var(--spacing-card);
-  border: 4rpx solid var(--border-color);
-  box-shadow: var(--shadow-md);
-}
-
-.stats-header {
-  margin-bottom: var(--spacing-lg);
-}
-
-.stats-title {
-  font-size: var(--font-lg);
-  font-weight: bold;
-  color: var(--text-primary);
-  text-shadow: none;
-}
-
 /* 统计汇总布局 - 分割线风格 */
 .stats-summary {
   display: flex;
@@ -488,100 +467,6 @@
   height: 4rpx;
   background: var(--border-color);
   margin: var(--spacing-lg) 0;
-}
-
-/* Ollie 卡片 */
-.ollie-card {
-  background: var(--bg-card);
-  border-radius: 0;
-  padding: var(--spacing-inner);
-  margin-bottom: var(--spacing-card);
-  border: 4rpx solid var(--border-color);
-  box-shadow: var(--shadow-md);
-  overflow: hidden;
-}
-
-/* Ollie 展示行 */
-.ollie-display {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.ollie-main {
-  display: flex;
-  align-items: baseline;
-  gap: var(--spacing-md);
-}
-
-.ollie-title {
-  font-size: var(--font-lg);
-  font-weight: bold;
-  color: var(--text-primary);
-  text-shadow: none;
-}
-
-.ollie-values {
-  display: flex;
-  align-items: baseline;
-  gap: 8rpx;
-}
-
-.ollie-value-item {
-  display: flex;
-  align-items: center;
-  gap: 4rpx;
-}
-
-.ollie-value-label {
-  font-size: var(--font-xs);
-  color: var(--text-secondary);
-  padding: 2rpx 8rpx;
-  background: var(--bg-surface);
-  border: 2rpx solid var(--border-color);
-  margin-right: 4rpx;
-}
-
-.ollie-value-divider {
-  font-size: var(--font-lg);
-  color: var(--text-secondary);
-  margin: 0 4rpx;
-}
-
-.ollie-val-main {
-  font-size: var(--font-2xl);
-  font-weight: bold;
-  color: var(--primary-yellow);
-  text-shadow: 2rpx 2rpx 0 #000;
-  font-variant-numeric: tabular-nums;
-  min-width: 48rpx;
-  text-align: right;
-  display: inline-block;
-}
-
-.ollie-val-sub {
-  font-size: var(--font-base);
-  color: var(--text-secondary);
-  font-weight: bold;
-  font-variant-numeric: tabular-nums;
-  min-width: 48rpx;
-  text-align: right;
-  display: inline-block;
-}
-
-.ollie-unit {
-  font-size: var(--font-xs);
-  color: var(--text-secondary);
-}
-
-.ollie-expand-arrow {
-  font-size: var(--font-sm);
-  color: var(--text-secondary);
-  transition: transform var(--transition-normal);
-}
-
-.ollie-expand-arrow.expanded {
-  transform: rotate(180deg);
 }
 
 /* Ollie 设置面板 */
