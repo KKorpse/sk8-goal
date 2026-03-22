@@ -388,6 +388,7 @@
 .stats-col .stat-icon {
   font-size: var(--icon-sm);
   margin-bottom: 2rpx;
+  display: none;
 }
 
 .stats-col .stat-num {
@@ -537,7 +538,7 @@
 }
 
 .progress-ollie-main {
-  font-size: var(--font-xl);
+  font-size: var(--font-lg);
   font-weight: bold;
   color: var(--primary-yellow);
   text-shadow: 2rpx 2rpx 0 #000;
@@ -550,7 +551,7 @@
 }
 
 .progress-ollie-sub {
-  font-size: 24rpx;
+  font-size: var(--font-lg);
   color: var(--primary-cyan);
   font-weight: bold;
   font-variant-numeric: tabular-nums;

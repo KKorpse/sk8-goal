@@ -94,16 +94,6 @@
           <text class="progress-ollie-unit">立</text>
         </view>
       </view>
-      <view class="progress-ollie-right">
-        <view class="progress-ollie-bar">
-          <view class="progress-ollie-fill" style="width: {{ollie.normal / 10 * 100}}%"></view>
-        </view>
-        <text class="progress-ollie-label">正</text>
-        <view class="progress-ollie-bar">
-          <view class="progress-ollie-fill progress-ollie-fill-switch" style="width: {{ollie.switch / 10 * 100}}%"></view>
-        </view>
-        <text class="progress-ollie-label">反</text>
-      </view>
       <text class="progress-expand-arrow {{ollieExpanded ? 'expanded' : ''}}">▼</text>
     </view>
     <!-- Ollie 展开设置面板 -->
@@ -139,24 +129,18 @@
       <!-- 横排三个统计 -->
       <view class="stats-row">
         <view class="stats-col mastered {{statExpanded === 'mastered' ? 'active' : ''}}" bindtap="toggleStatExpand" data-type="mastered">
-          <text class="stat-icon">⭐</text>
           <text class="stat-num">{{stats.masteredCount || 0}}</text>
           <text class="stat-label">一脚一个</text>
-          <text class="progress-expand-arrow {{statExpanded === 'mastered' ? 'expanded' : ''}}">▼</text>
         </view>
         <view class="stats-col-divider"></view>
         <view class="stats-col grinding {{statExpanded === 'grinding' ? 'active' : ''}}" bindtap="toggleStatExpand" data-type="grinding">
-          <text class="stat-icon">🔥</text>
           <text class="stat-num">{{stats.grindingCount || 0}}</text>
           <text class="stat-label">死磕中</text>
-          <text class="progress-expand-arrow {{statExpanded === 'grinding' ? 'expanded' : ''}}">▼</text>
         </view>
         <view class="stats-col-divider"></view>
         <view class="stats-col trial {{statExpanded === 'trial' ? 'active' : ''}}" bindtap="toggleStatExpand" data-type="trial">
-          <text class="stat-icon">✨</text>
           <text class="stat-num">{{stats.trialCount || 0}}</text>
           <text class="stat-label">体验卡</text>
-          <text class="progress-expand-arrow {{statExpanded === 'trial' ? 'expanded' : ''}}">▼</text>
         </view>
       </view>
 
