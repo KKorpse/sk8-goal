@@ -531,8 +531,9 @@
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: 12rpx;
+  justify-content: space-between;
   flex: 1;
+  overflow: hidden;
 }
 
 .progress-ollie-label {
@@ -602,12 +603,7 @@
   background: var(--primary-cyan);
 }
 
-.progress-ollie-label {
-  font-size: var(--font-xl);
-  color: var(--text-secondary);
-  width: 120rpx;
-  text-align: center;
-}
+/* .progress-ollie-label defined above, removed duplicate */
 
 .progress-expand-arrow {
   font-size: 24rpx;
