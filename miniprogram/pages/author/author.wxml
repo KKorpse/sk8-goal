@@ -75,13 +75,13 @@
     <view class="item-divider"></view>
 
     <!-- GitHub -->
-    <view class="social-item" bindtap="goExternal" data-url="https://github.com/korpse">
+    <view class="social-item" bindtap="goExternal" data-url="https://github.com/KKorpse">
       <view class="social-icon-box diamond">
         <text class="social-icon">💎</text>
       </view>
       <view class="social-info">
         <text class="social-name">GitHub</text>
-        <text class="social-id">github.com/korpse</text>
+        <text class="social-id">github.com/KKorpse</text>
       </view>
       <view class="social-action">
         <text class="action-text">复制链接</text>

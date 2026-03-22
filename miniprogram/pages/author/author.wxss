@@ -186,10 +186,6 @@
   font-size: var(--font-base);
   color: var(--text-primary);
   line-height: 1.8;
-  padding: 20rpx;
-  background: rgba(0, 0, 0, 0.08);
-  border: 3rpx solid #999999;
-  box-shadow: var(--shadow-pressed);
 }
 
 /* ===== 社交账号列表 ===== */
