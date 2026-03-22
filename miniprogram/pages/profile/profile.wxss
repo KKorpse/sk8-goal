@@ -357,81 +357,93 @@
   color: var(--primary-orange);
 }
 
-/* ========== 统计概览 - 可展开下拉列表 ========== */
+/* ========== 统计概览 - 横排 + 展开列表 ========== */
 .stats-summary-expandable {
   display: flex;
   flex-direction: column;
 }
 
-.stat-row {
+.stats-row {
   display: flex;
   align-items: center;
-  justify-content: space-between;
-  padding: var(--spacing-md) 0;
+  justify-content: space-around;
+  padding: var(--spacing-sm) 0;
+}
+
+.stats-col {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2rpx;
+  flex: 1;
+  padding: var(--spacing-sm) 0;
   cursor: pointer;
   transition: all var(--transition-fast);
 }
 
-.stat-row:active {
-  opacity: 0.8;
+.stats-col:active {
+  opacity: 0.7;
 }
 
-.stat-row-left {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-md);
-}
-
-.stat-icon {
+.stats-col .stat-icon {
   font-size: var(--icon-sm);
+  margin-bottom: 2rpx;
 }
 
-.stat-info {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-md);
+.stats-col .stat-num {
+  font-size: var(--font-xl);
+  font-weight: bold;
+  color: var(--primary-yellow);
+  text-shadow: 2rpx 2rpx 0 #000;
+  font-variant-numeric: tabular-nums;
+  line-height: 1.2;
 }
 
-.stat-row .summary-label {
-  font-size: var(--font-sm);
-  color: var(--text-primary-light);
+.stats-col .stat-label {
+  font-size: 20rpx;
+  color: var(--text-secondary);
+  font-weight: bold;
 }
 
-.stat-row .summary-num {
-  font-size: var(--font-lg);
-}
-
-.stat-row.mastered .summary-num {
+.stats-col.mastered .stat-num {
   color: var(--primary-green);
 }
 
-.stat-row.grinding .summary-num {
+.stats-col.grinding .stat-num {
   color: var(--primary-orange);
 }
 
-.stat-row.trial .summary-num {
+.stats-col.trial .stat-num {
   color: var(--primary-cyan);
 }
 
-.stat-row-divider {
-  height: 2rpx;
+.stats-col.active {
+  background: var(--bg-surface);
+  border: 3rpx solid var(--border-color);
+  box-shadow: var(--shadow-sm);
+  border-radius: 0;
+}
+
+.stats-col-divider {
+  width: 4rpx;
+  height: 60rpx;
   background: var(--border-color);
-  margin: 0;
+  flex-shrink: 0;
 }
 
 /* 展开列表 */
 .stat-expand-list {
   max-height: 0;
   overflow: hidden;
-  transition: max-height var(--transition-normal);
+  transition: max-height 0.3s ease;
 }
 
 .stat-expand-list.show {
-  max-height: 360rpx;
+  max-height: 340rpx;
 }
 
 .stat-list-scroll {
-  max-height: 340rpx;
+  max-height: 320rpx;
   padding: var(--spacing-sm) 0;
 }
 

@@ -134,82 +134,64 @@
     </view>
     <!-- 分割线 -->
     <view class="progress-divider"></view>
-    <!-- 统计概览区 - 可展开下拉列表 -->
+    <!-- 统计概览区 - 横排 + 展开列表 -->
     <view class="stats-summary-expandable">
-      <!-- 一脚一个 -->
-      <view class="stat-row mastered" bindtap="toggleStatExpand" data-type="mastered">
-        <view class="stat-row-left">
+      <!-- 横排三个统计 -->
+      <view class="stats-row">
+        <view class="stats-col mastered {{statExpanded === 'mastered' ? 'active' : ''}}" bindtap="toggleStatExpand" data-type="mastered">
           <text class="stat-icon">⭐</text>
-          <view class="stat-info">
-            <text class="summary-label">一脚一个</text>
-            <text class="summary-num">{{stats.masteredCount || 0}}</text>
-          </view>
+          <text class="stat-num">{{stats.masteredCount || 0}}</text>
+          <text class="stat-label">一脚一个</text>
+          <text class="progress-expand-arrow {{statExpanded === 'mastered' ? 'expanded' : ''}}">▼</text>
         </view>
-        <text class="progress-expand-arrow {{statExpanded === 'mastered' ? 'expanded' : ''}}">▼</text>
+        <view class="stats-col-divider"></view>
+        <view class="stats-col grinding {{statExpanded === 'grinding' ? 'active' : ''}}" bindtap="toggleStatExpand" data-type="grinding">
+          <text class="stat-icon">🔥</text>
+          <text class="stat-num">{{stats.grindingCount || 0}}</text>
+          <text class="stat-label">死磕中</text>
+          <text class="progress-expand-arrow {{statExpanded === 'grinding' ? 'expanded' : ''}}">▼</text>
+        </view>
+        <view class="stats-col-divider"></view>
+        <view class="stats-col trial {{statExpanded === 'trial' ? 'active' : ''}}" bindtap="toggleStatExpand" data-type="trial">
+          <text class="stat-icon">✨</text>
+          <text class="stat-num">{{stats.trialCount || 0}}</text>
+          <text class="stat-label">体验卡</text>
+          <text class="progress-expand-arrow {{statExpanded === 'trial' ? 'expanded' : ''}}">▼</text>
+        </view>
       </view>
-      <view class="stat-expand-list {{statExpanded === 'mastered' ? 'show' : ''}}">
-        <scroll-view scroll-y class="stat-list-scroll" wx:if="{{statTrickLists.mastered.length > 0}}">
+
+      <!-- 展开的招式列表 -->
+      <view class="stat-expand-list {{statExpanded ? 'show' : ''}}">
+        <scroll-view scroll-y class="stat-list-scroll" wx:if="{{statExpanded === 'mastered' && statTrickLists.mastered.length > 0}}">
           <view class="stat-trick-item" wx:for="{{statTrickLists.mastered}}" wx:key="id">
             <text class="stat-trick-emoji">{{item.emoji || '🛹'}}</text>
             <text class="stat-trick-name">{{item.name}}</text>
             <text class="stat-trick-stance" wx:if="{{item.stance}}">{{item.stance}}</text>
           </view>
         </scroll-view>
-        <view class="stat-list-empty" wx:else>
+        <view class="stat-list-empty" wx:if="{{statExpanded === 'mastered' && statTrickLists.mastered.length === 0}}">
           <text class="stat-list-empty-text">还没有一脚一个的招式</text>
         </view>
-      </view>
 
-      <!-- 分割线 -->
-      <view class="stat-row-divider"></view>
-
-      <!-- 死磕中 -->
-      <view class="stat-row grinding" bindtap="toggleStatExpand" data-type="grinding">
-        <view class="stat-row-left">
-          <text class="stat-icon">🔥</text>
-          <view class="stat-info">
-            <text class="summary-label">死磕中</text>
-            <text class="summary-num">{{stats.grindingCount || 0}}</text>
-          </view>
-        </view>
-        <text class="progress-expand-arrow {{statExpanded === 'grinding' ? 'expanded' : ''}}">▼</text>
-      </view>
-      <view class="stat-expand-list {{statExpanded === 'grinding' ? 'show' : ''}}">
-        <scroll-view scroll-y class="stat-list-scroll" wx:if="{{statTrickLists.grinding.length > 0}}">
+        <scroll-view scroll-y class="stat-list-scroll" wx:if="{{statExpanded === 'grinding' && statTrickLists.grinding.length > 0}}">
           <view class="stat-trick-item" wx:for="{{statTrickLists.grinding}}" wx:key="id">
             <text class="stat-trick-emoji">{{item.emoji || '🛹'}}</text>
             <text class="stat-trick-name">{{item.name}}</text>
             <text class="stat-trick-stance" wx:if="{{item.stance}}">{{item.stance}}</text>
           </view>
         </scroll-view>
-        <view class="stat-list-empty" wx:else>
+        <view class="stat-list-empty" wx:if="{{statExpanded === 'grinding' && statTrickLists.grinding.length === 0}}">
           <text class="stat-list-empty-text">还没有死磕中的招式</text>
         </view>
-      </view>
 
-      <!-- 分割线 -->
-      <view class="stat-row-divider"></view>
-
-      <!-- 体验卡 -->
-      <view class="stat-row trial" bindtap="toggleStatExpand" data-type="trial">
-        <view class="stat-row-left">
-          <text class="stat-icon">✨</text>
-          <view class="stat-info">
-            <text class="summary-label">体验卡</text>
-            <text class="summary-num">{{stats.trialCount || 0}}</text>
-          </view>
-        </view>
-        <text class="progress-expand-arrow {{statExpanded === 'trial' ? 'expanded' : ''}}">▼</text>
-      </view>
-      <view class="stat-expand-list {{statExpanded === 'trial' ? 'show' : ''}}">
-        <scroll-view scroll-y class="stat-list-scroll" wx:if="{{statTrickLists.trial.length > 0}}">
+        <scroll-view scroll-y class="stat-list-scroll" wx:if="{{statExpanded === 'trial' && statTrickLists.trial.length > 0}}">
           <view class="stat-trick-item" wx:for="{{statTrickLists.trial}}" wx:key="id">
             <text class="stat-trick-emoji">{{item.emoji || '🛹'}}</text>
             <text class="stat-trick-name">{{item.name}}</text>
             <text class="stat-trick-stance" wx:if="{{item.stance}}">{{item.stance}}</text>
           </view>
         </scroll-view>
-        <view class="stat-list-empty" wx:else>
+        <view class="stat-list-empty" wx:if="{{statExpanded === 'trial' && statTrickLists.trial.length === 0}}">
           <text class="stat-list-empty-text">还没有体验卡的招式</text>
         </view>
       </view>
