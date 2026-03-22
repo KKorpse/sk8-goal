@@ -134,7 +134,7 @@ function updateTrickStatus(trickId, stance, status) {
   
   // 获取旧状态
   const progress = storageService.getUserProgress()
-  const oldStatus = progress[trickId]?.[stance] || 'none'
+  const oldStatus = (progress[trickId] && progress[trickId][stance]) || 'none'
   
   // 如果状态没有变化，直接返回
   if (oldStatus === status) {

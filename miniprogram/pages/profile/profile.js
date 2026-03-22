@@ -96,7 +96,7 @@ Page({
     allTricks.forEach(t => { trickMap[t.id] = t })
     const timeline = timelineRaw.map(item => ({
       ...item,
-      emoji: trickMap[item.trickId]?.emoji || '🛹'
+      emoji: trickMap[item.trickId] && trickMap[item.trickId].emoji || '🛹'
     }))
 
     // 计算真实板龄
@@ -395,8 +395,8 @@ Page({
     // 计算每个徽章的状态
     const allBadges = badgeDefs.map(def => {
       const result = def.check()
-      const wasUnlocked = readStatus[def.id]?.unlocked || false
-      const isRead = readStatus[def.id]?.read || false
+      const wasUnlocked = (readStatus[def.id] && readStatus[def.id].unlocked) || false
+      const isRead = (readStatus[def.id] && readStatus[def.id].read) || false
       
       const badge = {
         id: def.id,

@@ -60,7 +60,7 @@ Component({
       
       // 计算统计信息
       const consecutiveDays = storageService.getConsecutiveDays()
-      const todayChecked = records[todayStr]?.count > 0
+      const todayChecked = (records[todayStr] && records[todayStr].count) > 0
       const monthCheckins = this.getMonthCheckins(records, today)
       const yearCheckins = this.getYearCheckins(records, today)
       const totalCheckins = Object.keys(records).length
@@ -106,7 +106,7 @@ Component({
           const date = new Date(startDate)
           date.setDate(startDate.getDate() + week * 7 + day)
           const dateStr = storageService.formatDate(date)
-          const count = records[dateStr]?.count || 0
+          const count = (records[dateStr] && records[dateStr].count) || 0
           
           weekData.push({
             date: dateStr,
@@ -203,7 +203,7 @@ Component({
       
       const todayStr = storageService.formatDate(new Date())
       const records = storageService.getCheckinRecords()
-      const todayCount = records[todayStr]?.count || 0
+      const todayCount = (records[todayStr] && records[todayStr].count) || 0
       
       if (todayCount > 0) {
         wx.showToast({

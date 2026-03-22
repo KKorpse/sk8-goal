@@ -104,7 +104,7 @@ Component({
     onStatusSelect(e) {
       const { stance, status } = e.currentTarget.dataset
       const trick = this.properties.trick
-      const oldStatus = trick?.stances?.[stance] || 'none'
+      const oldStatus = (trick && trick.stances && trick.stances[stance]) || 'none'
       
       // 如果选择相同状态，则取消（设为none）
       const newStatus = (oldStatus === status) ? 'none' : status
@@ -128,14 +128,14 @@ Component({
      * 获取状态显示文本
      */
     getStatusText(status) {
-      return this.data.statusConfig[status]?.text || '未解锁'
+      return (this.data.statusConfig && this.data.statusConfig[status] && this.data.statusConfig[status].text) || '未解锁'
     },
 
     /**
      * 获取状态 Emoji
      */
     getStatusEmoji(status) {
-      return this.data.statusConfig[status]?.emoji || '⬜'
+      return (this.data.statusConfig && this.data.statusConfig[status] && this.data.statusConfig[status].emoji) || '⬜'
     }
   }
 })
