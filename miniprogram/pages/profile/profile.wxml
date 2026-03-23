@@ -60,7 +60,7 @@
       </view>
       <view class="badges-list">
         <view
-          class="badge-item {{item.unlocked ? '' : 'locked'}}"
+          class="badge-item theme-{{themeId}} {{item.unlocked ? '' : 'locked'}}"
           wx:for="{{allBadges}}"
           wx:key="id"
           wx:if="{{index < 7}}"
