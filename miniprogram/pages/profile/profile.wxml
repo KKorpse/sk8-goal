@@ -1,7 +1,7 @@
 <!--我的页面-->
 <view class="profile-page theme-shell {{themeClass}}">
   <profile-terraria
-    wx:if="{{componentMap.profileLayout === '/components/terraria/profile-terraria/profile-terraria'}}"
+    wx:if="{{useTerrariaProfileLayout}}"
     theme-id="{{themeId}}"
     component-map="{{componentMap}}"
     user-info="{{userInfo}}"

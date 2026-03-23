@@ -47,7 +47,7 @@
         
         <!-- 招式卡片 -->
         <view class="group-content">
-          <block wx:if="{{componentMap.trickCard === '/components/terraria/trick-card-terraria/trick-card-terraria'}}">
+          <block wx:if="{{useTerrariaTrickCard}}">
             <trick-card-terraria
               wx:for="{{item.tricks}}"
               wx:for-item="trick"

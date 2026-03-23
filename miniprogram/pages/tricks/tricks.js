@@ -5,6 +5,7 @@ const trickService = require('../../services/trickService')
 const userService = require('../../services/userService')
 const vibrate = require('../../utils/vibrate')
 const themePage = require('../../utils/themePage')
+const { TERRARIA_COMPONENT_MAP } = require('../../themes/componentRegistry')
 
 Page({
   data: {
@@ -26,11 +27,13 @@ Page({
     themeId: '',
     themeClass: '',
     themeMeta: {},
-    themeOptions: []
+    themeOptions: [],
+    componentMap: {},
+    useTerrariaTrickCard: false
   },
 
   onLoad() {
-    themePage.applyTheme(this)
+    this.applyThemeState()
     // 初始化示例数据（首次使用）
     userService.initSampleData()
     
@@ -42,7 +45,7 @@ Page({
   },
 
   onShow() {
-    themePage.applyTheme(this)
+    this.applyThemeState()
     if (typeof this.getTabBar === 'function' &&
         this.getTabBar()) {
       this.getTabBar().setData({
@@ -168,5 +171,12 @@ Page({
         })
       }
     }
+  },
+
+  applyThemeState() {
+    themePage.applyTheme(this)
+    this.setData({
+      useTerrariaTrickCard: this.data.componentMap.trickCard === TERRARIA_COMPONENT_MAP.trickCard
+    })
   }
 })

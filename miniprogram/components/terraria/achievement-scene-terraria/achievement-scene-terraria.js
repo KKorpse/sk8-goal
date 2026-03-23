@@ -16,7 +16,8 @@ Component({
 
   methods: {
     onNodeTap(e) {
-      this.triggerEvent('nodetap', { index: e.currentTarget.dataset.index })
+      const { index } = e.currentTarget.dataset
+      this.triggerEvent('nodetap', { index })
     }
   }
 })

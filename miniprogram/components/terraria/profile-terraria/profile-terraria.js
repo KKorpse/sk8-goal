@@ -46,13 +46,20 @@ Component({
   },
 
   data: {
-    terrariaAchievementScenePath: TERRARIA_COMPONENT_MAP.achievementScene,
+    useTerrariaAchievementScene: false,
     litBarWidth: 0,
     masteredBarWidth: 0,
     yearsBarWidth: 0
   },
 
   observers: {
+    componentMap(componentMap) {
+      this.setData({
+        useTerrariaAchievementScene: !!componentMap &&
+          componentMap.achievementScene === TERRARIA_COMPONENT_MAP.achievementScene
+      })
+    },
+
     'stats.litCount, stats.masteredCount, yearsSkating': function (litCount, masteredCount, yearsSkating) {
       this.setData({
         litBarWidth: Math.min((litCount || 0) * 10, 100),

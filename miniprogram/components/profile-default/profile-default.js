@@ -46,7 +46,16 @@ Component({
   },
 
   data: {
-    terrariaAchievementScenePath: TERRARIA_COMPONENT_MAP.achievementScene
+    useTerrariaAchievementScene: false
+  },
+
+  observers: {
+    componentMap(componentMap) {
+      this.setData({
+        useTerrariaAchievementScene: !!componentMap &&
+          componentMap.achievementScene === TERRARIA_COMPONENT_MAP.achievementScene
+      })
+    }
   },
 
   methods: {

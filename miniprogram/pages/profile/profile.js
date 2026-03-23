@@ -5,6 +5,7 @@ const userService = require('../../services/userService')
 const trickService = require('../../services/trickService')
 const storageService = require('../../services/storageService')
 const themePage = require('../../utils/themePage')
+const { TERRARIA_COMPONENT_MAP } = require('../../themes/componentRegistry')
 
 Page({
   data: {
@@ -67,7 +68,8 @@ Page({
     themeMeta: {},
     themeOptions: [],
     sceneConfig: {},
-    themePanelExpanded: false
+    themePanelExpanded: false,
+    useTerrariaProfileLayout: false
   },
 
   onLoad() {
@@ -935,7 +937,8 @@ Page({
   applyThemeState(themeId) {
     const theme = themeId ? themePage.setTheme(this, themeId) : themePage.applyTheme(this)
     this.setData({
-      sceneConfig: theme.sceneConfig || {}
+      sceneConfig: theme.sceneConfig || {},
+      useTerrariaProfileLayout: this.data.componentMap.profileLayout === TERRARIA_COMPONENT_MAP.profileLayout
     })
     return theme
   },

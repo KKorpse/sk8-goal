@@ -184,7 +184,7 @@
     </view>
 
     <achievement-scene-terraria
-      wx:if="{{componentMap.achievementScene === terrariaAchievementScenePath}}"
+      wx:if="{{useTerrariaAchievementScene}}"
       timeline="{{timeline}}"
       variant="{{themeId}}"
       scene-config="{{sceneConfig}}"
