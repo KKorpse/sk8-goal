@@ -106,7 +106,7 @@
       <view class="ollie-setting-item">
         <view class="ollie-label-wrapper">
           <text class="ollie-label-icon">🦶</text>
-          <text class="ollie-label">正角 ({{userInfo.stance === 'regular' ? 'Regular' : 'Goofy'}})</text>
+          <text class="ollie-label">正脚 ({{userInfo.stance === 'regular' ? 'Regular' : 'Goofy'}})</text>
         </view>
         <view class="ollie-control">
           <view class="ollie-btn" bindtap="adjustOllie" data-type="normal" data-delta="-0.5">-</view>
@@ -118,7 +118,7 @@
       <view class="ollie-setting-item">
         <view class="ollie-label-wrapper">
           <text class="ollie-label-icon">🔄</text>
-          <text class="ollie-label">反角 (Switch/Fakie)</text>
+          <text class="ollie-label">反脚 (Switch/Fakie)</text>
         </view>
         <view class="ollie-control">
           <view class="ollie-btn" bindtap="adjustOllie" data-type="switch" data-delta="-0.5">-</view>

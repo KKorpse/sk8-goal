@@ -2,6 +2,7 @@
  * 招式卡片组件
  */
 const config = require('../../config')
+const themeService = require('../../services/themeService')
 const vibrate = require('../../utils/vibrate')
 
 Component({
@@ -14,6 +15,7 @@ Component({
   },
 
   data: {
+    theme: themeService.getCurrentTheme().id,
     stanceConfig: config.stanceConfig,
     statusConfig: config.statusConfig,
     stances: config.stances

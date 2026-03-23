@@ -1,5 +1,5 @@
 <!--招式卡片组件-->
-<view class="trick-card" bindtap="onTap" hover-class="trick-card-hover">
+<view class="trick-card theme-{{theme}}" bindtap="onTap" hover-class="trick-card-hover">
   <!-- 左侧：图标和名称 -->
   <view class="card-left">
     <view class="trick-icon">
