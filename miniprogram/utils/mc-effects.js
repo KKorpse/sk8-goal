@@ -130,10 +130,10 @@ function getCurrentPage() {
 /**
  * 打卡成功效果
  * MC 风格的方块放置 + 粒子
+ * @param {Object} component - 组件实例
  */
-function playCheckinEffect(selector = '#checkin-btn') {
-  const page = getCurrentPage()
-  if (!page) return
+function playCheckinEffect(component) {
+  if (!component) return
 
   // 创建 MC 方块动画
   const blockAnim = wx.createAnimation({
@@ -146,19 +146,19 @@ function playCheckinEffect(selector = '#checkin-btn') {
   blockAnim.scale(1.1, 1.1).opacity(1).step({ duration: 150 })
   blockAnim.scale(1, 1).opacity(1).step({ duration: 100 })
 
-  page.setData({ checkinBlockAnim: blockAnim.export() })
+  component.setData({ checkinBlockAnim: blockAnim.export() })
 
   // 播放放置音效
   playPlaceSound()
 
   // 创建粒子
   setTimeout(() => {
-    createCheckinParticles(page)
+    createCheckinParticles(component)
   }, 100)
 
   // 清理
   setTimeout(() => {
-    page.setData({ checkinBlockAnim: null, checkinParticles: null })
+    component.setData({ checkinBlockAnim: null, checkinParticles: null })
   }, 800)
 }
 
@@ -186,8 +186,9 @@ function playBreakSound() {
 
 /**
  * 创建打卡粒子效果
+ * @param {Object} component - 组件实例
  */
-function createCheckinParticles(page) {
+function createCheckinParticles(component) {
   // 生成8个粒子，初始在中心
   const particleCount = 8
   const particles = []
@@ -219,11 +220,11 @@ function createCheckinParticles(page) {
     })
   }
   
-  page.setData({ checkinParticles: particles })
+  component.setData({ checkinParticles: particles })
   
   // 清理
   setTimeout(() => {
-    page.setData({ checkinParticles: null })
+    component.setData({ checkinParticles: null })
   }, 800)
 }
 

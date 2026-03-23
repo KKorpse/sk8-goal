@@ -222,7 +222,7 @@ Component({
       vibrate.success()
       
       // MC 放置效果（打卡成功）
-      mcEffects.playCheckinEffect()
+      mcEffects.playCheckinEffect(this)
       
       wx.showToast({
         title: '打卡成功！',
