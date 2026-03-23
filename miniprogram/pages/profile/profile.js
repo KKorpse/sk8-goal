@@ -66,7 +66,8 @@ Page({
     themeClass: '',
     themeMeta: {},
     themeOptions: [],
-    sceneConfig: {}
+    sceneConfig: {},
+    themePanelExpanded: false
   },
 
   onLoad() {
@@ -955,6 +956,12 @@ Page({
       title: `已切换到${theme.name}`,
       icon: 'none',
       duration: 1500
+    })
+  },
+
+  toggleThemePanel() {
+    this.setData({
+      themePanelExpanded: !this.data.themePanelExpanded
     })
   },
 

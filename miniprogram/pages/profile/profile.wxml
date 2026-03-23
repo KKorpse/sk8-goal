@@ -82,29 +82,6 @@
       </view>
     </view>
 
-    <view class="theme-switcher">
-      <view class="theme-switcher-header">
-        <text class="theme-switcher-title">页面风格</text>
-        <text class="theme-switcher-subtitle">{{themeMeta.preview}}</text>
-      </view>
-      <view class="theme-options">
-        <view
-          wx:for="{{themeOptions}}"
-          wx:key="id"
-          class="theme-option {{themeId === item.id ? 'active' : ''}}"
-          data-theme-id="{{item.id}}"
-          bindtap="onThemeChange"
-        >
-          <view class="theme-option-preview {{item.className}}">
-            <view class="theme-option-swatch"></view>
-          </view>
-          <view class="theme-option-body">
-            <text class="theme-option-name">{{item.name}}</text>
-            <text class="theme-option-desc">{{item.description}}</text>
-          </view>
-        </view>
-      </view>
-    </view>
   </view>
   
   <!-- 合并进度卡片: Ollie + 统计概览 -->
@@ -232,6 +209,35 @@
   
   <!-- 滑板打卡墙 - 游戏风格 -->
   <checkin-wall variant="{{themeId}}" />
+
+  <view class="theme-panel">
+    <view class="theme-panel-header" bindtap="toggleThemePanel">
+      <view class="theme-panel-header-main">
+        <text class="theme-panel-title">页面风格</text>
+        <text class="theme-panel-subtitle">当前：{{themeMeta.name}} · {{themeMeta.preview}}</text>
+      </view>
+      <text class="theme-panel-arrow {{themePanelExpanded ? 'expanded' : ''}}">▼</text>
+    </view>
+    <view class="theme-panel-body {{themePanelExpanded ? 'expanded' : ''}}">
+      <view class="theme-options">
+        <view
+          wx:for="{{themeOptions}}"
+          wx:key="id"
+          class="theme-option {{themeId === item.id ? 'active' : ''}}"
+          data-theme-id="{{item.id}}"
+          bindtap="onThemeChange"
+        >
+          <view class="theme-option-preview {{item.className}}">
+            <view class="theme-option-swatch"></view>
+          </view>
+          <view class="theme-option-body-text">
+            <text class="theme-option-name">{{item.name}}</text>
+            <text class="theme-option-desc">{{item.description}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
   
   <!-- 底部信息 -->
   <view class="footer">
