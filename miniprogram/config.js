@@ -95,6 +95,61 @@ const config = {
       1: { color: '#276749', name: '已打卡', minCount: 1 },
       2: { color: '#38a169', name: '多次打卡', minCount: 2 }
     }
+  },
+
+  // 成就定义
+  achievements: {
+    // 招式类成就
+    first_trick: {
+      id: 'first_trick',
+      title: '初次见面',
+      description: '解锁第一个招式',
+      icon: '🌱'
+    },
+    ollie_master: {
+      id: 'ollie_master',
+      title: '豚跳大师',
+      description: '完全掌握 Ollie',
+      icon: '🦘'
+    },
+    kickflip_boss: {
+      id: 'kickflip_boss',
+      title: '跟翻王者',
+      description: '掌握所有跟翻招式',
+      icon: '💫'
+    },
+    // 打卡类成就
+    first_checkin: {
+      id: 'first_checkin',
+      title: '初次打卡',
+      description: '完成第一次打卡',
+      icon: '📅'
+    },
+    week_streak: {
+      id: 'week_streak',
+      title: '一周坚持',
+      description: '连续打卡7天',
+      icon: '🔥'
+    },
+    month_streak: {
+      id: 'month_streak',
+      title: '月度达人',
+      description: '连续打卡30天',
+      icon: '⭐'
+    },
+    // 招式完成度成就
+    stance_complete: {
+      id: 'stance_complete',
+      title: '一脚四式',
+      description: '完成一个招式的全部四种脚位',
+      icon: '🎯'
+    },
+    all_basics: {
+      id: 'all_basics',
+      title: '基础毕业',
+      description: '完成所有基础招式',
+      icon: '🎓'
+    }
   }
 }
 

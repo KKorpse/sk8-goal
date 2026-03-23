@@ -3,6 +3,7 @@
  */
 const storageService = require('../../services/storageService')
 const vibrate = require('../../utils/vibrate')
+const mcEffects = require('../../utils/mc-effects')
 
 Component({
   properties: {
@@ -206,6 +207,8 @@ Component({
       const todayCount = (records[todayStr] && records[todayStr].count) || 0
       
       if (todayCount > 0) {
+        // MC 破坏效果（已打卡）
+        mcEffects.playBlockBreak()
         wx.showToast({
           title: '今日已打卡',
           icon: 'none',
@@ -217,6 +220,9 @@ Component({
       // 添加打卡
       storageService.addCheckin(todayStr)
       vibrate.success()
+      
+      // MC 放置效果（打卡成功）
+      mcEffects.playCheckinEffect()
       
       wx.showToast({
         title: '打卡成功！',

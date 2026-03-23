@@ -275,6 +275,50 @@
 /* 今日打卡按钮 */
 .checkin-action {
   margin-bottom: var(--spacing-md);
+  position: relative;
+}
+
+/* MC 方块容器 */
+.mc-block-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 10;
+  pointer-events: none;
+}
+
+.mc-block {
+  width: 80rpx;
+  height: 80rpx;
+  background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%);
+  border: 4rpx solid #1B5E20;
+  box-shadow: 
+    inset 4rpx 4rpx 0px 0px #81C784,
+    inset -4rpx -4rpx 0px 0px #1B5E20,
+    0 0 20rpx rgba(76, 175, 80, 0.5);
+}
+
+/* MC 粒子容器 */
+.mc-particles-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 0;
+  height: 0;
+  z-index: 9;
+  pointer-events: none;
+}
+
+.mc-particle {
+  position: absolute;
+  width: 12rpx;
+  height: 12rpx;
+  background: #4CAF50;
+  border: 2rpx solid #1B5E20;
+  box-shadow: inset 2rpx 2rpx 0px 0px #81C784;
+  transition: all 0.5s ease-out;
 }
 
 .checkin-btn {

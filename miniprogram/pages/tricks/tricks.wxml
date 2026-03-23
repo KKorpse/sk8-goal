@@ -69,4 +69,21 @@
     bind:close="onStancePanelClose"
     bind:statuschange="onStatusChange"
   />
+
+  <!-- MC 风格成就弹窗 -->
+  <view 
+    class="achievement-popup {{showAchievement ? 'show' : ''}}" 
+    animation="{{achievementAnim}}"
+    wx:if="{{showAchievement && achievementData}}"
+  >
+    <view class="achievement-content">
+      <text class="achievement-icon">{{achievementData.icon}}</text>
+      <view class="achievement-text">
+        <text class="achievement-title">成就解锁</text>
+        <text class="achievement-name">{{achievementData.title}}</text>
+        <text class="achievement-desc">{{achievementData.description}}</text>
+      </view>
+    </view>
+    <view class="achievement-shine"></view>
+  </view>
 </view>

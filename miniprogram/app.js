@@ -25,6 +25,20 @@ App({
   },
 
   /**
+   * 显示 MC 风格成就弹窗
+   * @param {Object} achievement - { title, description, icon }
+   */
+  showAchievement(achievement) {
+    // 通知所有页面显示成就弹窗
+    const pages = getCurrentPages()
+    pages.forEach(page => {
+      if (page.onAchievementShow) {
+        page.onAchievementShow(achievement)
+      }
+    })
+  },
+
+  /**
    * 初始化用户数据
    */
   initUserData() {
@@ -64,6 +78,8 @@ App({
     userProgress: {},
     // 时光轴记录
     timeline: [],
+    // 已解锁成就
+    unlockedAchievements: wx.getStorageSync('unlockedAchievements') || [],
     // 系统信息
     systemInfo: wx.getSystemInfoSync()
   }

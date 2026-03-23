@@ -117,3 +117,97 @@
 .bottom-safe {
   height: calc(200rpx + env(safe-area-inset-bottom));
 }
+
+/* ========== MC 风格成就弹窗 ========== */
+.achievement-popup {
+  position: fixed;
+  top: 120rpx;
+  right: 20rpx;
+  width: 560rpx;
+  background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
+  border: 4rpx solid #5c3d0e;
+  border-radius: 0;
+  box-shadow: 
+    0 0 20rpx rgba(0, 0, 0, 0.8),
+    inset 0 0 20rpx rgba(255, 200, 100, 0.1),
+    0 0 60rpx rgba(255, 180, 50, 0.3);
+  overflow: hidden;
+  transform: translateX(300px);
+  opacity: 0;
+  z-index: 9999;
+}
+
+.achievement-popup.show {
+  transform: translateX(0);
+  opacity: 1;
+}
+
+.achievement-content {
+  display: flex;
+  align-items: center;
+  padding: 24rpx 28rpx;
+  position: relative;
+  z-index: 1;
+}
+
+.achievement-icon {
+  font-size: 72rpx;
+  margin-right: 24rpx;
+  filter: drop-shadow(0 0 8rpx rgba(255, 200, 100, 0.6));
+}
+
+.achievement-text {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.achievement-title {
+  font-size: 20rpx;
+  color: #ffc857;
+  font-weight: bold;
+  text-transform: uppercase;
+  letter-spacing: 2rpx;
+  text-shadow: 2rpx 2rpx 0 #000;
+  margin-bottom: 4rpx;
+}
+
+.achievement-name {
+  font-size: 32rpx;
+  color: #ffffff;
+  font-weight: bold;
+  text-shadow: 2rpx 2rpx 0 #000;
+  margin-bottom: 4rpx;
+}
+
+.achievement-desc {
+  font-size: 22rpx;
+  color: #b0b0b0;
+  font-weight: bold;
+  text-shadow: 2rpx 2rpx 0 #000;
+}
+
+/* 光泽效果 */
+.achievement-shine {
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.1),
+    transparent
+  );
+  animation: shine 2s ease-in-out infinite;
+}
+
+@keyframes shine {
+  0% {
+    left: -100%;
+  }
+  50%, 100% {
+    left: 100%;
+  }
+}

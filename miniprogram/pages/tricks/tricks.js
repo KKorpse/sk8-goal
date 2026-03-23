@@ -4,6 +4,8 @@
 const trickService = require('../../services/trickService')
 const userService = require('../../services/userService')
 const vibrate = require('../../utils/vibrate')
+const config = require('../../config')
+const mcEffects = require('../../utils/mc-effects')
 
 Page({
   data: {
@@ -20,7 +22,11 @@ Page({
     // 当前选中的招式（用于脚位面板）
     selectedTrick: null,
     // 脚位面板是否显示
-    showStancePanel: false
+    showStancePanel: false,
+    // 成就弹窗相关
+    showAchievement: false,
+    achievementData: null,
+    achievementAnim: null
   },
 
   onLoad() {
@@ -151,14 +157,129 @@ Page({
       })
       this.setData({ groupedTricks })
       
-      // 如果是达成"一脚一个"，显示庆祝提示
+      // 检查成就解锁
+      this.checkAchievements(trickId, updatedTrick)
+      
+      // MC 音效反馈
       if (newStatus === 'mastered') {
+        // 播放 MC 成就音效
+        mcEffects.playAchievementSound()
+        // 显示庆祝提示
         wx.showToast({
           title: '🎉 一脚一个！',
           icon: 'none',
           duration: 2000
         })
+      } else if (newStatus !== 'none') {
+        // 其他状态变化播放放置音效
+        mcEffects.playPlaceSound()
+      } else {
+        // 取消/重置播放破坏音效
+        mcEffects.playBreakSound()
       }
+    }
+  },
+
+  /**
+   * 成就显示回调（由 app.showAchievement 触发）
+   */
+  onAchievementShow(achievement) {
+    this.showAchievementPopup(achievement)
+  },
+
+  /**
+   * 显示成就弹窗
+   */
+  showAchievementPopup(achievement) {
+    const animation = wx.createAnimation({
+      duration: 300,
+      timingFunction: 'ease-out'
+    })
+    
+    // 从右侧滑入
+    animation.translateX(300).opacity(0).step()
+    animation.translateX(0).opacity(1).step({ duration: 300 })
+    
+    this.setData({
+      showAchievement: true,
+      achievementData: achievement,
+      achievementAnim: animation.export()
+    })
+    
+    // 3秒后自动关闭
+    setTimeout(() => {
+      this.hideAchievementPopup()
+    }, 3000)
+  },
+
+  /**
+   * 隐藏成就弹窗
+   */
+  hideAchievementPopup() {
+    const animation = wx.createAnimation({
+      duration: 200,
+      timingFunction: 'ease-in'
+    })
+    
+    animation.translateX(300).opacity(0).step({ duration: 200 })
+    
+    this.setData({
+      achievementAnim: animation.export()
+    })
+    
+    setTimeout(() => {
+      this.setData({
+        showAchievement: false,
+        achievementData: null
+      })
+    }, 200)
+  },
+
+  /**
+   * 检查成就解锁
+   */
+  checkAchievements(trickId, trick) {
+    const app = getApp()
+    const unlocked = app.globalData.unlockedAchievements || []
+    
+    // 检查"一脚四式"成就 - 完成所有四种脚位
+    const stances = trick.stances || {}
+    const hasAllStances = stances.normal !== 'none' && 
+                          stances.fakie !== 'none' && 
+                          stances.switch !== 'none' && 
+                          stances.nollie !== 'none'
+    
+    if (hasAllStances && !unlocked.includes('stance_complete')) {
+      this.unlockAchievement('stance_complete')
+    }
+    
+    // 检查"初次见面" - 第一个招式
+    if (!unlocked.includes('first_trick')) {
+      this.unlockAchievement('first_trick')
+    }
+    
+    // 检查 Ollie 相关
+    if (trickId === 'ollie' && stances.normal === 'mastered' && !unlocked.includes('ollie_master')) {
+      this.unlockAchievement('ollie_master')
+    }
+  },
+
+  /**
+   * 解锁成就
+   */
+  unlockAchievement(achievementId) {
+    const app = getApp()
+    const unlocked = app.globalData.unlockedAchievements || []
+    
+    if (unlocked.includes(achievementId)) return
+    
+    unlocked.push(achievementId)
+    app.globalData.unlockedAchievements = unlocked
+    wx.setStorageSync('unlockedAchievements', unlocked)
+    
+    const achievement = config.achievements[achievementId]
+    if (achievement) {
+      mcEffects.showAchievement(achievement)
     }
   }
 })

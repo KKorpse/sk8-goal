@@ -78,6 +78,21 @@
 
   <!-- 今日打卡按钮 -->
   <view class="checkin-action">
+    <!-- MC 方块动画 -->
+    <view class="mc-block-container" wx:if="{{checkinBlockAnim}}">
+      <view class="mc-block" animation="{{checkinBlockAnim}}"></view>
+    </view>
+    
+    <!-- 粒子容器 -->
+    <view class="mc-particles-container" wx:if="{{checkinParticles}}">
+      <view 
+        class="mc-particle"
+        wx:for="{{checkinParticles}}"
+        wx:key="index"
+        style="transform: translate({{item.x}}rpx, {{item.y}}rpx) scale({{item.scale}}); opacity: {{item.opacity}};"
+      ></view>
+    </view>
+    
     <view 
       class="checkin-btn {{todayChecked ? 'checked' : ''}}" 
       bindtap="onCheckinTap"
