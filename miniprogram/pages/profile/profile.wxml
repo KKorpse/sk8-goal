@@ -252,7 +252,7 @@
 
 <!-- 新成就弹窗 -->
 <view class="badge-modal-mask {{showNewBadgesModal ? 'show' : ''}}" bindtap="closeNewBadgesModal" wx:if="{{showNewBadgesModal}}">
-  <view class="new-badges-modal" catchtap="preventClose">
+  <view class="new-badges-modal theme-{{themeId}}" catchtap="preventClose">
     <view class="new-badges-header">
       <text class="new-badges-title">🎉 恭喜解锁新成就！</text>
     </view>
@@ -275,7 +275,7 @@
 
 <!-- 徽章详情弹窗 -->
 <view class="badge-modal-mask {{showBadgeModal ? 'show' : ''}}" bindtap="closeBadgeModal" wx:if="{{showBadgeModal}}">
-  <view class="badge-modal" catchtap="preventClose">
+  <view class="badge-modal theme-{{themeId}}" catchtap="preventClose">
     <view class="badge-modal-header">
       <view class="badge-modal-icon {{selectedBadge.unlocked ? '' : 'locked'}}">
         <text class="badge-modal-emoji">{{selectedBadge.emoji}}</text>
@@ -302,7 +302,7 @@
 
 <!-- 昵称修改弹窗 -->
 <view class="badge-modal-mask {{showNicknameModal ? 'show' : ''}}" bindtap="closeNicknameModal" wx:if="{{showNicknameModal}}">
-  <view class="badge-modal nickname-modal" catchtap="preventClose">
+  <view class="badge-modal nickname-modal theme-{{themeId}}" catchtap="preventClose">
     <view class="badge-modal-header">
       <view class="badge-modal-icon">
         <text class="badge-modal-emoji">✏️</text>
@@ -359,7 +359,7 @@
 
 <!-- 昵称修改弹窗 -->
 <view class="badge-modal-mask {{showNicknameModal ? 'show' : ''}}" bindtap="closeNicknameModal" wx:if="{{showNicknameModal}}">
-  <view class="badge-modal nickname-modal" catchtap="preventClose">
+  <view class="badge-modal nickname-modal theme-{{themeId}}" catchtap="preventClose">
     <view class="badge-modal-header">
       <view class="badge-modal-icon">
         <text class="badge-modal-emoji">✏️</text>
@@ -390,7 +390,7 @@
 
 <!-- 成招详情弹窗 -->
 <view class="badge-modal-mask {{showTimelineDetail ? 'show' : ''}}" bindtap="closeTimelineDetail" wx:if="{{showTimelineDetail}}">
-  <view class="badge-modal" catchtap="preventClose">
+  <view class="badge-modal theme-{{themeId}}" catchtap="preventClose">
     <view class="badge-modal-header">
       <view class="badge-modal-icon {{selectedTimeline.status}}">
         <text class="badge-modal-emoji">{{selectedTimeline.emoji || '🛹'}}</text>
@@ -421,7 +421,7 @@
 
 <!-- 昵称修改弹窗 -->
 <view class="badge-modal-mask {{showNicknameModal ? 'show' : ''}}" bindtap="closeNicknameModal" wx:if="{{showNicknameModal}}">
-  <view class="badge-modal nickname-modal" catchtap="preventClose">
+  <view class="badge-modal nickname-modal theme-{{themeId}}" catchtap="preventClose">
     <view class="badge-modal-header">
       <view class="badge-modal-icon">
         <text class="badge-modal-emoji">✏️</text>
