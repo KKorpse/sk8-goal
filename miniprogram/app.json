@@ -1,5 +1,7 @@
 {
   "pages": [
+    "pages/index/index",
+    "pages/friends/friends",
     "pages/profile/profile",
     "pages/tricks/tricks",
     "pages/skating-history/skating-history",

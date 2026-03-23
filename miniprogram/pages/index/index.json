@@ -1,0 +1,9 @@
+{
+  "navigationBarTitleText": "SkateGoal",
+  "enablePullDownRefresh": true,
+  "usingComponents": {
+    "timeline-item": "/components/timeline-item/timeline-item",
+    "checkin-wall": "/components/checkin-wall/checkin-wall",
+    "achievement-scene": "/components/achievement-scene/achievement-scene"
+  }
+}

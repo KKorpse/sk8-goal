@@ -1,0 +1,464 @@
+<!--我的页面-->
+<view class="profile-page theme-shell {{themeClass}}">
+  <!-- 个人信息卡片 -->
+  <view class="profile-card">
+    <!-- 头像和基本信息 -->
+    <view class="card-header">
+      <view class="avatar-wrapper" bindtap="chooseAvatar">
+        <view class="avatar-placeholder avatar-placeholder-{{themeId}}" wx:if="{{!userInfo.avatar}}">
+          <text class="avatar-placeholder-emoji">{{sceneConfig.avatarIcon}}</text>
+        </view>
+        <image
+          class="avatar"
+          wx:else
+          src="{{userInfo.avatar}}"
+          mode="aspectFill"
+        />
+        <view class="avatar-edit-hint">
+          <text class="edit-icon">📷</text>
+        </view>
+      </view>
+      <view class="user-info">
+        <view class="nickname-wrapper" bindtap="editNickname">
+          <text class="nickname">{{userInfo.nickname || '滑板玩家'}}</text>
+          <text class="nickname-edit-icon">✏️</text>
+        </view>
+        <text class="user-id">ID: {{userInfo.id}}</text>
+      </view>
+      <!-- 右侧信息区：脚位和板龄 -->
+      <view class="header-right">
+        <view class="header-tag tag-clickable" bindtap="toggleStanceExpand">
+          <text class="header-tag-text">脚位 {{userInfo.stance === 'regular' ? 'Regular' : 'Goofy'}}</text>
+          <text class="tag-arrow {{stanceExpanded ? 'expanded' : ''}}">▼</text>
+        </view>
+        <view class="header-tag tag-clickable" bindtap="onSkatingHistoryTap">
+          <text class="header-tag-text">板龄 {{yearsSkating}} 年</text>
+          <text class="tag-arrow">›</text>
+        </view>
+      </view>
+    </view>
+    
+    <!-- 脚位设置面板 -->
+    <view class="stance-panel {{stanceExpanded ? 'show' : ''}}">
+      <view class="stance-option {{userInfo.stance === 'regular' ? 'active' : ''}}" bindtap="setStance" data-stance="regular">
+        <text class="stance-emoji">🦶</text>
+        <text class="stance-name">Regular (左脚前)</text>
+        <text class="stance-check" wx:if="{{userInfo.stance === 'regular'}}">✓</text>
+      </view>
+      <view class="stance-option {{userInfo.stance === 'goofy' ? 'active' : ''}}" bindtap="setStance" data-stance="goofy">
+        <text class="stance-emoji">🦶</text>
+        <text class="stance-name">Goofy (右脚前)</text>
+        <text class="stance-check" wx:if="{{userInfo.stance === 'goofy'}}">✓</text>
+      </view>
+    </view>
+    
+    <!-- 成就徽章 -->
+    <view class="badges-wrapper">
+      <view class="badges-header">
+        <text class="badges-title">成就徽章</text>
+        <text class="badges-count">{{unlockedBadges.length}}/{{allBadges.length}}</text>
+      </view>
+      <view class="badges-list">
+        <view
+          class="badge-item theme-{{themeId}} {{item.unlocked ? '' : 'locked'}}"
+          wx:for="{{allBadges}}"
+          wx:key="id"
+          wx:if="{{index < 7}}"
+          bindtap="onBadgeTap"
+          data-badge="{{item}}"
+          data-index="{{index}}"
+        >
+          <text class="badge-emoji">{{item.emoji}}</text>
+        </view>
+        <!-- 更多徽章提示 -->
+        <view
+          class="badge-item badge-more"
+          wx:if="{{allBadges.length > 7}}"
+          bindtap="onBadgeTap"
+          data-badge="{{allBadges[7]}}"
+        >
+          <text class="badge-more-text">+{{allBadges.length - 7}}</text>
+        </view>
+      </view>
+    </view>
+
+  </view>
+  
+  <!-- 合并进度卡片: Ollie + 统计概览 -->
+  <view class="progress-card">
+    <!-- 卡片标题 -->
+    <view class="progress-card-title">滑手数据</view>
+    <!-- Ollie 高度区 -->
+    <view class="progress-ollie" bindtap="toggleOllieExpand">
+      <view class="progress-ollie-left">
+        <text class="progress-ollie-label">Ollie 高度</text>
+        <view class="progress-ollie-values">
+          <text class="progress-ollie-main">{{ollie.normal}}</text>
+          <text class="progress-ollie-sep">/</text>
+          <text class="progress-ollie-sub">{{ollie.switch}}</text>
+          <text class="progress-ollie-unit">立</text>
+        </view>
+      </view>
+      <text class="progress-expand-arrow {{ollieExpanded ? 'expanded' : ''}}">▼</text>
+    </view>
+    <!-- Ollie 展开设置面板 -->
+    <view class="ollie-settings {{ollieExpanded ? 'show' : ''}}">
+      <view class="ollie-setting-item">
+        <view class="ollie-label-wrapper">
+          <text class="ollie-label-icon">🦶</text>
+          <text class="ollie-label">正脚 ({{userInfo.stance === 'regular' ? 'Regular' : 'Goofy'}})</text>
+        </view>
+        <view class="ollie-control">
+          <view class="ollie-btn" bindtap="adjustOllie" data-type="normal" data-delta="-0.5">-</view>
+          <text class="ollie-value">{{ollie.normal}}</text>
+          <view class="ollie-btn" bindtap="adjustOllie" data-type="normal" data-delta="0.5">+</view>
+        </view>
+      </view>
+      <view class="ollie-divider"></view>
+      <view class="ollie-setting-item">
+        <view class="ollie-label-wrapper">
+          <text class="ollie-label-icon">🔄</text>
+          <text class="ollie-label">反脚 (Switch/Fakie)</text>
+        </view>
+        <view class="ollie-control">
+          <view class="ollie-btn" bindtap="adjustOllie" data-type="switch" data-delta="-0.5">-</view>
+          <text class="ollie-value">{{ollie.switch}}</text>
+          <view class="ollie-btn" bindtap="adjustOllie" data-type="switch" data-delta="0.5">+</view>
+        </view>
+      </view>
+    </view>
+    <!-- 分割线 -->
+    <view class="progress-divider"></view>
+    <!-- 统计概览区 - 横排 + 展开列表 -->
+    <view class="stats-summary-expandable">
+      <!-- 横排三个统计 -->
+      <view class="stats-row">
+        <view class="stats-col mastered {{statExpanded === 'mastered' ? 'active' : ''}}" bindtap="toggleStatExpand" data-type="mastered">
+          <text class="stat-num">{{stats.masteredCount || 0}}</text>
+          <text class="stat-label">一脚一个</text>
+        </view>
+        <view class="stats-col-divider"></view>
+        <view class="stats-col grinding {{statExpanded === 'grinding' ? 'active' : ''}}" bindtap="toggleStatExpand" data-type="grinding">
+          <text class="stat-num">{{stats.grindingCount || 0}}</text>
+          <text class="stat-label">死磕中</text>
+        </view>
+        <view class="stats-col-divider"></view>
+        <view class="stats-col trial {{statExpanded === 'trial' ? 'active' : ''}}" bindtap="toggleStatExpand" data-type="trial">
+          <text class="stat-num">{{stats.trialCount || 0}}</text>
+          <text class="stat-label">体验卡</text>
+        </view>
+      </view>
+
+      <!-- 展开的招式列表 -->
+      <view class="stat-expand-list {{statExpanded ? 'show' : ''}}">
+        <scroll-view scroll-y class="stat-list-scroll" wx:if="{{statExpanded === 'mastered' && statTrickLists.mastered.length > 0}}">
+          <view class="stat-trick-item" wx:for="{{statTrickLists.mastered}}" wx:key="id">
+            <text class="stat-trick-emoji">{{item.emoji || '🛹'}}</text>
+            <text class="stat-trick-name">{{item.name}}</text>
+            <text class="stat-trick-stance" wx:if="{{item.stance}}">{{item.stance}}</text>
+          </view>
+        </scroll-view>
+        <view class="stat-list-empty" wx:if="{{statExpanded === 'mastered' && statTrickLists.mastered.length === 0}}">
+          <text class="stat-list-empty-text">还没有一脚一个的招式</text>
+        </view>
+
+        <scroll-view scroll-y class="stat-list-scroll" wx:if="{{statExpanded === 'grinding' && statTrickLists.grinding.length > 0}}">
+          <view class="stat-trick-item" wx:for="{{statTrickLists.grinding}}" wx:key="id">
+            <text class="stat-trick-emoji">{{item.emoji || '🛹'}}</text>
+            <text class="stat-trick-name">{{item.name}}</text>
+            <text class="stat-trick-stance" wx:if="{{item.stance}}">{{item.stance}}</text>
+          </view>
+        </scroll-view>
+        <view class="stat-list-empty" wx:if="{{statExpanded === 'grinding' && statTrickLists.grinding.length === 0}}">
+          <text class="stat-list-empty-text">还没有死磕中的招式</text>
+        </view>
+
+        <scroll-view scroll-y class="stat-list-scroll" wx:if="{{statExpanded === 'trial' && statTrickLists.trial.length > 0}}">
+          <view class="stat-trick-item" wx:for="{{statTrickLists.trial}}" wx:key="id">
+            <text class="stat-trick-emoji">{{item.emoji || '🛹'}}</text>
+            <text class="stat-trick-name">{{item.name}}</text>
+            <text class="stat-trick-stance" wx:if="{{item.stance}}">{{item.stance}}</text>
+          </view>
+        </scroll-view>
+        <view class="stat-list-empty" wx:if="{{statExpanded === 'trial' && statTrickLists.trial.length === 0}}">
+          <text class="stat-list-empty-text">还没有体验卡的招式</text>
+        </view>
+      </view>
+    </view>
+  </view>
+  
+  <!-- 成招记录 - 横屏游戏风格 -->
+  <view class="timeline-card">
+    <view class="timeline-header">
+      <text class="timeline-title"> 成招记录</text>
+      <!-- 解锁新招按钮 -->
+      <view class="unlock-btn" bindtap="onGoToTricks">
+        <text class="unlock-icon"></text>
+        <text class="unlock-text">解锁新招</text>
+        <text class="unlock-arrow">›</text>
+      </view>
+    </view>
+
+    <achievement-scene
+      timeline="{{timeline}}"
+      variant="{{themeId}}"
+      scene-config="{{sceneConfig}}"
+      bind:nodetap="onTimelineNodeTap"
+    />
+  </view>
+  
+  <!-- 滑板打卡墙 - 游戏风格 -->
+  <checkin-wall variant="{{themeId}}" />
+
+  <view class="theme-panel">
+    <view class="theme-panel-header" bindtap="toggleThemePanel">
+      <view class="theme-panel-header-main">
+        <text class="theme-panel-title">页面风格</text>
+        <text class="theme-panel-subtitle">当前：{{themeMeta.name}} · {{themeMeta.preview}}</text>
+      </view>
+      <text class="theme-panel-arrow {{themePanelExpanded ? 'expanded' : ''}}">▼</text>
+    </view>
+    <view class="theme-panel-body {{themePanelExpanded ? 'expanded' : ''}}">
+      <view class="theme-options">
+        <view
+          wx:for="{{themeOptions}}"
+          wx:key="id"
+          class="theme-option {{themeId === item.id ? 'active' : ''}}"
+          data-theme-id="{{item.id}}"
+          bindtap="onThemeChange"
+        >
+          <view class="theme-option-preview {{item.className}}">
+            <view class="theme-option-swatch"></view>
+          </view>
+          <view class="theme-option-body-text">
+            <text class="theme-option-name">{{item.name}}</text>
+            <text class="theme-option-desc">{{item.description}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="friends-entry-card" bindtap="goFriends">
+    <view class="friends-entry-main">
+      <view class="friends-entry-badge">
+        <text class="friends-entry-icon">👥</text>
+      </view>
+      <view class="friends-entry-copy">
+        <text class="friends-entry-title">好友列表</text>
+        <text class="friends-entry-subtitle">看看大家的 Ollie 高度和练习进度</text>
+      </view>
+    </view>
+    <text class="friends-entry-arrow">›</text>
+  </view>
+  
+  <!-- 底部信息 -->
+  <view class="footer">
+    <text class="footer-text">Made with 🛹 by Korpse</text>
+    <text class="footer-author-link" bindtap="goAuthor">作者信息</text>
+    <text class="footer-version">v1.0.0</text>
+  </view>
+  
+  <!-- 底部安全距离 -->
+  <view class="bottom-safe"></view>
+</view>
+
+<!-- 新成就弹窗 -->
+<view class="badge-modal-mask {{showNewBadgesModal ? 'show' : ''}}" bindtap="closeNewBadgesModal" wx:if="{{showNewBadgesModal}}">
+  <view class="new-badges-modal theme-{{themeId}}" catchtap="preventClose">
+    <view class="new-badges-header">
+      <text class="new-badges-title">🎉 恭喜解锁新成就！</text>
+    </view>
+    <scroll-view scroll-y class="new-badges-list">
+      <view class="new-badge-item" wx:for="{{newBadges}}" wx:key="id">
+        <view class="new-badge-icon">
+          <text class="new-badge-emoji">{{item.emoji}}</text>
+        </view>
+        <view class="new-badge-info">
+          <text class="new-badge-name">{{item.name}}</text>
+          <text class="new-badge-desc">{{item.description}}</text>
+        </view>
+      </view>
+    </scroll-view>
+    <view class="new-badges-footer">
+      <view class="new-badges-btn" bindtap="closeNewBadgesModal">太棒了！</view>
+    </view>
+  </view>
+</view>
+
+<!-- 徽章详情弹窗 -->
+<view class="badge-modal-mask {{showBadgeModal ? 'show' : ''}}" bindtap="closeBadgeModal" wx:if="{{showBadgeModal}}">
+  <view class="badge-modal theme-{{themeId}}" catchtap="preventClose">
+    <view class="badge-modal-header">
+      <view class="badge-modal-icon {{selectedBadge.unlocked ? '' : 'locked'}}">
+        <text class="badge-modal-emoji">{{selectedBadge.emoji}}</text>
+      </view>
+      <text class="badge-modal-name">{{selectedBadge.name}}</text>
+    </view>
+    <view class="badge-modal-body">
+      <view class="badge-desc">
+        <text class="badge-desc-text">{{selectedBadge.description}}</text>
+      </view>
+      <view class="badge-progress" wx:if="{{!selectedBadge.unlocked && selectedBadge.progress !== undefined}}">
+        <text class="badge-progress-label">进度：</text>
+        <view class="badge-progress-bar">
+          <view class="badge-progress-fill" style="width: {{selectedBadge.progressPercent}}%"></view>
+        </view>
+        <text class="badge-progress-text">{{selectedBadge.progressText}}</text>
+      </view>
+    </view>
+    <view class="badge-modal-footer">
+      <view class="badge-modal-btn" bindtap="closeBadgeModal">知道了</view>
+    </view>
+  </view>
+</view>
+
+<!-- 昵称修改弹窗 -->
+<view class="badge-modal-mask {{showNicknameModal ? 'show' : ''}}" bindtap="closeNicknameModal" wx:if="{{showNicknameModal}}">
+  <view class="badge-modal nickname-modal theme-{{themeId}}" catchtap="preventClose">
+    <view class="badge-modal-header">
+      <view class="badge-modal-icon">
+        <text class="badge-modal-emoji">✏️</text>
+      </view>
+      <text class="badge-modal-name">修改昵称</text>
+    </view>
+    <view class="badge-modal-body">
+      <view class="nickname-input-wrapper">
+        <input 
+          class="nickname-input"
+          type="text"
+          maxlength="12"
+          placeholder="请输入昵称"
+          value="{{tempNickname}}"
+          bindinput="onNicknameInput"
+          focus="{{showNicknameModal}}"
+        />
+        <text class="nickname-count">{{tempNickname.length || 0}}/12</text>
+      </view>
+      <text class="nickname-hint">昵称将显示在个人主页</text>
+    </view>
+    <view class="badge-modal-footer nickname-modal-footer">
+      <view class="nickname-btn cancel" bindtap="closeNicknameModal">取消</view>
+      <view class="nickname-btn confirm" bindtap="confirmNickname">确认</view>
+    </view>
+  </view>
+</view>
+
+<!-- 招式列表弹窗 -->
+<view class="trick-list-modal-mask {{showTrickListModal ? 'show' : ''}}" bindtap="closeTrickListModal" wx:if="{{showTrickListModal}}">
+  <view class="trick-list-modal" catchtap="preventClose">
+    <view class="trick-list-header">
+      <text class="trick-list-title">{{trickListTitle}}</text>
+      <text class="trick-list-count">{{trickList.length}} 个</text>
+    </view>
+    <scroll-view scroll-y class="trick-list-body">
+      <view class="trick-list-item" wx:for="{{trickList}}" wx:key="id">
+        <text class="trick-item-emoji">{{item.emoji || '🛹'}}</text>
+        <view class="trick-item-info">
+          <text class="trick-item-name">{{item.name}}</text>
+          <text class="trick-item-stance" wx:if="{{item.stance}}">{{item.stance}}</text>
+        </view>
+        <text class="trick-item-date" wx:if="{{item.date}}">{{item.date}}</text>
+      </view>
+      <view class="trick-list-empty" wx:if="{{trickList.length === 0}}">
+        <text class="trick-list-empty-text">暂无招式</text>
+      </view>
+    </scroll-view>
+    <view class="trick-list-footer">
+      <view class="trick-list-btn" bindtap="closeTrickListModal">关闭</view>
+    </view>
+  </view>
+</view>
+
+<!-- 昵称修改弹窗 -->
+<view class="badge-modal-mask {{showNicknameModal ? 'show' : ''}}" bindtap="closeNicknameModal" wx:if="{{showNicknameModal}}">
+  <view class="badge-modal nickname-modal theme-{{themeId}}" catchtap="preventClose">
+    <view class="badge-modal-header">
+      <view class="badge-modal-icon">
+        <text class="badge-modal-emoji">✏️</text>
+      </view>
+      <text class="badge-modal-name">修改昵称</text>
+    </view>
+    <view class="badge-modal-body">
+      <view class="nickname-input-wrapper">
+        <input 
+          class="nickname-input"
+          type="text"
+          maxlength="12"
+          placeholder="请输入昵称"
+          value="{{tempNickname}}"
+          bindinput="onNicknameInput"
+          focus="{{showNicknameModal}}"
+        />
+        <text class="nickname-count">{{tempNickname.length || 0}}/12</text>
+      </view>
+      <text class="nickname-hint">昵称将显示在个人主页</text>
+    </view>
+    <view class="badge-modal-footer nickname-modal-footer">
+      <view class="nickname-btn cancel" bindtap="closeNicknameModal">取消</view>
+      <view class="nickname-btn confirm" bindtap="confirmNickname">确认</view>
+    </view>
+  </view>
+</view>
+
+<!-- 成招详情弹窗 -->
+<view class="badge-modal-mask {{showTimelineDetail ? 'show' : ''}}" bindtap="closeTimelineDetail" wx:if="{{showTimelineDetail}}">
+  <view class="badge-modal theme-{{themeId}}" catchtap="preventClose">
+    <view class="badge-modal-header">
+      <view class="badge-modal-icon {{selectedTimeline.status}}">
+        <text class="badge-modal-emoji">{{selectedTimeline.emoji || '🛹'}}</text>
+      </view>
+      <text class="badge-modal-name">{{selectedTimeline.trickName}}</text>
+    </view>
+    <view class="badge-modal-body">
+      <view class="timeline-detail-row">
+        <text class="timeline-detail-label">脚位</text>
+        <text class="timeline-detail-value">{{selectedTimeline.stance}}</text>
+      </view>
+      <view class="timeline-detail-row">
+        <text class="timeline-detail-label">熟练度</text>
+        <text class="timeline-detail-value status-{{selectedTimeline.status}}">
+          {{selectedTimeline.status === 'mastered' ? '一脚一个' : selectedTimeline.status === 'trial' ? '体验卡' : '死磕中'}}
+        </text>
+      </view>
+      <view class="timeline-detail-row">
+        <text class="timeline-detail-label">记录日期</text>
+        <text class="timeline-detail-value">{{selectedTimeline.date}}</text>
+      </view>
+    </view>
+    <view class="badge-modal-footer">
+      <view class="badge-modal-btn" bindtap="closeTimelineDetail">知道了</view>
+    </view>
+  </view>
+</view>
+
+<!-- 昵称修改弹窗 -->
+<view class="badge-modal-mask {{showNicknameModal ? 'show' : ''}}" bindtap="closeNicknameModal" wx:if="{{showNicknameModal}}">
+  <view class="badge-modal nickname-modal theme-{{themeId}}" catchtap="preventClose">
+    <view class="badge-modal-header">
+      <view class="badge-modal-icon">
+        <text class="badge-modal-emoji">✏️</text>
+      </view>
+      <text class="badge-modal-name">修改昵称</text>
+    </view>
+    <view class="badge-modal-body">
+      <view class="nickname-input-wrapper">
+        <input 
+          class="nickname-input"
+          type="text"
+          maxlength="12"
+          placeholder="请输入昵称"
+          value="{{tempNickname}}"
+          bindinput="onNicknameInput"
+          focus="{{showNicknameModal}}"
+        />
+        <text class="nickname-count">{{tempNickname.length || 0}}/12</text>
+      </view>
+      <text class="nickname-hint">昵称将显示在个人主页</text>
+    </view>
+    <view class="badge-modal-footer nickname-modal-footer">
+      <view class="nickname-btn cancel" bindtap="closeNicknameModal">取消</view>
+      <view class="nickname-btn confirm" bindtap="confirmNickname">确认</view>
+    </view>
+  </view>
+</view>

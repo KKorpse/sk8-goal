@@ -1,0 +1,33 @@
+<view class="friends-page theme-shell {{themeClass}}">
+  <view class="friends-header">
+    <text class="friends-title">好友列表</text>
+    <text class="friends-subtitle">一起练招，也一起看进度</text>
+  </view>
+
+  <view class="friends-list">
+    <view
+      wx:for="{{friends}}"
+      wx:key="id"
+      class="friend-card"
+    >
+      <image
+        class="friend-avatar"
+        src="{{item.avatar}}"
+        mode="aspectFill"
+      />
+      <view class="friend-body">
+        <view class="friend-topline">
+          <text class="friend-name">{{item.nickname}}</text>
+          <text class="friend-city">{{item.city}}</text>
+        </view>
+        <view class="friend-stats">
+          <text class="friend-stat">Ollie {{item.ollieHeight}} 立</text>
+          <text class="friend-stat">练习 {{item.practiceDays}} 天</text>
+        </view>
+        <text class="friend-tagline">{{item.tagline}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="bottom-safe"></view>
+</view>
