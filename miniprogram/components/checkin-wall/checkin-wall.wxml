@@ -89,7 +89,7 @@
         class="mc-particle"
         wx:for="{{checkinParticles}}"
         wx:key="index"
-        style="transform: translate({{item.x}}rpx, {{item.y}}rpx) scale({{item.scale}}); opacity: {{item.opacity}};"
+        animation="{{item.animData}}"
       ></view>
     </view>
     

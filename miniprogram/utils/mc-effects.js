@@ -188,19 +188,43 @@ function playBreakSound() {
  * 创建打卡粒子效果
  */
 function createCheckinParticles(page) {
-  // 生成8个粒子的随机位置
+  // 生成8个粒子，初始在中心
+  const particleCount = 8
   const particles = []
-  for (let i = 0; i < 8; i++) {
-    const angle = (i / 8) * Math.PI * 2
-    const distance = 30 + Math.random() * 20
+  
+  for (let i = 0; i < particleCount; i++) {
+    const angle = (i / particleCount) * Math.PI * 2
+    const distance = 40 + Math.random() * 20
+    
+    // 每个粒子分步动画：先扩大距离，再缩小消失
+    const anim = wx.createAnimation({
+      duration: 400,
+      timingFunction: 'ease-out',
+      delay: i * 30  // 错开延迟
+    })
+    
+    // 第一步：从中心向外移动
+    anim.translate(
+      Math.cos(angle) * distance, 
+      Math.sin(angle) * distance
+    ).scale(1).opacity(1).step({ duration: 200 })
+    
+    // 第二步：缩小消失
+    anim.scale(0.3).opacity(0).step({ duration: 200 })
+    
     particles.push({
+      animData: anim.export(),
       x: Math.cos(angle) * distance,
-      y: Math.sin(angle) * distance,
-      scale: 0.5 + Math.random() * 0.5,
-      opacity: 1
+      y: Math.sin(angle) * distance
     })
   }
+  
   page.setData({ checkinParticles: particles })
+  
+  // 清理
+  setTimeout(() => {
+    page.setData({ checkinParticles: null })
+  }, 800)
 }
 
 module.exports = {
