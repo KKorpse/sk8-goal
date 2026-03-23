@@ -14,10 +14,14 @@ function applyNavigationBar(theme) {
     return
   }
 
-  wx.setNavigationBarColor({
-    frontColor: theme.navigationBar.frontColor,
-    backgroundColor: theme.navigationBar.backgroundColor
-  })
+  try {
+    wx.setNavigationBarColor({
+      frontColor: theme.navigationBar.frontColor,
+      backgroundColor: theme.navigationBar.backgroundColor
+    })
+  } catch (error) {
+    console.warn('setNavigationBarColor failed', error)
+  }
 }
 
 function applyTheme(page) {

@@ -58,7 +58,6 @@ App({
   initTheme() {
     const theme = themeService.getCurrentTheme()
     this.globalData.theme = theme
-    themePage.applyNavigationBar(theme)
   },
 
   /**

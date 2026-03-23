@@ -1,5 +1,5 @@
 const STORAGE_KEY = 'app_theme'
-const THEMES = require('../themes')
+const THEMES = require('../themes/index')
 
 function getDefaultThemeId() {
   return THEMES.minecraft.id
