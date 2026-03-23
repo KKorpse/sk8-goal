@@ -3,7 +3,9 @@
   "version": "1.0.0",
   "description": "SkateGoal - 滑板招式成就系统，滑板人的打怪升级记录工具",
   "scripts": {
-    "lint": "eslint ."
+    "lint": "eslint .",
+    "theme:validate": "node scripts/validate-themes.js",
+    "theme:create": "node scripts/create-theme.js"
   },
   "author": "SkateGoal Team",
   "license": "MIT",

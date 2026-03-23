@@ -10,6 +10,11 @@ Component({
     visible: {
       type: Boolean,
       value: true
+    },
+    // 主题变体
+    variant: {
+      type: String,
+      value: 'minecraft'
     }
   },
 

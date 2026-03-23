@@ -11,7 +11,7 @@
 .summary-card {
   background: var(--bg-card);
   border: 4rpx solid var(--border-color);
-  border-radius: 0;
+  border-radius: var(--radius-lg);
   padding: var(--spacing-inner);
   margin-bottom: var(--spacing-card);
   box-shadow: var(--shadow-md);
@@ -45,7 +45,7 @@
   font-size: var(--font-3xl);
   font-weight: bold;
   color: var(--primary-yellow);
-  text-shadow: 2rpx 2rpx 0 #000;
+  text-shadow: none;
 }
 
 .summary-label {
@@ -97,7 +97,7 @@
 
 .action-btn.start:active,
 .action-btn.pause:active {
-  box-shadow: inset 4rpx 4rpx 0px 0px #555555, inset -4rpx -4rpx 0px 0px #ffffff;
+  box-shadow: var(--shadow-pressed);
 }
 
 .action-emoji {
@@ -108,14 +108,14 @@
   font-size: var(--font-base);
   font-weight: bold;
   color: var(--text-primary-light);
-  text-shadow: 2rpx 2rpx 0 #000;
+  text-shadow: none;
 }
 
 /* 时间线区域 */
 .timeline-section {
   background: var(--bg-card);
   border: 4rpx solid var(--border-color);
-  border-radius: 0;
+  border-radius: var(--radius-lg);
   padding: var(--spacing-inner);
   box-shadow: var(--shadow-md);
 }

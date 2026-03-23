@@ -1,5 +1,5 @@
 <!--时光轴条目组件-->
-<view class="timeline-item {{record.status}}" bindtap="onTap">
+<view class="timeline-item theme-{{variant}} {{record.status}}" bindtap="onTap">
   <!-- 左侧时间轴 -->
   <view class="timeline-left">
     <!-- 日期 -->

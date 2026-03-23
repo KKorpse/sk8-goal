@@ -4,6 +4,8 @@
  */
 
 const userService = require('./services/userService')
+const themeService = require('./services/themeService')
+const themePage = require('./utils/themePage')
 
 App({
   onLaunch(opts) {
@@ -11,6 +13,9 @@ App({
     
     // 初始化用户数据
     this.initUserData()
+
+    // 初始化主题
+    this.initTheme()
     
     // 同步 progress 到 timeline（确保数据一致性）
     userService.syncProgressToTimeline()
@@ -48,6 +53,15 @@ App({
   },
 
   /**
+   * 初始化主题
+   */
+  initTheme() {
+    const theme = themeService.getCurrentTheme()
+    this.globalData.theme = theme
+    themePage.applyNavigationBar(theme)
+  },
+
+  /**
    * 全局数据
    */
   globalData: {
@@ -64,6 +78,8 @@ App({
     userProgress: {},
     // 时光轴记录
     timeline: [],
+    // 当前主题
+    theme: themeService.getCurrentTheme(),
     // 系统信息
     systemInfo: wx.getSystemInfoSync()
   }

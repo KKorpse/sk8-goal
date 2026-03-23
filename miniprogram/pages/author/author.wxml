@@ -1,43 +1,41 @@
 <!--pages/author/author.wxml-->
-<view class="author-page">
+<view class="author-page theme-shell {{themeClass}}">
   <!-- 装饰性云朵 -->
   <view class="cloud cloud-1">☁️</view>
   <view class="cloud cloud-2">☁️</view>
   <view class="cloud cloud-3">☁️</view>
 
-  <!-- 作者卡片 - MC 物品栏风格 -->
   <view class="author-card">
     <view class="card-header">
       <view class="header-icon">
-        <text class="header-emoji">⚔️</text>
+        <text class="header-emoji">{{pageContent.heroIcon}}</text>
       </view>
-      <text class="card-title">关于作者</text>
+      <text class="card-title">{{pageContent.heroTitle}}</text>
     </view>
 
     <!-- 作者头像 & 昵称 -->
     <view class="author-info-row">
       <view class="author-avatar-frame">
-        <text class="author-avatar-emoji">🛹</text>
+        <text class="author-avatar-emoji">{{pageContent.avatarIcon}}</text>
       </view>
       <view class="author-name-block">
         <text class="author-name">Korpse</text>
-        <text class="author-tag">开发者 / 滑手</text>
+        <text class="author-tag">{{pageContent.roleText}}</text>
       </view>
     </view>
 
     <!-- 个人介绍 -->
     <view class="intro-box">
-      <text class="intro-text">一个喜欢滑板和写代码的人。做这个小程序是因为想记录自己学动作的过程，顺便帮到更多滑手。希望能把喜欢的两件事结合在一起 🤙</text>
+      <text class="intro-text">{{pageContent.introText}}</text>
     </view>
   </view>
 
-  <!-- 社交账号 - MC 物品栏风格 -->
   <view class="social-card">
     <view class="card-header">
       <view class="header-icon red">
-        <text class="header-emoji">📡</text>
+        <text class="header-emoji">{{pageContent.socialIcon}}</text>
       </view>
-      <text class="card-title">找到我</text>
+      <text class="card-title">{{pageContent.socialTitle}}</text>
     </view>
 
     <!-- 小红书 -->
@@ -91,11 +89,10 @@
 
   <!-- 底部提示 -->
   <view class="tip-box">
-    <text class="tip-text">💡 可在小红书给我提意见和反馈</text>
-    <text class="tip-sub">你的建议会让这个工具变得更好</text>
+    <text class="tip-text">{{pageContent.tipText}}</text>
+    <text class="tip-sub">{{pageContent.tipSub}}</text>
   </view>
 
-  <!-- 底部像素装饰 -->
   <view class="pixel-ground">
     <view class="ground-grass"></view>
     <view class="ground-dirt"></view>

@@ -11,7 +11,7 @@
 .profile-card {
   background: var(--bg-card);
   border: 4rpx solid var(--border-color);
-  border-radius: 0;
+  border-radius: var(--radius-lg);
   padding: var(--spacing-inner);
   margin-bottom: var(--spacing-card);
   box-shadow: var(--shadow-md);
@@ -32,7 +32,7 @@
 .avatar {
   width: 120rpx;
   height: 120rpx;
-  border-radius: 0;
+  border-radius: var(--radius-md);
   border: 4rpx solid var(--border-color);
   background: var(--bg-card-light);
   box-shadow: var(--shadow-sm);
@@ -57,8 +57,8 @@
   font-size: 20rpx;
 }
 
-/* MC 史蒂夫风格头像 - 像素风格 */
-.avatar-steve {
+/* 默认头像占位 */
+.avatar-placeholder {
   width: 120rpx;
   height: 120rpx;
   border: 4rpx solid var(--border-color);
@@ -66,32 +66,42 @@
   box-shadow: var(--shadow-sm);
   position: relative;
   overflow: hidden;
-  image-rendering: pixelated;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-md);
 }
 
-/* 史蒂夫头部像素绘制 */
-.avatar-steve::before {
-  content: '';
+.avatar-placeholder::before {
+  content: "";
   position: absolute;
   top: 0;
   left: 0;
   right: 0;
   bottom: 0;
-  background: 
-    /* 头发 - 第一行 */
-    linear-gradient(to right, #5a3d2b 0, #5a3d2b 14.28%, #5a3d2b 14.28%, #5a3d2b 28.57%, #5a3d2b 28.57%, #5a3d2b 42.85%, #5a3d2b 42.85%, #5a3d2b 57.14%, #5a3d2b 57.14%, #5a3d2b 71.42%, #5a3d2b 71.42%, #5a3d2b 85.71%, #5a3d2b 85.71%, #5a3d2b 100%) 0 0 / 100% 14.28% no-repeat,
-    /* 头发 - 第二行 */
-    linear-gradient(to right, #5a3d2b 0, #5a3d2b 14.28%, #5a3d2b 14.28%, #5a3d2b 28.57%, #5a3d2b 28.57%, #5a3d2b 42.85%, #5a3d2b 42.85%, #5a3d2b 57.14%, #5a3d2b 57.14%, #5a3d2b 71.42%, #5a3d2b 71.42%, #5a3d2b 85.71%, #5a3d2b 85.71%, #5a3d2b 100%) 0 14.28% / 100% 14.28% no-repeat,
-    /* 额头 */
-    linear-gradient(to right, #c4a87c 0, #c4a87c 14.28%, #c4a87c 14.28%, #c4a87c 28.57%, #c4a87c 28.57%, #c4a87c 42.85%, #c4a87c 42.85%, #c4a87c 57.14%, #c4a87c 57.14%, #c4a87c 71.42%, #c4a87c 71.42%, #c4a87c 85.71%, #c4a87c 85.71%, #c4a87c 100%) 0 28.57% / 100% 14.28% no-repeat,
-    /* 眼睛行 */
-    linear-gradient(to right, #c4a87c 0, #c4a87c 14.28%, #fff 14.28%, #fff 28.57%, #3d5a80 28.57%, #3d5a80 42.85%, #c4a87c 42.85%, #c4a87c 57.14%, #fff 57.14%, #fff 71.42%, #3d5a80 71.42%, #3d5a80 85.71%, #c4a87c 85.71%, #c4a87c 100%) 0 42.85% / 100% 14.28% no-repeat,
-    /* 鼻子行 */
-    linear-gradient(to right, #c4a87c 0, #c4a87c 14.28%, #c4a87c 14.28%, #c4a87c 28.57%, #a08050 28.57%, #a08050 42.85%, #c4a87c 42.85%, #c4a87c 57.14%, #c4a87c 57.14%, #c4a87c 71.42%, #a08050 71.42%, #a08050 85.71%, #c4a87c 85.71%, #c4a87c 100%) 0 57.14% / 100% 14.28% no-repeat,
-    /* 嘴巴行 */
-    linear-gradient(to right, #c4a87c 0, #c4a87c 14.28%, #c4a87c 14.28%, #c4a87c 28.57%, #8b6c4a 28.57%, #8b6c4a 42.85%, #c4a87c 42.85%, #c4a87c 57.14%, #c4a87c 57.14%, #c4a87c 71.42%, #8b6c4a 71.42%, #8b6c4a 85.71%, #c4a87c 85.71%, #c4a87c 100%) 0 71.42% / 100% 14.28% no-repeat,
-    /* 下巴 */
-    linear-gradient(to right, #c4a87c 0, #c4a87c 14.28%, #c4a87c 14.28%, #c4a87c 28.57%, #c4a87c 28.57%, #c4a87c 42.85%, #c4a87c 42.85%, #c4a87c 57.14%, #c4a87c 57.14%, #c4a87c 71.42%, #c4a87c 71.42%, #c4a87c 85.71%, #c4a87c 85.71%, #c4a87c 100%) 0 85.71% / 100% 14.28% no-repeat;
+  background:
+    linear-gradient(180deg, rgba(255, 255, 255, 0.22), transparent),
+    repeating-linear-gradient(
+      45deg,
+      rgba(255, 255, 255, 0.12) 0,
+      rgba(255, 255, 255, 0.12) 10rpx,
+      rgba(0, 0, 0, 0.04) 10rpx,
+      rgba(0, 0, 0, 0.04) 20rpx
+    );
+}
+
+.avatar-placeholder-emoji {
+  position: relative;
+  z-index: 1;
+  font-size: 56rpx;
+}
+
+.avatar-placeholder-minecraft {
+  image-rendering: pixelated;
+}
+
+.avatar-placeholder-stardew {
+  background: linear-gradient(180deg, var(--bg-card-light) 0%, var(--bg-card) 100%);
 }
 
 .user-info {
@@ -227,7 +237,7 @@
 .badges-wrapper {
   padding: var(--spacing-lg) var(--spacing-inner);
   background: var(--bg-surface);
-  border-radius: 0;
+  border-radius: var(--radius-lg);
   border: 4rpx solid var(--border-color);
   box-shadow: var(--shadow-pressed);
 }
@@ -327,7 +337,7 @@
   font-size: var(--font-xl);
   font-weight: bold;
   color: var(--primary-yellow);
-  text-shadow: 2rpx 2rpx 0 #000;
+  text-shadow: none;
   font-variant-numeric: tabular-nums;
   line-height: 1.2;
 }
@@ -395,7 +405,7 @@
   font-size: var(--font-xl);
   font-weight: bold;
   color: var(--primary-yellow);
-  text-shadow: 2rpx 2rpx 0 #000;
+  text-shadow: var(--text-shadow-strong);
   font-variant-numeric: tabular-nums;
   line-height: 1.2;
 }
@@ -422,7 +432,7 @@
   background: var(--bg-surface);
   border: 3rpx solid var(--border-color);
   box-shadow: var(--shadow-sm);
-  border-radius: 0;
+  border-radius: var(--radius-md);
 }
 
 .stats-col-divider {
@@ -506,7 +516,7 @@
 /* 合并进度卡片: Ollie + 统计 */
 .progress-card {
   background: var(--bg-card);
-  border-radius: 0;
+  border-radius: var(--radius-lg);
   padding: calc(var(--spacing-inner) * 5 / 6);
   margin-bottom: calc(var(--spacing-card) * 5 / 6);
   border: 4rpx solid var(--border-color);
@@ -553,7 +563,7 @@
   font-size: var(--font-xl);
   font-weight: bold;
   color: var(--primary-yellow);
-  text-shadow: 2rpx 2rpx 0 #000;
+  text-shadow: var(--text-shadow-strong);
   font-variant-numeric: tabular-nums;
 }
 
@@ -689,7 +699,7 @@
   font-size: var(--font-2xl);
   font-weight: bold;
   color: var(--primary-yellow);
-  text-shadow: 2rpx 2rpx 0 #000;
+  text-shadow: var(--text-shadow-strong);
   min-width: 64rpx;
   text-align: center;
 }
@@ -703,7 +713,7 @@
 /* 解锁新招按钮 */
 .action-card {
   background: var(--bg-surface);
-  border-radius: 0;
+  border-radius: var(--radius-lg);
   padding: var(--spacing-inner);
   margin-bottom: var(--spacing-card);
   border: 4rpx solid var(--border-color);
@@ -728,7 +738,7 @@
   font-size: var(--font-lg);
   font-weight: bold;
   color: var(--primary-yellow);
-  text-shadow: 2rpx 2rpx 0 #000;
+  text-shadow: var(--text-shadow-strong);
 }
 
 .action-arrow {
@@ -795,7 +805,7 @@
 
 .timeline-card {
   background: var(--bg-card);
-  border-radius: 0;
+  border-radius: var(--radius-lg);
   padding: var(--spacing-inner);
   margin-bottom: var(--spacing-card);
   border: 4rpx solid var(--border-color);
@@ -841,363 +851,13 @@
   font-size: var(--font-sm);
   font-weight: bold;
   color: var(--primary-yellow);
-  text-shadow: 2rpx 2rpx 0 #000;
+  text-shadow: var(--text-shadow-strong);
 }
 
 .unlock-arrow {
   font-size: var(--font-sm);
   color: var(--text-primary);
   font-weight: bold;
-}
-
-/* 横屏游戏场景 */
-.game-scene {
-  position: relative;
-  height: 320rpx;
-  background: linear-gradient(180deg, #5c94fc 0%, #87ceeb 60%, #87ceeb 100%);
-  border: 4rpx solid var(--border-color);
-  overflow: hidden;
-  margin-top: var(--spacing-lg);
-}
-
-/* 天空背景 */
-.sky-bg {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 200rpx;
-  pointer-events: none;
-}
-
-/* 飘动的云朵 */
-.cloud {
-  position: absolute;
-  font-size: 32rpx;
-  opacity: 0.9;
-  animation: floatCloud linear infinite;
-}
-
-.cloud-1 {
-  top: 20rpx;
-  animation-duration: 20s;
-}
-
-.cloud-2 {
-  top: 60rpx;
-  font-size: 24rpx;
-  animation-duration: 25s;
-  animation-delay: -10s;
-}
-
-.cloud-3 {
-  top: 100rpx;
-  font-size: 28rpx;
-  animation-duration: 30s;
-  animation-delay: -5s;
-}
-
-@keyframes floatCloud {
-  0% { left: -60rpx; }
-  100% { left: calc(100% + 60rpx); }
-}
-
-/* 游戏滚动区域 */
-.game-scroll {
-  position: absolute;
-  top: 40rpx;
-  left: 0;
-  right: 0;
-  bottom: 80rpx;
-  white-space: nowrap;
-}
-
-.game-track {
-  display: inline-flex;
-  align-items: flex-end;
-  padding: 0 20rpx;
-  gap: 16rpx;
-  height: 100%;
-}
-
-/* 起点 */
-.track-start {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
-  flex-shrink: 0;
-  width: 60rpx;
-  height: 140rpx;
-}
-
-.start-flag {
-  font-size: 40rpx;
-  animation: wave 1s ease-in-out infinite;
-}
-
-@keyframes wave {
-  0%, 100% { transform: rotate(-5deg); }
-  50% { transform: rotate(5deg); }
-}
-
-.start-label {
-  font-size: 18rpx;
-  font-weight: bold;
-  color: #fff;
-  text-shadow: 1rpx 1rpx 0 #000;
-  margin-top: 4rpx;
-}
-
-/* 招式砖块 - 问号砖块风格 */
-.trick-block {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  flex-shrink: 0;
-  width: 120rpx;
-  cursor: pointer;
-  transition: transform var(--transition-fast);
-  position: relative;
-}
-
-.trick-block:active {
-  transform: scale(0.95) translateY(4rpx);
-}
-
-.block-body {
-  width: 80rpx;
-  height: 80rpx;
-  background: #e89b3c;
-  border: 4rpx solid #000;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  box-shadow: inset 4rpx 4rpx 0 #f0b860, inset -4rpx -4rpx 0 #a06020;
-  animation: blockFloat 2s ease-in-out infinite;
-}
-
-.trick-block:nth-child(odd) .block-body {
-  animation-delay: 0.5s;
-}
-
-@keyframes blockFloat {
-  0%, 100% { transform: translateY(0); }
-  50% { transform: translateY(-4rpx); }
-}
-
-.trick-block:active .block-body {
-  animation: none;
-  box-shadow: inset -4rpx -4rpx 0 #f0b860, inset 4rpx 4rpx 0 #a06020;
-}
-
-.block-shine {
-  position: absolute;
-  top: 6rpx;
-  left: 6rpx;
-  width: 16rpx;
-  height: 16rpx;
-  background: rgba(255, 255, 255, 0.4);
-}
-
-.block-emoji {
-  font-size: 32rpx;
-  position: relative;
-  z-index: 1;
-}
-
-/* 状态标识 */
-.block-status {
-  position: absolute;
-  top: -16rpx;
-  right: -8rpx;
-  width: 32rpx;
-  height: 32rpx;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 2rpx solid #000;
-}
-
-.block-status.mastered {
-  background: var(--primary-green);
-  box-shadow: 0 0 8rpx var(--primary-green);
-}
-
-.block-status.trial {
-  background: var(--primary-cyan);
-  box-shadow: 0 0 8rpx var(--primary-cyan);
-}
-
-.block-status.grinding {
-  background: var(--primary-orange);
-  box-shadow: 0 0 8rpx var(--primary-orange);
-}
-
-.status-star {
-  font-size: 16rpx;
-}
-
-/* 招式名 */
-.block-name {
-  font-size: 18rpx;
-  font-weight: bold;
-  color: #fff;
-  text-shadow: 1rpx 1rpx 0 #000;
-  text-align: center;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  max-width: 116rpx;
-  margin-top: 4rpx;
-}
-
-/* 脚位标签 */
-.block-stance {
-  font-size: 14rpx;
-  font-weight: bold;
-  color: #fff;
-  background: rgba(0, 0, 0, 0.5);
-  padding: 2rpx 8rpx;
-  margin-top: 4rpx;
-}
-
-/* 终点 */
-.track-end {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: flex-end;
-  flex-shrink: 0;
-  width: 80rpx;
-  height: 140rpx;
-}
-
-.end-castle {
-  font-size: 48rpx;
-  animation: castleGlow 2s ease-in-out infinite;
-}
-
-@keyframes castleGlow {
-  0%, 100% { filter: brightness(1); }
-  50% { filter: brightness(1.2); }
-}
-
-.end-label {
-  font-size: 16rpx;
-  font-weight: bold;
-  color: #fff;
-  text-shadow: 1rpx 1rpx 0 #000;
-  margin-top: 4rpx;
-}
-
-/* 地面 */
-.ground {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 80rpx;
-  pointer-events: none;
-}
-
-.grass {
-  height: 20rpx;
-  background: repeating-linear-gradient(
-    90deg,
-    #5cb85c 0px,
-    #5cb85c 8rpx,
-    #4a9f4a 8rpx,
-    #4a9f4a 16rpx
-  );
-}
-
-.dirt {
-  height: 60rpx;
-  background: repeating-linear-gradient(
-    90deg,
-    #8b5a2b 0px,
-    #8b5a2b 8rpx,
-    #6b4423 8rpx,
-    #6b4423 16rpx
-  );
-}
-
-/* 滑板小人 */
-.skater {
-  position: absolute;
-  bottom: 84rpx;
-  left: 24rpx;
-  z-index: 10;
-  animation: skaterMove 3s ease-in-out infinite;
-}
-
-.skater-emoji {
-  font-size: 36rpx;
-  transform: scaleX(-1);
-}
-
-@keyframes skaterMove {
-  0%, 100% { transform: translateX(0) rotate(0deg); }
-  25% { transform: translateX(8rpx) rotate(5deg); }
-  50% { transform: translateX(0) rotate(0deg); }
-  75% { transform: translateX(-4rpx) rotate(-3deg); }
-}
-
-/* 时光轴空状态 */
-.timeline-empty {
-  position: relative;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: var(--spacing-xl) 0;
-  min-height: 200rpx;
-  background: linear-gradient(180deg, #5c94fc 0%, #87ceeb 100%);
-  border: 4rpx solid var(--border-color);
-  overflow: hidden;
-  margin-top: var(--spacing-lg);
-}
-
-.empty-game-bg {
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  pointer-events: none;
-}
-
-.empty-game-bg .cloud {
-  animation-duration: 15s;
-}
-
-.timeline-empty .empty-emoji {
-  font-size: 60rpx;
-  margin-bottom: var(--spacing-lg);
-  position: relative;
-  z-index: 1;
-}
-
-.timeline-empty .empty-text {
-  font-size: var(--font-base);
-  color: #fff;
-  font-weight: bold;
-  text-shadow: 2rpx 2rpx 0 #000;
-  margin-bottom: var(--spacing-md);
-  position: relative;
-  z-index: 1;
-}
-
-.timeline-empty .empty-hint {
-  font-size: var(--font-sm);
-  color: #fff;
-  font-weight: bold;
-  text-shadow: 1rpx 1rpx 0 #000;
-  position: relative;
-  z-index: 1;
 }
 
 /* 底部信息 */
@@ -1211,14 +871,14 @@
 .footer-text {
   font-size: var(--font-sm);
   color: var(--text-primary-light);
-  text-shadow: 2rpx 2rpx 0 #000;
+  text-shadow: var(--text-shadow-strong);
   margin-bottom: 4rpx;
 }
 
 .footer-author-link {
   font-size: 18rpx;
   color: rgba(255, 255, 255, 0.3);
-  text-shadow: 2rpx 2rpx 0 #000;
+  text-shadow: var(--text-shadow-strong);
   margin-bottom: 8rpx;
   padding: 4rpx 16rpx;
   border: 2rpx solid rgba(255, 255, 255, 0.1);
@@ -1227,7 +887,7 @@
 .footer-version {
   font-size: 18rpx;
   color: var(--text-secondary-light);
-  text-shadow: 2rpx 2rpx 0 #000;
+  text-shadow: var(--text-shadow-strong);
 }
 
 /* 底部安全距离 */
@@ -1347,7 +1007,7 @@
   font-size: var(--font-xl);
   font-weight: bold;
   color: var(--text-primary);
-  text-shadow: 2rpx 2rpx 0 #000;
+  text-shadow: var(--text-shadow-strong);
 }
 
 .new-badges-list {
@@ -1419,7 +1079,7 @@
   font-size: var(--font-lg);
   font-weight: bold;
   color: var(--text-primary);
-  text-shadow: 2rpx 2rpx 0 #000;
+  text-shadow: var(--text-shadow-strong);
   background: var(--primary-green);
   border: 4rpx solid var(--border-color);
   box-shadow: var(--shadow-sm);
@@ -1501,7 +1161,7 @@
   height: 24rpx;
   background: var(--bg-surface);
   border: 4rpx solid var(--border-color);
-  box-shadow: inset 2rpx 2rpx 0px 0px #555555;
+  box-shadow: inset 2rpx 2rpx 0 0 var(--border-light);
   overflow: hidden;
 }
 
@@ -1828,4 +1488,119 @@
 .nickname-btn.confirm {
   background: var(--primary-green);
   color: var(--text-primary);
+}
+
+/* ========== 主题切换 ========== */
+.theme-switcher {
+  margin-top: var(--spacing-lg);
+  padding: var(--spacing-lg);
+  background: var(--bg-card-light);
+  border: 4rpx solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+}
+
+.theme-switcher-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--spacing-md);
+  margin-bottom: var(--spacing-md);
+}
+
+.theme-switcher-title {
+  font-size: var(--font-sm);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.theme-switcher-subtitle {
+  font-size: var(--font-xs);
+  color: var(--text-secondary);
+}
+
+.theme-options {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-md);
+}
+
+.theme-option {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-md);
+  padding: var(--spacing-md);
+  background: var(--bg-card);
+  border: 4rpx solid var(--border-color);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-sm);
+  transition: all var(--transition-fast);
+}
+
+.theme-option:active {
+  box-shadow: var(--shadow-pressed);
+}
+
+.theme-option.active {
+  border-color: var(--primary-yellow);
+}
+
+.theme-option-preview {
+  width: 112rpx;
+  height: 84rpx;
+  flex-shrink: 0;
+  border: 4rpx solid var(--border-color);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.theme-option-preview.theme-minecraft {
+  background:
+    linear-gradient(180deg, #92c9ff 0%, #92c9ff 48%, #6ab04f 48%, #6ab04f 60%, #7c5637 60%, #7c5637 100%);
+}
+
+.theme-option-preview.theme-stardew {
+  background:
+    linear-gradient(180deg, #c3ebff 0%, #c3ebff 42%, #9dc97a 42%, #9dc97a 62%, #d8b883 62%, #d8b883 100%);
+}
+
+.theme-option-preview.theme-terraria {
+  background:
+    linear-gradient(180deg, #7eb8ea 0%, #7eb8ea 38%, #6cab54 38%, #6cab54 56%, #85603d 56%, #85603d 100%);
+}
+
+.theme-option-swatch {
+  width: 70rpx;
+  height: 26rpx;
+  margin-bottom: 10rpx;
+  background: rgba(255, 255, 255, 0.7);
+  border: 3rpx solid rgba(0, 0, 0, 0.25);
+  border-radius: var(--radius-sm);
+}
+
+.theme-option-body {
+  display: flex;
+  flex-direction: column;
+  gap: 6rpx;
+  min-width: 0;
+}
+
+.theme-option-name {
+  font-size: var(--font-base);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.theme-option-desc {
+  font-size: var(--font-xs);
+  color: var(--text-secondary);
+}
+
+.theme-stardew .header-tag,
+.theme-stardew .stance-option,
+.theme-stardew .badge-item {
+  border-radius: var(--radius-md);
 }

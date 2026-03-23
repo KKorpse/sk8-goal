@@ -15,6 +15,11 @@ Component({
     trick: {
       type: Object,
       value: null
+    },
+    // 主题变体
+    variant: {
+      type: String,
+      value: 'minecraft'
     }
   },
 

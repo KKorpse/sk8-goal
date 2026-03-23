@@ -4,6 +4,7 @@
 const trickService = require('../../services/trickService')
 const userService = require('../../services/userService')
 const vibrate = require('../../utils/vibrate')
+const themePage = require('../../utils/themePage')
 
 Page({
   data: {
@@ -20,10 +21,16 @@ Page({
     // 当前选中的招式（用于脚位面板）
     selectedTrick: null,
     // 脚位面板是否显示
-    showStancePanel: false
+    showStancePanel: false,
+    // 主题
+    themeId: '',
+    themeClass: '',
+    themeMeta: {},
+    themeOptions: []
   },
 
   onLoad() {
+    themePage.applyTheme(this)
     // 初始化示例数据（首次使用）
     userService.initSampleData()
     
@@ -35,6 +42,7 @@ Page({
   },
 
   onShow() {
+    themePage.applyTheme(this)
     if (typeof this.getTabBar === 'function' &&
         this.getTabBar()) {
       this.getTabBar().setData({

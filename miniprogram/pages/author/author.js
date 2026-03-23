@@ -1,5 +1,29 @@
+const themePage = require('../../utils/themePage')
+
 Page({
-  data: {},
+  data: {
+    themeId: '',
+    themeClass: '',
+    themeMeta: {},
+    themeOptions: [],
+    pageContent: {}
+  },
+
+  onLoad() {
+    this.applyThemeState()
+  },
+
+  onShow() {
+    this.applyThemeState()
+  },
+
+  applyThemeState(themeId) {
+    const theme = themeId ? themePage.setTheme(this, themeId) : themePage.applyTheme(this)
+    this.setData({
+      pageContent: theme.authorContent || {}
+    })
+    return theme
+  },
 
   copyText(e) {
     const text = e.currentTarget.dataset.text;

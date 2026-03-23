@@ -1,6 +1,5 @@
 /**
  * SkateGoal 全局样式
- * Minecraft 风格配色方案 - 优化版
  */
 
 @import "./styles/theme.wxss";
@@ -8,16 +7,20 @@
 /* Reset */
 page {
   background-color: var(--bg-dark);
-  /* 使用 CSS 绘制优化后的泥土背景像素纹理 */
-  background-image: 
-    radial-gradient(circle at 25% 25%, rgba(74, 53, 32, 0.8) 2rpx, transparent 2rpx),
-    radial-gradient(circle at 75% 75%, rgba(45, 30, 17, 0.6) 2rpx, transparent 2rpx);
+  background-image: var(--page-background-image);
   background-size: 24rpx 24rpx;
   min-height: 100%;
   font-size: 28rpx;
   line-height: 1.6;
   color: var(--text-primary);
-  font-family: 'Courier New', Courier, monospace, 'PingFang SC', sans-serif;
+  font-family: var(--font-family-base);
+}
+
+.theme-shell {
+  min-height: 100vh;
+  background-color: var(--bg-dark);
+  background-image: var(--page-background-image);
+  background-size: 24rpx 24rpx;
 }
 
 /* 通用容器 */
@@ -29,7 +32,7 @@ page {
   padding-bottom: env(safe-area-inset-bottom);
 }
 
-/* 卡片基础样式 - MC Stone UI */
+/* 卡片基础样式 */
 .card {
   background: var(--bg-card);
   border: 4rpx solid var(--border-color);
@@ -52,7 +55,7 @@ page {
   content: "";
   position: absolute;
   top: 4rpx; left: 4rpx; right: 4rpx; bottom: 4rpx;
-  border: 4rpx solid #555555;
+  border: 4rpx solid var(--border-light);
   pointer-events: none;
 }
 
@@ -60,7 +63,7 @@ page {
   box-shadow: var(--shadow-purple);
 }
 
-/* 胶囊标签 (改为 MC 按钮风格) */
+/* 胶囊标签 */
 .pill {
   display: inline-flex;
   align-items: center;
@@ -122,27 +125,27 @@ page {
 
 .text-yellow {
   color: var(--primary-yellow);
-  text-shadow: 2rpx 2rpx 0 #000;
+  text-shadow: var(--text-shadow-strong);
 }
 
 .text-purple {
   color: var(--primary-purple);
-  text-shadow: 2rpx 2rpx 0 #000;
+  text-shadow: var(--text-shadow-strong);
 }
 
 .text-cyan {
   color: var(--status-trial);
-  text-shadow: 2rpx 2rpx 0 #000;
+  text-shadow: var(--text-shadow-strong);
 }
 
 .text-orange {
   color: var(--status-grinding);
-  text-shadow: 2rpx 2rpx 0 #000;
+  text-shadow: var(--text-shadow-strong);
 }
 
 .text-green {
   color: var(--status-mastered);
-  text-shadow: 2rpx 2rpx 0 #000;
+  text-shadow: var(--text-shadow-strong);
 }
 
 /* 卡片内文字样式 */

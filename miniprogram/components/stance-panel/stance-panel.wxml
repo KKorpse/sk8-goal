@@ -1,5 +1,5 @@
 <!--脚位矩阵面板组件-->
-<view class="panel-mask {{showMask ? 'show' : ''}}" bindtap="onClose" wx:if="{{showMask}}">
+<view class="panel-mask theme-{{variant}} {{showMask ? 'show' : ''}}" bindtap="onClose" wx:if="{{showMask}}">
   <view 
     class="panel-container" 
     animation="{{animationData}}"

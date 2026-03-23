@@ -19,6 +19,11 @@ Component({
     isLast: {
       type: Boolean,
       value: false
+    },
+    // 主题变体
+    variant: {
+      type: String,
+      value: 'minecraft'
     }
   },
 

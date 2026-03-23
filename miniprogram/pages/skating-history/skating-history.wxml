@@ -1,5 +1,5 @@
 <!--滑板历史页面-->
-<view class="history-page">
+<view class="history-page theme-shell {{themeClass}}">
   <!-- 顶部统计 -->
   <view class="summary-card">
     <view class="summary-header">

@@ -1,5 +1,5 @@
 <!--动作库页面-->
-<view class="tricks-page">
+<view class="tricks-page theme-shell {{themeClass}}">
   <!-- 顶部固定区域 -->
   <view class="header-fixed">
     <!-- 搜索栏 -->
@@ -66,6 +66,7 @@
   <stance-panel 
     visible="{{showStancePanel}}"
     trick="{{selectedTrick}}"
+    variant="{{themeId}}"
     bind:close="onStancePanelClose"
     bind:statuschange="onStatusChange"
   />

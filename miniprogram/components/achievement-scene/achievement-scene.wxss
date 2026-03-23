@@ -1,0 +1,327 @@
+.achievement-scene {
+  margin-top: var(--spacing-lg);
+}
+
+.game-scene {
+  position: relative;
+  height: 320rpx;
+  background: linear-gradient(180deg, var(--scene-sky-start) 0%, var(--scene-sky-end) 60%, var(--scene-sky-end) 100%);
+  border: 4rpx solid var(--border-color);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.sky-bg {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 200rpx;
+  pointer-events: none;
+}
+
+.cloud {
+  position: absolute;
+  font-size: 32rpx;
+  opacity: 0.9;
+  animation: floatCloud linear infinite;
+}
+
+.cloud-1 {
+  top: 20rpx;
+  animation-duration: 20s;
+}
+
+.cloud-2 {
+  top: 60rpx;
+  font-size: 24rpx;
+  animation-duration: 25s;
+  animation-delay: -10s;
+}
+
+.cloud-3 {
+  top: 100rpx;
+  font-size: 28rpx;
+  animation-duration: 30s;
+  animation-delay: -5s;
+}
+
+@keyframes floatCloud {
+  0% { left: -60rpx; }
+  100% { left: calc(100% + 60rpx); }
+}
+
+.game-scroll {
+  position: absolute;
+  top: 40rpx;
+  left: 0;
+  right: 0;
+  bottom: 80rpx;
+  white-space: nowrap;
+}
+
+.game-track {
+  display: inline-flex;
+  align-items: flex-end;
+  padding: 0 20rpx;
+  gap: 16rpx;
+  height: 100%;
+}
+
+.track-start,
+.track-end {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-end;
+  flex-shrink: 0;
+  height: 140rpx;
+}
+
+.track-start {
+  width: 60rpx;
+}
+
+.track-end {
+  width: 80rpx;
+}
+
+.start-flag {
+  font-size: 40rpx;
+  animation: wave 1s ease-in-out infinite;
+}
+
+@keyframes wave {
+  0%, 100% { transform: rotate(-5deg); }
+  50% { transform: rotate(5deg); }
+}
+
+.start-label,
+.end-label {
+  font-size: 18rpx;
+  font-weight: bold;
+  color: var(--text-primary-light);
+  text-shadow: var(--text-shadow-soft);
+  margin-top: 4rpx;
+}
+
+.trick-block {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex-shrink: 0;
+  width: 120rpx;
+  transition: transform var(--transition-fast);
+  position: relative;
+}
+
+.trick-block:active {
+  transform: scale(0.95) translateY(4rpx);
+}
+
+.block-body {
+  width: 80rpx;
+  height: 80rpx;
+  background: var(--scene-card-accent);
+  border: 4rpx solid var(--border-color);
+  border-radius: var(--radius-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  box-shadow: inset 4rpx 4rpx 0 var(--scene-card-highlight), inset -4rpx -4rpx 0 var(--scene-card-shadow);
+  animation: blockFloat 2s ease-in-out infinite;
+}
+
+.trick-block:nth-child(odd) .block-body {
+  animation-delay: 0.5s;
+}
+
+@keyframes blockFloat {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-4rpx); }
+}
+
+.trick-block:active .block-body {
+  animation: none;
+  box-shadow: inset -4rpx -4rpx 0 var(--scene-card-highlight), inset 4rpx 4rpx 0 var(--scene-card-shadow);
+}
+
+.block-shine {
+  position: absolute;
+  top: 6rpx;
+  left: 6rpx;
+  width: 16rpx;
+  height: 16rpx;
+  background: rgba(255, 255, 255, 0.4);
+}
+
+.block-emoji {
+  font-size: 32rpx;
+  position: relative;
+  z-index: 1;
+}
+
+.block-status {
+  position: absolute;
+  top: -16rpx;
+  right: -8rpx;
+  width: 32rpx;
+  height: 32rpx;
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 2rpx solid var(--border-color);
+}
+
+.block-status.mastered {
+  background: var(--primary-green);
+  box-shadow: 0 0 8rpx var(--primary-green);
+}
+
+.block-status.trial {
+  background: var(--primary-cyan);
+  box-shadow: 0 0 8rpx var(--primary-cyan);
+}
+
+.block-status.grinding {
+  background: var(--primary-orange);
+  box-shadow: 0 0 8rpx var(--primary-orange);
+}
+
+.status-star {
+  font-size: 16rpx;
+}
+
+.block-name {
+  font-size: 18rpx;
+  font-weight: bold;
+  color: var(--text-primary-light);
+  text-shadow: var(--text-shadow-soft);
+  text-align: center;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 116rpx;
+  margin-top: 4rpx;
+}
+
+.block-stance {
+  font-size: 14rpx;
+  font-weight: bold;
+  color: var(--text-primary-light);
+  background: rgba(0, 0, 0, 0.5);
+  padding: 2rpx 8rpx;
+  margin-top: 4rpx;
+  border-radius: var(--radius-full);
+}
+
+.end-castle {
+  font-size: 48rpx;
+  animation: castleGlow 2s ease-in-out infinite;
+}
+
+@keyframes castleGlow {
+  0%, 100% { filter: brightness(1); }
+  50% { filter: brightness(1.2); }
+}
+
+.ground {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 80rpx;
+  pointer-events: none;
+}
+
+.grass {
+  height: 20rpx;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--scene-ground-start) 0px,
+    var(--scene-ground-start) 8rpx,
+    var(--scene-ground-end) 8rpx,
+    var(--scene-ground-end) 16rpx
+  );
+}
+
+.dirt {
+  height: 60rpx;
+  background: repeating-linear-gradient(
+    90deg,
+    var(--scene-soil-start) 0px,
+    var(--scene-soil-start) 8rpx,
+    var(--scene-soil-end) 8rpx,
+    var(--scene-soil-end) 16rpx
+  );
+}
+
+.timeline-empty {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: var(--spacing-xl) 0;
+  min-height: 200rpx;
+  background: linear-gradient(180deg, var(--scene-sky-start) 0%, var(--scene-sky-end) 100%);
+  border: 4rpx solid var(--border-color);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+.empty-game-bg {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.empty-game-bg .cloud {
+  animation-duration: 15s;
+}
+
+.empty-emoji {
+  font-size: 60rpx;
+  margin-bottom: var(--spacing-lg);
+  position: relative;
+  z-index: 1;
+}
+
+.empty-text {
+  font-size: var(--font-base);
+  color: var(--text-primary-light);
+  font-weight: bold;
+  text-shadow: var(--text-shadow-strong);
+  margin-bottom: var(--spacing-md);
+  position: relative;
+  z-index: 1;
+}
+
+.empty-hint {
+  font-size: var(--font-sm);
+  color: var(--text-primary-light);
+  font-weight: bold;
+  text-shadow: var(--text-shadow-soft);
+  position: relative;
+  z-index: 1;
+}
+
+.theme-stardew .cloud,
+.theme-terraria .cloud {
+  opacity: 0.6;
+}
+
+.theme-stardew .block-shine,
+.theme-terraria .block-shine {
+  background: rgba(255, 255, 255, 0.22);
+  border-radius: var(--radius-sm);
+}
+
+.scene-stardew .start-flag,
+.scene-stardew .end-castle,
+.scene-terraria .start-flag,
+.scene-terraria .end-castle {
+  animation-duration: 2.5s;
+}

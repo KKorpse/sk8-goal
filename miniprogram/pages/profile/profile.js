@@ -4,6 +4,7 @@
 const userService = require('../../services/userService')
 const trickService = require('../../services/trickService')
 const storageService = require('../../services/storageService')
+const themePage = require('../../utils/themePage')
 
 Page({
   data: {
@@ -59,10 +60,17 @@ Page({
     showNicknameModal: false,
     tempNickname: '',
     // 滚动同步
-    timelineScrollLeft: 9999
+    timelineScrollLeft: 9999,
+    // 主题
+    themeId: '',
+    themeClass: '',
+    themeMeta: {},
+    themeOptions: [],
+    sceneConfig: {}
   },
 
   onLoad() {
+    this.applyThemeState()
     this.loadData()
   },
 
@@ -73,6 +81,7 @@ Page({
         selected: 1
       })
     }
+    this.applyThemeState()
     // 每次显示时刷新数据
     this.loadData()
   },
@@ -900,7 +909,7 @@ Page({
    * 点击成招记录节点
    */
   onTimelineNodeTap(e) {
-    const { index } = e.currentTarget.dataset
+    const { index } = e.detail
     const record = this.data.timeline[index]
     const allTricks = require('../../mock/tricks').getAllTricks()
     const trick = allTricks.find(t => t.id === record.trickId) || {}
@@ -919,6 +928,34 @@ Page({
    */
   closeTimelineDetail() {
     this.setData({ showTimelineDetail: false })
+  },
+
+  applyThemeState(themeId) {
+    const theme = themeId ? themePage.setTheme(this, themeId) : themePage.applyTheme(this)
+    this.setData({
+      sceneConfig: theme.sceneConfig || {}
+    })
+    return theme
+  },
+
+  /**
+   * 切换主题
+   */
+  onThemeChange(e) {
+    const { themeId } = e.currentTarget.dataset
+
+    if (!themeId || themeId === this.data.themeId) {
+      return
+    }
+
+    const theme = this.applyThemeState(themeId)
+    getApp().globalData.theme = theme
+
+    wx.showToast({
+      title: `已切换到${theme.name}`,
+      icon: 'none',
+      duration: 1500
+    })
   },
 
   /**

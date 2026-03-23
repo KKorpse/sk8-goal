@@ -1,11 +1,13 @@
 <!--我的页面-->
-<view class="profile-page">
+<view class="profile-page theme-shell {{themeClass}}">
   <!-- 个人信息卡片 -->
   <view class="profile-card">
     <!-- 头像和基本信息 -->
     <view class="card-header">
       <view class="avatar-wrapper" bindtap="chooseAvatar">
-        <view class="avatar-steve" wx:if="{{!userInfo.avatar}}"></view>
+        <view class="avatar-placeholder avatar-placeholder-{{themeId}}" wx:if="{{!userInfo.avatar}}">
+          <text class="avatar-placeholder-emoji">{{sceneConfig.avatarIcon}}</text>
+        </view>
         <image
           class="avatar"
           wx:else
@@ -76,6 +78,30 @@
           data-badge="{{allBadges[7]}}"
         >
           <text class="badge-more-text">+{{allBadges.length - 7}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="theme-switcher">
+      <view class="theme-switcher-header">
+        <text class="theme-switcher-title">页面风格</text>
+        <text class="theme-switcher-subtitle">{{themeMeta.preview}}</text>
+      </view>
+      <view class="theme-options">
+        <view
+          wx:for="{{themeOptions}}"
+          wx:key="id"
+          class="theme-option {{themeId === item.id ? 'active' : ''}}"
+          data-theme-id="{{item.id}}"
+          bindtap="onThemeChange"
+        >
+          <view class="theme-option-preview {{item.className}}">
+            <view class="theme-option-swatch"></view>
+          </view>
+          <view class="theme-option-body">
+            <text class="theme-option-name">{{item.name}}</text>
+            <text class="theme-option-desc">{{item.description}}</text>
+          </view>
         </view>
       </view>
     </view>
@@ -196,79 +222,16 @@
       </view>
     </view>
 
-    <!-- 横屏游戏场景 -->
-    <view class="game-scene" wx:if="{{timeline.length > 0}}">
-      <!-- 天空背景 -->
-      <view class="sky-bg">
-        <!-- 飘动的云朵 -->
-        <view class="cloud cloud-1">☁️</view>
-        <view class="cloud cloud-2">☁️</view>
-        <view class="cloud cloud-3">☁️</view>
-      </view>
-
-      <!-- 横向滚动区域 -->
-      <scroll-view scroll-x class="game-scroll" enhanced show-scrollbar="{{false}}">
-        <view class="game-track" style="width: {{timeline.length * 140 + 200}}rpx;">
-          <!-- 起点 -->
-          <view class="track-start">
-            <view class="start-flag">🚩</view>
-            <text class="start-label">起点</text>
-          </view>
-
-          <!-- 招式节点 - 问号砖块风格 -->
-          <view
-            class="trick-block {{item.status}}"
-            wx:for="{{timeline}}"
-            wx:key="id"
-            bindtap="onTimelineNodeTap"
-            data-index="{{index}}"
-          >
-            <!-- 砖块主体 -->
-            <view class="block-body">
-              <view class="block-shine"></view>
-              <text class="block-emoji">{{item.emoji || '🛹'}}</text>
-            </view>
-            <!-- 状态标识 -->
-            <view class="block-status {{item.status}}">
-              <text class="status-star">{{item.status === 'mastered' ? '⭐' : item.status === 'trial' ? '✨' : '🔥'}}</text>
-            </view>
-            <!-- 招式名 -->
-            <text class="block-name">{{item.trickName}}</text>
-            <!-- 脚位标签 -->
-            <view class="block-stance">
-              <text>{{item.stance === 'normal' ? 'N' : item.stance === 'fakie' ? 'F' : item.stance === 'switch' ? 'S' : 'No'}}</text>
-            </view>
-          </view>
-
-          <!-- 终点 -->
-          <view class="track-end">
-            <view class="end-castle">🏰</view>
-            <text class="end-label">继续挑战</text>
-          </view>
-        </view>
-      </scroll-view>
-
-      <!-- 地面 -->
-      <view class="ground">
-        <view class="grass"></view>
-        <view class="dirt"></view>
-      </view>
-    </view>
-
-    <!-- 空状态 -->
-    <view class="timeline-empty" wx:if="{{timeline.length === 0}}">
-      <view class="empty-game-bg">
-        <view class="cloud cloud-1">☁️</view>
-        <view class="cloud cloud-2">☁️</view>
-      </view>
-      <text class="empty-emoji">🎮</text>
-      <text class="empty-text">还没有成招记录</text>
-      <text class="empty-hint">去动作库点亮你的第一个招式吧！</text>
-    </view>
+    <achievement-scene
+      timeline="{{timeline}}"
+      variant="{{themeId}}"
+      scene-config="{{sceneConfig}}"
+      bind:nodetap="onTimelineNodeTap"
+    />
   </view>
   
   <!-- 滑板打卡墙 - 游戏风格 -->
-  <checkin-wall />
+  <checkin-wall variant="{{themeId}}" />
   
   <!-- 底部信息 -->
   <view class="footer">

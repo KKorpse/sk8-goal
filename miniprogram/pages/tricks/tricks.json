@@ -1,7 +1,6 @@
 {
   "navigationBarTitleText": "动作库",
   "enablePullDownRefresh": true,
-  "backgroundColor": "#1A1A2E",
   "usingComponents": {
     "search-bar": "/components/search-bar/search-bar",
     "filter-tabs": "/components/filter-tabs/filter-tabs",

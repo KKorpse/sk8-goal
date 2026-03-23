@@ -7,14 +7,11 @@
 
 /* 顶部固定区域 */
 .header-fixed {
-  /* 泥土背景 */
-  background-image: 
-    radial-gradient(circle at 25% 25%, rgba(74, 53, 32, 0.8) 2rpx, transparent 2rpx),
-    radial-gradient(circle at 75% 75%, rgba(45, 30, 17, 0.6) 2rpx, transparent 2rpx);
+  background-image: var(--page-background-image);
   background-size: 24rpx 24rpx;
   background-color: var(--bg-dark);
   padding-bottom: var(--spacing-md);
-  border-bottom: 4rpx solid #000;
+  border-bottom: 4rpx solid var(--border-color);
 }
 
 /* 招式列表 */
@@ -36,7 +33,7 @@
   height: 60rpx;
   border: 4rpx solid var(--border-color);
   border-top-color: var(--primary-yellow);
-  border-radius: 0;
+  border-radius: var(--radius-full);
   animation: spin 1s steps(8, end) infinite;
 }
 
@@ -51,7 +48,7 @@
   font-size: var(--font-sm);
   color: var(--text-secondary-light);
   font-weight: bold;
-  text-shadow: 2rpx 2rpx 0 #000;
+  text-shadow: none;
 }
 
 /* 空状态 */
@@ -73,7 +70,7 @@
   color: var(--text-primary-light);
   margin-bottom: var(--spacing-md);
   font-weight: bold;
-  text-shadow: 2rpx 2rpx 0 #000;
+  text-shadow: none;
 }
 
 .empty-hint {
@@ -106,7 +103,7 @@
   font-size: var(--font-base);
   font-weight: bold;
   color: var(--text-primary-light);
-  text-shadow: 2rpx 2rpx 0 #000;
+  text-shadow: none;
 }
 
 .group-content {

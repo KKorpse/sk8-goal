@@ -4,9 +4,7 @@
 .author-page {
   min-height: 100vh;
   background-color: var(--bg-dark);
-  background-image:
-    radial-gradient(circle at 25% 25%, rgba(74, 53, 32, 0.8) 2rpx, transparent 2rpx),
-    radial-gradient(circle at 75% 75%, rgba(45, 30, 17, 0.6) 2rpx, transparent 2rpx);
+  background-image: var(--page-background-image);
   background-size: 24rpx 24rpx;
   padding: 32rpx 24rpx 0;
   position: relative;
@@ -54,13 +52,13 @@
 .social-card {
   background: var(--bg-card);
   border: 4rpx solid var(--border-color);
+  border-radius: var(--radius-lg);
   position: relative;
   margin-bottom: 24rpx;
   z-index: 1;
   box-shadow: var(--shadow-md);
 }
 
-/* MC 双层边框效果 */
 .author-card::before,
 .social-card::before {
   content: "";
@@ -75,7 +73,7 @@
   content: "";
   position: absolute;
   top: 4rpx; left: 4rpx; right: 4rpx; bottom: 4rpx;
-  border: 4rpx solid #555555;
+  border: 4rpx solid var(--border-light);
   pointer-events: none;
 }
 
@@ -84,7 +82,7 @@
   display: flex;
   align-items: center;
   padding: 24rpx 28rpx 20rpx;
-  border-bottom: 4rpx solid #555555;
+  border-bottom: 4rpx solid var(--border-light);
   background: var(--bg-surface);
   position: relative;
   z-index: 1;
@@ -114,7 +112,7 @@
   font-size: var(--font-lg);
   color: var(--text-primary-light);
   font-weight: 700;
-  text-shadow: 2rpx 2rpx 0 #000;
+  text-shadow: none;
   letter-spacing: 4rpx;
 }
 
@@ -130,7 +128,7 @@
 .author-avatar-frame {
   width: 96rpx;
   height: 96rpx;
-  background: #8b5e3c;
+  background: var(--bg-surface);
   border: 4rpx solid var(--border-color);
   display: flex;
   align-items: center;
@@ -204,7 +202,7 @@
 
 .item-divider {
   height: 3rpx;
-  background: #999999;
+  background: var(--border-light);
   margin: 0 28rpx;
   position: relative;
   z-index: 1;
@@ -215,6 +213,7 @@
   width: 72rpx;
   height: 72rpx;
   border: 4rpx solid var(--border-color);
+  border-radius: var(--radius-md);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -223,18 +222,18 @@
 }
 
 .social-icon-box.redstone {
-  background: #e89b3c;
-  box-shadow: inset 4rpx 4rpx 0 #f0b860, inset -4rpx -4rpx 0 #a06020;
+  background: var(--scene-card-accent);
+  box-shadow: inset 4rpx 4rpx 0 var(--scene-card-highlight), inset -4rpx -4rpx 0 var(--scene-card-shadow);
 }
 
 .social-icon-box.note {
-  background: #222222;
-  box-shadow: inset 4rpx 4rpx 0 #444444, inset -4rpx -4rpx 0 #000000;
+  background: var(--bg-surface-dark);
+  box-shadow: inset 4rpx 4rpx 0 var(--button-neutral-highlight), inset -4rpx -4rpx 0 var(--button-neutral-shadow);
 }
 
 .social-icon-box.diamond {
-  background: #55cccc;
-  box-shadow: inset 4rpx 4rpx 0 #88eeee, inset -4rpx -4rpx 0 #228888;
+  background: var(--primary-cyan);
+  box-shadow: inset 4rpx 4rpx 0 rgba(255, 255, 255, 0.35), inset -4rpx -4rpx 0 rgba(0, 0, 0, 0.18);
 }
 
 .social-icon {
@@ -291,14 +290,14 @@
 .tip-text {
   font-size: var(--font-base);
   color: var(--primary-yellow);
-  text-shadow: 2rpx 2rpx 0 #000;
+  text-shadow: var(--text-shadow-strong);
   margin-bottom: 8rpx;
 }
 
 .tip-sub {
   font-size: var(--font-xs);
   color: var(--text-secondary-light);
-  text-shadow: 2rpx 2rpx 0 #000;
+  text-shadow: var(--text-shadow-strong);
   opacity: 0.7;
 }
 
@@ -313,10 +312,10 @@
   height: 16rpx;
   background: repeating-linear-gradient(
     90deg,
-    #5cb85c 0rpx,
-    #5cb85c 12rpx,
-    #4a9f4a 12rpx,
-    #4a9f4a 24rpx
+    var(--scene-ground-start) 0rpx,
+    var(--scene-ground-start) 12rpx,
+    var(--scene-ground-end) 12rpx,
+    var(--scene-ground-end) 24rpx
   );
 }
 
@@ -324,9 +323,18 @@
   height: 32rpx;
   background: repeating-linear-gradient(
     90deg,
-    #8b5a2b 0rpx,
-    #8b5a2b 12rpx,
-    #6b4423 12rpx,
-    #6b4423 24rpx
+    var(--scene-soil-start) 0rpx,
+    var(--scene-soil-start) 12rpx,
+    var(--scene-soil-end) 12rpx,
+    var(--scene-soil-end) 24rpx
   );
+}
+
+.theme-stardew .cloud {
+  opacity: 0.16;
+}
+
+.theme-stardew .author-avatar-frame,
+.theme-stardew .action-text {
+  border-radius: var(--radius-md);
 }

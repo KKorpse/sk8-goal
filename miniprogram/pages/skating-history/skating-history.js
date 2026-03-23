@@ -1,6 +1,7 @@
 /**
  * 滑板历史页面
  */
+const themePage = require('../../utils/themePage')
 
 Page({
   data: {
@@ -16,15 +17,21 @@ Page({
     editingNode: null,
     editingIndex: -1,
     isSkating: false, // 当前是否正在滑板
-    actionType: 'start' // 按钮状态：'start' | 'pause'
+    actionType: 'start', // 按钮状态：'start' | 'pause'
+    themeId: '',
+    themeClass: '',
+    themeMeta: {},
+    themeOptions: []
   },
 
   onLoad() {
+    themePage.applyTheme(this)
     this.initToday()
     this.loadData()
   },
 
   onShow() {
+    themePage.applyTheme(this)
     this.loadData()
   },
 

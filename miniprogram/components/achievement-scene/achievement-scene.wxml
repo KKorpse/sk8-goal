@@ -1,0 +1,58 @@
+<view class="achievement-scene theme-{{variant}}">
+  <view class="game-scene scene-{{variant}}" wx:if="{{timeline.length > 0}}">
+    <view class="sky-bg">
+      <view class="cloud cloud-1">☁️</view>
+      <view class="cloud cloud-2">☁️</view>
+      <view class="cloud cloud-3">☁️</view>
+    </view>
+
+    <scroll-view scroll-x class="game-scroll" enhanced show-scrollbar="{{false}}">
+      <view class="game-track" style="width: {{timeline.length * 140 + 200}}rpx;">
+        <view class="track-start">
+          <view class="start-flag">{{sceneConfig.startIcon}}</view>
+          <text class="start-label">{{sceneConfig.startLabel}}</text>
+        </view>
+
+        <view
+          class="trick-block {{item.status}}"
+          wx:for="{{timeline}}"
+          wx:key="id"
+          bindtap="onNodeTap"
+          data-index="{{index}}"
+        >
+          <view class="block-body">
+            <view class="block-shine"></view>
+            <text class="block-emoji">{{item.emoji || '🛹'}}</text>
+          </view>
+          <view class="block-status {{item.status}}">
+            <text class="status-star">{{item.status === 'mastered' ? '⭐' : item.status === 'trial' ? '✨' : '🔥'}}</text>
+          </view>
+          <text class="block-name">{{item.trickName}}</text>
+          <view class="block-stance">
+            <text>{{item.stance === 'normal' ? 'N' : item.stance === 'fakie' ? 'F' : item.stance === 'switch' ? 'S' : 'No'}}</text>
+          </view>
+        </view>
+
+        <view class="track-end">
+          <view class="end-castle">{{sceneConfig.endIcon}}</view>
+          <text class="end-label">{{sceneConfig.endLabel}}</text>
+        </view>
+      </view>
+    </scroll-view>
+
+    <view class="ground">
+      <view class="grass"></view>
+      <view class="dirt"></view>
+    </view>
+  </view>
+
+  <view class="timeline-empty scene-{{variant}}" wx:if="{{timeline.length === 0}}">
+    <view class="empty-game-bg">
+      <view class="cloud cloud-1">☁️</view>
+      <view class="cloud cloud-2">☁️</view>
+    </view>
+    <text class="empty-emoji">{{sceneConfig.emptyEmoji}}</text>
+    <text class="empty-text">还没有成招记录</text>
+    <text class="empty-hint">{{sceneConfig.emptyHint}}</text>
+  </view>
+</view>
