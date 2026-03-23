@@ -1,5 +1,6 @@
 const STORAGE_KEY = 'app_theme'
 const THEMES = require('../themes/index')
+const { getDefaultComponentMap, resolveComponentMap } = require('../themes/componentRegistry')
 
 function getDefaultThemeId() {
   return THEMES.minecraft.id
@@ -22,6 +23,14 @@ function getCurrentTheme() {
   return getThemeById(getCurrentThemeId())
 }
 
+function getDefaultComponentConfig() {
+  return getDefaultComponentMap()
+}
+
+function getResolvedComponentMap(themeId) {
+  return resolveComponentMap(getThemeById(themeId || getCurrentThemeId()))
+}
+
 function setCurrentTheme(themeId) {
   const theme = getThemeById(themeId)
   wx.setStorageSync(STORAGE_KEY, theme.id)
@@ -36,5 +45,7 @@ module.exports = {
   getThemeOptions,
   getCurrentThemeId,
   getCurrentTheme,
+  getDefaultComponentConfig,
+  getResolvedComponentMap,
   setCurrentTheme
 }

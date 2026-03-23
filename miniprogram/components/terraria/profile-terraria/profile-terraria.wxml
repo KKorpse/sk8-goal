@@ -1,0 +1,195 @@
+<view class="terraria-profile">
+  <view class="inventory-shell">
+    <view class="surface-band"></view>
+    <view class="soil-band"></view>
+    <view class="stone-band"></view>
+
+    <view class="hero-panel">
+      <view class="paperdoll-card">
+        <view class="panel-title">角色</view>
+        <view class="paperdoll-grid">
+          <view class="equip-slot head">
+            <text class="slot-label">头</text>
+          </view>
+          <view class="paperdoll-avatar" bindtap="handleEmit" data-name="chooseavatar">
+            <view class="avatar-placeholder" wx:if="{{!userInfo.avatar}}">
+              <text class="avatar-icon">{{sceneConfig.avatarIcon}}</text>
+            </view>
+            <image class="paperdoll-image" wx:else src="{{userInfo.avatar}}" mode="aspectFill" />
+          </view>
+          <view class="equip-slot hand">
+            <text class="slot-label">手</text>
+          </view>
+          <view class="equip-slot armor">
+            <text class="slot-label">甲</text>
+          </view>
+          <view class="equip-slot board">
+            <text class="slot-label">板</text>
+          </view>
+          <view class="equip-slot boots">
+            <text class="slot-label">靴</text>
+          </view>
+        </view>
+      </view>
+
+      <view class="status-card">
+        <view class="player-line">
+          <view class="name-box" bindtap="handleEmit" data-name="editnickname">
+            <text class="name-main">{{userInfo.nickname || '滑板玩家'}}</text>
+            <text class="name-sub">ID {{userInfo.id}}</text>
+          </view>
+          <view class="stance-chip" bindtap="handleEmit" data-name="togglestanceexpand">
+            <text class="chip-label">{{userInfo.stance === 'regular' ? 'Regular' : 'Goofy'}}</text>
+            <text class="chip-arrow {{stanceExpanded ? 'expanded' : ''}}">▼</text>
+          </view>
+        </view>
+
+        <view class="stance-switch {{stanceExpanded ? 'show' : ''}}">
+          <view class="stance-tile {{userInfo.stance === 'regular' ? 'active' : ''}}" bindtap="handleEmitDataset" data-name="setstance" data-stance="regular">
+            <text class="stance-tile-main">Regular</text>
+            <text class="stance-tile-sub">左脚前</text>
+          </view>
+          <view class="stance-tile {{userInfo.stance === 'goofy' ? 'active' : ''}}" bindtap="handleEmitDataset" data-name="setstance" data-stance="goofy">
+            <text class="stance-tile-main">Goofy</text>
+            <text class="stance-tile-sub">右脚前</text>
+          </view>
+        </view>
+
+        <view class="status-bars">
+          <view class="bar-row">
+            <text class="bar-label">生命</text>
+            <view class="bar-track hp">
+              <view class="bar-fill hp-fill" style="width: {{litBarWidth}}%"></view>
+            </view>
+            <text class="bar-value">{{stats.litCount || 0}}</text>
+          </view>
+          <view class="bar-row">
+            <text class="bar-label">耐力</text>
+            <view class="bar-track mana">
+              <view class="bar-fill mana-fill" style="width: {{masteredBarWidth}}%"></view>
+            </view>
+            <text class="bar-value">{{stats.masteredCount || 0}}</text>
+          </view>
+          <view class="bar-row clickable" bindtap="handleEmit" data-name="skatinghistorytap">
+            <text class="bar-label">旅程</text>
+            <view class="bar-track travel">
+              <view class="bar-fill travel-fill" style="width: {{yearsBarWidth}}%"></view>
+            </view>
+            <text class="bar-value">{{yearsSkating}}y</text>
+          </view>
+        </view>
+
+        <view class="stat-rack">
+          <view class="stat-slot mastered {{statExpanded === 'mastered' ? 'active' : ''}}" bindtap="handleEmitDataset" data-name="togglestatexpand" data-type="mastered">
+            <text class="stat-slot-count">{{stats.masteredCount || 0}}</text>
+            <text class="stat-slot-label">一脚一个</text>
+          </view>
+          <view class="stat-slot grinding {{statExpanded === 'grinding' ? 'active' : ''}}" bindtap="handleEmitDataset" data-name="togglestatexpand" data-type="grinding">
+            <text class="stat-slot-count">{{stats.grindingCount || 0}}</text>
+            <text class="stat-slot-label">死磕中</text>
+          </view>
+          <view class="stat-slot trial {{statExpanded === 'trial' ? 'active' : ''}}" bindtap="handleEmitDataset" data-name="togglestatexpand" data-type="trial">
+            <text class="stat-slot-count">{{stats.trialCount || 0}}</text>
+            <text class="stat-slot-label">体验卡</text>
+          </view>
+        </view>
+
+        <view class="stat-detail" wx:if="{{statExpanded}}">
+          <scroll-view scroll-y class="stat-detail-scroll" wx:if="{{statExpanded === 'mastered' && statTrickLists.mastered.length > 0}}">
+            <view class="stat-detail-item" wx:for="{{statTrickLists.mastered}}" wx:key="id">
+              <text class="detail-name">{{item.name}}</text>
+              <text class="detail-stance">{{item.stance}}</text>
+            </view>
+          </scroll-view>
+          <scroll-view scroll-y class="stat-detail-scroll" wx:elif="{{statExpanded === 'grinding' && statTrickLists.grinding.length > 0}}">
+            <view class="stat-detail-item" wx:for="{{statTrickLists.grinding}}" wx:key="id">
+              <text class="detail-name">{{item.name}}</text>
+              <text class="detail-stance">{{item.stance}}</text>
+            </view>
+          </scroll-view>
+          <scroll-view scroll-y class="stat-detail-scroll" wx:elif="{{statExpanded === 'trial' && statTrickLists.trial.length > 0}}">
+            <view class="stat-detail-item" wx:for="{{statTrickLists.trial}}" wx:key="id">
+              <text class="detail-name">{{item.name}}</text>
+              <text class="detail-stance">{{item.stance}}</text>
+            </view>
+          </scroll-view>
+          <view class="stat-detail-empty" wx:else>
+            <text class="detail-empty-text">这个栏位还是空的</text>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="backpack-card">
+      <view class="card-heading">
+        <text class="heading-title">背包</text>
+        <text class="heading-meta">{{unlockedBadges.length}} / {{allBadges.length}}</text>
+      </view>
+      <view class="backpack-grid">
+        <view
+          class="badge-slot {{item.unlocked ? 'unlocked' : 'locked'}}"
+          wx:for="{{allBadges}}"
+          wx:key="id"
+          bindtap="handleEmitDataset"
+          data-name="badgetap"
+          data-badge="{{item}}"
+        >
+          <text class="badge-slot-icon">{{item.unlocked ? item.emoji : '▣'}}</text>
+        </view>
+      </view>
+    </view>
+
+    <view class="loadout-card">
+      <view class="card-heading">
+        <text class="heading-title">训练装备</text>
+        <view class="ollie-switch" bindtap="handleEmit" data-name="toggleollieexpand">
+          <text class="heading-meta">Ollie {{ollie.normal}} / {{ollie.switch}}</text>
+          <text class="chip-arrow {{ollieExpanded ? 'expanded' : ''}}">▼</text>
+        </view>
+      </view>
+
+      <view class="ollie-panel {{ollieExpanded ? 'show' : ''}}">
+        <view class="ollie-row">
+          <text class="ollie-name">正脚</text>
+          <view class="ollie-actions">
+            <view class="ollie-btn" bindtap="handleEmitDataset" data-name="adjustollie" data-type="normal" data-delta="-0.5">-</view>
+            <text class="ollie-value">{{ollie.normal}}</text>
+            <view class="ollie-btn" bindtap="handleEmitDataset" data-name="adjustollie" data-type="normal" data-delta="0.5">+</view>
+          </view>
+        </view>
+        <view class="ollie-row">
+          <text class="ollie-name">反脚</text>
+          <view class="ollie-actions">
+            <view class="ollie-btn" bindtap="handleEmitDataset" data-name="adjustollie" data-type="switch" data-delta="-0.5">-</view>
+            <text class="ollie-value">{{ollie.switch}}</text>
+            <view class="ollie-btn" bindtap="handleEmitDataset" data-name="adjustollie" data-type="switch" data-delta="0.5">+</view>
+          </view>
+        </view>
+      </view>
+    </view>
+
+    <view class="timeline-card terraria-timeline-card">
+      <view class="card-heading">
+        <text class="heading-title">地表 / 地下进度</text>
+        <view class="unlock-link" bindtap="handleEmit" data-name="gototrics">
+          <text class="unlock-link-text">解锁新招</text>
+        </view>
+      </view>
+
+      <achievement-scene-terraria
+        wx:if="{{componentMap.achievementScene === terrariaAchievementScenePath}}"
+        timeline="{{timeline}}"
+        variant="{{themeId}}"
+        scene-config="{{sceneConfig}}"
+        bind:nodetap="onTimelineNodeTap"
+      />
+      <achievement-scene-default
+        wx:else
+        timeline="{{timeline}}"
+        variant="{{themeId}}"
+        scene-config="{{sceneConfig}}"
+        bind:nodetap="onTimelineNodeTap"
+      />
+    </view>
+  </view>
+</view>

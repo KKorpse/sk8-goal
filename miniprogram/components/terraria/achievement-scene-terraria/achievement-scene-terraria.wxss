@@ -1,0 +1,214 @@
+.terraria-scene {
+  margin-top: var(--spacing-lg);
+}
+
+.layer-scene,
+.timeline-empty {
+  position: relative;
+  height: 360rpx;
+  border: 4rpx solid #223116;
+  overflow: hidden;
+  background: #4a4d54;
+}
+
+.surface-layer,
+.soil-layer,
+.stone-layer,
+.empty-surface,
+.empty-soil,
+.empty-stone {
+  position: absolute;
+  left: 0;
+  right: 0;
+}
+
+.surface-layer,
+.empty-surface {
+  top: 0;
+  height: 92rpx;
+  background: #6aa53b;
+}
+
+.soil-layer,
+.empty-soil {
+  top: 92rpx;
+  height: 108rpx;
+  background: #77502d;
+}
+
+.stone-layer,
+.empty-stone {
+  top: 200rpx;
+  bottom: 0;
+  background: #4a4d54;
+}
+
+.scene-scroll {
+  position: relative;
+  z-index: 1;
+  height: 100%;
+}
+
+.scene-track {
+  position: relative;
+  height: 100%;
+}
+
+.start-totem,
+.end-shrine {
+  position: absolute;
+  top: 16rpx;
+  width: 120rpx;
+  text-align: center;
+}
+
+.start-totem {
+  left: 20rpx;
+}
+
+.end-shrine {
+  right: 20rpx;
+  top: 232rpx;
+}
+
+.totem-block,
+.shrine-block {
+  width: 72rpx;
+  height: 72rpx;
+  margin: 0 auto;
+  border: 4rpx solid #1d2914;
+  background: #8c6537;
+}
+
+.shrine-block {
+  background: #887238;
+}
+
+.totem-label {
+  display: block;
+  margin-top: 8rpx;
+  font-size: 18rpx;
+  color: #f6e7c0;
+  font-weight: 700;
+}
+
+.scene-node {
+  position: absolute;
+  width: 140rpx;
+}
+
+.node-token {
+  position: relative;
+  width: 72rpx;
+  height: 72rpx;
+  margin: 0 auto;
+  border: 4rpx solid #1d2914;
+  background: #5c6068;
+}
+
+.node-token.ore {
+  background: #566a73;
+}
+
+.node-token.chest {
+  background: #8b6438;
+}
+
+.node-token.altar {
+  background: #696091;
+}
+
+.token-core,
+.token-piece {
+  position: absolute;
+}
+
+.token-core {
+  top: 16rpx;
+  left: 16rpx;
+  right: 16rpx;
+  bottom: 16rpx;
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.token-piece.piece-a {
+  width: 14rpx;
+  height: 14rpx;
+  top: 8rpx;
+  left: 10rpx;
+  background: rgba(255, 255, 255, 0.32);
+}
+
+.token-piece.piece-b {
+  width: 12rpx;
+  height: 12rpx;
+  right: 8rpx;
+  bottom: 10rpx;
+  background: rgba(0, 0, 0, 0.18);
+}
+
+.node-token.trial {
+  box-shadow: inset 0 0 0 4rpx #8c949d;
+}
+
+.node-token.grinding {
+  box-shadow: inset 0 0 0 4rpx #59a2bc;
+}
+
+.node-token.mastered {
+  box-shadow: inset 0 0 0 4rpx #efc95f;
+}
+
+.node-meta {
+  margin-top: 8rpx;
+  text-align: center;
+}
+
+.node-name,
+.node-stance,
+.empty-text,
+.empty-hint {
+  display: block;
+  color: #f6e7c0;
+  text-align: center;
+}
+
+.node-name {
+  font-size: 18rpx;
+  font-weight: 700;
+}
+
+.node-stance {
+  margin-top: 4rpx;
+  font-size: 16rpx;
+  color: #d9cfbd;
+}
+
+.timeline-empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.empty-icon {
+  position: relative;
+  z-index: 1;
+  font-size: 48rpx;
+  color: #fff1c0;
+}
+
+.empty-text {
+  position: relative;
+  z-index: 1;
+  margin-top: 12rpx;
+  font-size: 24rpx;
+  font-weight: 700;
+}
+
+.empty-hint {
+  position: relative;
+  z-index: 1;
+  margin-top: 8rpx;
+  font-size: 18rpx;
+}

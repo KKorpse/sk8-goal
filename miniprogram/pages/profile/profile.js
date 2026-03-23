@@ -482,7 +482,7 @@ Page({
    * 设置脚位
    */
   setStance(e) {
-    const { stance } = e.currentTarget.dataset
+    const stance = (e.currentTarget && e.currentTarget.dataset && e.currentTarget.dataset.stance) || e.detail.stance
     const userInfo = userService.updateUserInfo({ stance })
     this.setData({
       userInfo,
@@ -663,7 +663,7 @@ Page({
    * 展开/收起统计列表
    */
   toggleStatExpand(e) {
-    const { type } = e.currentTarget.dataset
+    const type = (e.currentTarget && e.currentTarget.dataset && e.currentTarget.dataset.type) || e.detail.type
     const { statExpanded, statTrickLists } = this.data
 
     if (statExpanded === type) {
@@ -679,7 +679,8 @@ Page({
    * 调整 Ollie 高度
    */
   adjustOllie(e) {
-    const { type, delta } = e.currentTarget.dataset
+    const type = (e.currentTarget && e.currentTarget.dataset && e.currentTarget.dataset.type) || e.detail.type
+    const delta = (e.currentTarget && e.currentTarget.dataset && e.currentTarget.dataset.delta) || e.detail.delta
     let val = parseFloat(delta)
     let current = this.data.ollie[type]
     let newValue = current + val
@@ -713,7 +714,7 @@ Page({
    * 点击单个徽章查看详情
    */
   onBadgeTap(e) {
-    const { badge } = e.currentTarget.dataset
+    const badge = (e.currentTarget && e.currentTarget.dataset && e.currentTarget.dataset.badge) || e.detail.badge
     this.setData({
       showBadgeModal: true,
       selectedBadge: badge

@@ -57,6 +57,22 @@ function validateNavigationBar(theme) {
   assertNonEmptyString(navigationBar.backgroundColor, 'navigationBar.backgroundColor')
 }
 
+function validateComponentMap(theme) {
+  const { componentMap } = theme
+
+  if (componentMap === undefined) {
+    return
+  }
+
+  if (!componentMap || typeof componentMap !== 'object' || Array.isArray(componentMap)) {
+    throw new Error(`Theme "${theme.id || 'unknown'}" field "componentMap" must be an object`)
+  }
+
+  Object.keys(componentMap).forEach((key) => {
+    assertNonEmptyString(componentMap[key], `componentMap.${key}`)
+  })
+}
+
 function validateTheme(theme) {
   if (!theme || typeof theme !== 'object') {
     throw new Error('Theme definition must be an object')
@@ -67,6 +83,7 @@ function validateTheme(theme) {
   })
 
   validateNavigationBar(theme)
+  validateComponentMap(theme)
   validateFieldGroup(theme, 'sceneConfig', REQUIRED_SCENE_FIELDS)
   validateFieldGroup(theme, 'authorContent', REQUIRED_AUTHOR_FIELDS)
 

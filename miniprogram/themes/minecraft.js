@@ -1,3 +1,5 @@
+const { DEFAULT_COMPONENT_MAP } = require('./componentRegistry')
+
 module.exports = {
   id: 'minecraft',
   name: '方块冒险',
@@ -8,6 +10,7 @@ module.exports = {
     frontColor: '#ffffff',
     backgroundColor: '#3b2818'
   },
+  componentMap: DEFAULT_COMPONENT_MAP,
   sceneConfig: {
     avatarIcon: '⛏️',
     startIcon: '🚩',

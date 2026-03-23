@@ -2,8 +2,8 @@
   "navigationBarTitleText": "我的",
   "enablePullDownRefresh": true,
   "usingComponents": {
-    "timeline-item": "/components/timeline-item/timeline-item",
     "checkin-wall": "/components/checkin-wall/checkin-wall",
-    "achievement-scene": "/components/achievement-scene/achievement-scene"
+    "profile-default": "/components/profile-default/profile-default",
+    "profile-terraria": "/components/terraria/profile-terraria/profile-terraria"
   }
 }

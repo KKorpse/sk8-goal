@@ -1,0 +1,7 @@
+{
+  "component": true,
+  "usingComponents": {
+    "achievement-scene-default": "/components/achievement-scene/achievement-scene",
+    "achievement-scene-terraria": "/components/terraria/achievement-scene-terraria/achievement-scene-terraria"
+  }
+}

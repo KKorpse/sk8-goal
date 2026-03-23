@@ -1,3 +1,5 @@
+const { DEFAULT_COMPONENT_MAP } = require('./componentRegistry')
+
 module.exports = {
   id: 'stardew',
   name: '田园像素',
@@ -8,6 +10,7 @@ module.exports = {
     frontColor: '#000000',
     backgroundColor: '#f3e7c5'
   },
+  componentMap: DEFAULT_COMPONENT_MAP,
   sceneConfig: {
     avatarIcon: '🌻',
     startIcon: '🌱',

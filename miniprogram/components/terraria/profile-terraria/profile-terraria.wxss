@@ -1,0 +1,386 @@
+.terraria-profile {
+  margin-bottom: var(--spacing-card);
+}
+
+.inventory-shell {
+  position: relative;
+  padding: 20rpx;
+  border: 4rpx solid #223116;
+  background: #4d6b2f;
+  overflow: hidden;
+}
+
+.surface-band,
+.soil-band,
+.stone-band {
+  position: absolute;
+  left: 0;
+  right: 0;
+  pointer-events: none;
+}
+
+.surface-band {
+  top: 0;
+  height: 28rpx;
+  background: #77a73a;
+}
+
+.soil-band {
+  top: 28rpx;
+  height: 64rpx;
+  background: #6f4c2d;
+}
+
+.stone-band {
+  top: 92rpx;
+  bottom: 0;
+  background: #4a4d54;
+}
+
+.hero-panel,
+.backpack-card,
+.loadout-card,
+.terraria-timeline-card {
+  position: relative;
+  z-index: 1;
+  border: 4rpx solid #1f2b16;
+  background: #7f5a34;
+  margin-bottom: 20rpx;
+}
+
+.hero-panel {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16rpx;
+  background: transparent;
+  border: 0;
+}
+
+.paperdoll-card,
+.status-card {
+  border: 4rpx solid #1f2b16;
+  background: #6b4a2a;
+  padding: 16rpx;
+}
+
+.paperdoll-card {
+  width: 240rpx;
+  flex-shrink: 0;
+}
+
+.status-card {
+  flex: 1;
+  min-width: 0;
+}
+
+.panel-title,
+.heading-title {
+  font-size: 22rpx;
+  font-weight: 700;
+  color: #fff3cf;
+  letter-spacing: 2rpx;
+}
+
+.paperdoll-grid {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 12rpx;
+  margin-top: 16rpx;
+}
+
+.equip-slot,
+.paperdoll-avatar,
+.badge-slot,
+.ollie-btn,
+.stat-slot,
+.stance-tile,
+.detail-stance {
+  border: 4rpx solid #1f2b16;
+  background: #8d6538;
+}
+
+.equip-slot,
+.paperdoll-avatar {
+  width: 60rpx;
+  height: 72rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.paperdoll-avatar {
+  width: 72rpx;
+  height: 156rpx;
+  background: #5c6b32;
+}
+
+.avatar-placeholder,
+.paperdoll-image {
+  width: 100%;
+  height: 100%;
+}
+
+.avatar-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #51612b;
+}
+
+.paperdoll-image {
+  display: block;
+}
+
+.avatar-icon {
+  font-size: 46rpx;
+}
+
+.slot-label,
+.name-sub,
+.bar-label,
+.bar-value,
+.stat-slot-label,
+.heading-meta,
+.detail-stance,
+.unlock-link-text,
+.ollie-name {
+  font-size: 18rpx;
+  color: #f8e7c5;
+}
+
+.player-line,
+.card-heading,
+.ollie-row,
+.bar-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.name-box,
+.stance-chip,
+.unlock-link,
+.ollie-switch {
+  border: 4rpx solid #1f2b16;
+  background: #5d7e2b;
+  padding: 10rpx 14rpx;
+}
+
+.name-box {
+  flex: 1;
+  margin-right: 12rpx;
+  background: #4f6527;
+}
+
+.name-main,
+.stat-slot-count,
+.ollie-value,
+.detail-name {
+  font-size: 26rpx;
+  font-weight: 700;
+  color: #fff3cf;
+}
+
+.chip-label {
+  font-size: 20rpx;
+  color: #fff3cf;
+}
+
+.chip-arrow {
+  margin-left: 8rpx;
+  font-size: 18rpx;
+  color: #fff3cf;
+  display: inline-block;
+}
+
+.chip-arrow.expanded {
+  transform: rotate(180deg);
+}
+
+.stance-switch {
+  display: none;
+  margin-top: 16rpx;
+  gap: 12rpx;
+}
+
+.stance-switch.show {
+  display: flex;
+}
+
+.stance-tile {
+  flex: 1;
+  padding: 12rpx;
+}
+
+.stance-tile.active {
+  background: #7f9e2f;
+}
+
+.stance-tile-main {
+  display: block;
+  font-size: 22rpx;
+  color: #fff3cf;
+  font-weight: 700;
+}
+
+.stance-tile-sub {
+  display: block;
+  font-size: 18rpx;
+  color: #f8e7c5;
+  margin-top: 6rpx;
+}
+
+.status-bars,
+.stat-rack,
+.ollie-panel {
+  margin-top: 16rpx;
+}
+
+.bar-row {
+  margin-top: 12rpx;
+}
+
+.bar-row.clickable {
+  padding: 8rpx 0;
+}
+
+.bar-track {
+  flex: 1;
+  height: 20rpx;
+  margin: 0 12rpx;
+  border: 4rpx solid #1f2b16;
+  background: #2f2f32;
+}
+
+.bar-fill {
+  height: 100%;
+}
+
+.hp-fill {
+  background: #c64232;
+}
+
+.mana-fill {
+  background: #3f8fd1;
+}
+
+.travel-fill {
+  background: #f0c25a;
+}
+
+.stat-rack {
+  display: flex;
+  gap: 12rpx;
+}
+
+.stat-slot {
+  flex: 1;
+  padding: 12rpx;
+  text-align: center;
+}
+
+.stat-slot.mastered.active {
+  background: #a77b2b;
+}
+
+.stat-slot.grinding.active {
+  background: #a3542f;
+}
+
+.stat-slot.trial.active {
+  background: #3c7f8d;
+}
+
+.stat-detail {
+  margin-top: 16rpx;
+  border: 4rpx solid #1f2b16;
+  background: #4a4d54;
+  max-height: 240rpx;
+}
+
+.stat-detail-scroll {
+  max-height: 240rpx;
+}
+
+.stat-detail-item,
+.stat-detail-empty {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12rpx 14rpx;
+  border-bottom: 2rpx solid #2f2f32;
+}
+
+.detail-empty-text {
+  font-size: 20rpx;
+  color: #d1d5db;
+}
+
+.backpack-card,
+.loadout-card,
+.terraria-timeline-card {
+  padding: 16rpx;
+}
+
+.backpack-grid {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10rpx;
+  margin-top: 16rpx;
+}
+
+.badge-slot {
+  width: calc((100% - 50rpx) / 6);
+  height: 72rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #4a4d54;
+}
+
+.badge-slot.unlocked {
+  background: #7a9735;
+}
+
+.badge-slot.locked {
+  background: #2f2f32;
+}
+
+.badge-slot-icon {
+  font-size: 28rpx;
+}
+
+.ollie-panel {
+  display: none;
+}
+
+.ollie-panel.show {
+  display: block;
+}
+
+.ollie-row + .ollie-row {
+  margin-top: 12rpx;
+}
+
+.ollie-actions {
+  display: flex;
+  align-items: center;
+  gap: 10rpx;
+}
+
+.ollie-btn {
+  width: 56rpx;
+  height: 56rpx;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #fff3cf;
+  font-size: 28rpx;
+  font-weight: 700;
+  background: #5c6b32;
+}
+
+.unlock-link {
+  padding: 10rpx 12rpx;
+}

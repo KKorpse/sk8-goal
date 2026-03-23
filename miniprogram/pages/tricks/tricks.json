@@ -5,6 +5,7 @@
     "search-bar": "/components/search-bar/search-bar",
     "filter-tabs": "/components/filter-tabs/filter-tabs",
     "trick-card": "/components/trick-card/trick-card",
+    "trick-card-terraria": "/components/terraria/trick-card-terraria/trick-card-terraria",
     "stance-panel": "/components/stance-panel/stance-panel"
   }
 }

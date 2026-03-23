@@ -1,3 +1,5 @@
+const { TERRARIA_COMPONENT_MAP } = require('./componentRegistry')
+
 module.exports = {
   id: 'terraria',
   name: '冒险洞穴',
@@ -8,6 +10,7 @@ module.exports = {
     frontColor: '#ffffff',
     backgroundColor: '#2d4f2d'
   },
+  componentMap: TERRARIA_COMPONENT_MAP,
   sceneConfig: {
     avatarIcon: '🗡️',
     startIcon: '🌲',

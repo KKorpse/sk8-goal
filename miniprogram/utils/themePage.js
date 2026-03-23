@@ -5,7 +5,9 @@ function buildThemeData(theme) {
     themeId: theme.id,
     themeClass: theme.className,
     themeMeta: theme,
-    themeOptions: themeService.getThemeOptions()
+    themeOptions: themeService.getThemeOptions(),
+    defaultComponentMap: themeService.getDefaultComponentConfig(),
+    componentMap: themeService.getResolvedComponentMap(theme.id)
   }
 }
 

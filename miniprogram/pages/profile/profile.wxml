@@ -1,211 +1,61 @@
 <!--我的页面-->
 <view class="profile-page theme-shell {{themeClass}}">
-  <!-- 个人信息卡片 -->
-  <view class="profile-card">
-    <!-- 头像和基本信息 -->
-    <view class="card-header">
-      <view class="avatar-wrapper" bindtap="chooseAvatar">
-        <view class="avatar-placeholder avatar-placeholder-{{themeId}}" wx:if="{{!userInfo.avatar}}">
-          <text class="avatar-placeholder-emoji">{{sceneConfig.avatarIcon}}</text>
-        </view>
-        <image
-          class="avatar"
-          wx:else
-          src="{{userInfo.avatar}}"
-          mode="aspectFill"
-        />
-        <view class="avatar-edit-hint">
-          <text class="edit-icon">📷</text>
-        </view>
-      </view>
-      <view class="user-info">
-        <view class="nickname-wrapper" bindtap="editNickname">
-          <text class="nickname">{{userInfo.nickname || '滑板玩家'}}</text>
-          <text class="nickname-edit-icon">✏️</text>
-        </view>
-        <text class="user-id">ID: {{userInfo.id}}</text>
-      </view>
-      <!-- 右侧信息区：脚位和板龄 -->
-      <view class="header-right">
-        <view class="header-tag tag-clickable" bindtap="toggleStanceExpand">
-          <text class="header-tag-text">脚位 {{userInfo.stance === 'regular' ? 'Regular' : 'Goofy'}}</text>
-          <text class="tag-arrow {{stanceExpanded ? 'expanded' : ''}}">▼</text>
-        </view>
-        <view class="header-tag tag-clickable" bindtap="onSkatingHistoryTap">
-          <text class="header-tag-text">板龄 {{yearsSkating}} 年</text>
-          <text class="tag-arrow">›</text>
-        </view>
-      </view>
-    </view>
-    
-    <!-- 脚位设置面板 -->
-    <view class="stance-panel {{stanceExpanded ? 'show' : ''}}">
-      <view class="stance-option {{userInfo.stance === 'regular' ? 'active' : ''}}" bindtap="setStance" data-stance="regular">
-        <text class="stance-emoji">🦶</text>
-        <text class="stance-name">Regular (左脚前)</text>
-        <text class="stance-check" wx:if="{{userInfo.stance === 'regular'}}">✓</text>
-      </view>
-      <view class="stance-option {{userInfo.stance === 'goofy' ? 'active' : ''}}" bindtap="setStance" data-stance="goofy">
-        <text class="stance-emoji">🦶</text>
-        <text class="stance-name">Goofy (右脚前)</text>
-        <text class="stance-check" wx:if="{{userInfo.stance === 'goofy'}}">✓</text>
-      </view>
-    </view>
-    
-    <!-- 成就徽章 -->
-    <view class="badges-wrapper">
-      <view class="badges-header">
-        <text class="badges-title">成就徽章</text>
-        <text class="badges-count">{{unlockedBadges.length}}/{{allBadges.length}}</text>
-      </view>
-      <view class="badges-list">
-        <view
-          class="badge-item theme-{{themeId}} {{item.unlocked ? '' : 'locked'}}"
-          wx:for="{{allBadges}}"
-          wx:key="id"
-          wx:if="{{index < 7}}"
-          bindtap="onBadgeTap"
-          data-badge="{{item}}"
-          data-index="{{index}}"
-        >
-          <text class="badge-emoji">{{item.emoji}}</text>
-        </view>
-        <!-- 更多徽章提示 -->
-        <view
-          class="badge-item badge-more"
-          wx:if="{{allBadges.length > 7}}"
-          bindtap="onBadgeTap"
-          data-badge="{{allBadges[7]}}"
-        >
-          <text class="badge-more-text">+{{allBadges.length - 7}}</text>
-        </view>
-      </view>
-    </view>
-
-  </view>
-  
-  <!-- 合并进度卡片: Ollie + 统计概览 -->
-  <view class="progress-card">
-    <!-- 卡片标题 -->
-    <view class="progress-card-title">滑手数据</view>
-    <!-- Ollie 高度区 -->
-    <view class="progress-ollie" bindtap="toggleOllieExpand">
-      <view class="progress-ollie-left">
-        <text class="progress-ollie-label">Ollie 高度</text>
-        <view class="progress-ollie-values">
-          <text class="progress-ollie-main">{{ollie.normal}}</text>
-          <text class="progress-ollie-sep">/</text>
-          <text class="progress-ollie-sub">{{ollie.switch}}</text>
-          <text class="progress-ollie-unit">立</text>
-        </view>
-      </view>
-      <text class="progress-expand-arrow {{ollieExpanded ? 'expanded' : ''}}">▼</text>
-    </view>
-    <!-- Ollie 展开设置面板 -->
-    <view class="ollie-settings {{ollieExpanded ? 'show' : ''}}">
-      <view class="ollie-setting-item">
-        <view class="ollie-label-wrapper">
-          <text class="ollie-label-icon">🦶</text>
-          <text class="ollie-label">正脚 ({{userInfo.stance === 'regular' ? 'Regular' : 'Goofy'}})</text>
-        </view>
-        <view class="ollie-control">
-          <view class="ollie-btn" bindtap="adjustOllie" data-type="normal" data-delta="-0.5">-</view>
-          <text class="ollie-value">{{ollie.normal}}</text>
-          <view class="ollie-btn" bindtap="adjustOllie" data-type="normal" data-delta="0.5">+</view>
-        </view>
-      </view>
-      <view class="ollie-divider"></view>
-      <view class="ollie-setting-item">
-        <view class="ollie-label-wrapper">
-          <text class="ollie-label-icon">🔄</text>
-          <text class="ollie-label">反脚 (Switch/Fakie)</text>
-        </view>
-        <view class="ollie-control">
-          <view class="ollie-btn" bindtap="adjustOllie" data-type="switch" data-delta="-0.5">-</view>
-          <text class="ollie-value">{{ollie.switch}}</text>
-          <view class="ollie-btn" bindtap="adjustOllie" data-type="switch" data-delta="0.5">+</view>
-        </view>
-      </view>
-    </view>
-    <!-- 分割线 -->
-    <view class="progress-divider"></view>
-    <!-- 统计概览区 - 横排 + 展开列表 -->
-    <view class="stats-summary-expandable">
-      <!-- 横排三个统计 -->
-      <view class="stats-row">
-        <view class="stats-col mastered {{statExpanded === 'mastered' ? 'active' : ''}}" bindtap="toggleStatExpand" data-type="mastered">
-          <text class="stat-num">{{stats.masteredCount || 0}}</text>
-          <text class="stat-label">一脚一个</text>
-        </view>
-        <view class="stats-col-divider"></view>
-        <view class="stats-col grinding {{statExpanded === 'grinding' ? 'active' : ''}}" bindtap="toggleStatExpand" data-type="grinding">
-          <text class="stat-num">{{stats.grindingCount || 0}}</text>
-          <text class="stat-label">死磕中</text>
-        </view>
-        <view class="stats-col-divider"></view>
-        <view class="stats-col trial {{statExpanded === 'trial' ? 'active' : ''}}" bindtap="toggleStatExpand" data-type="trial">
-          <text class="stat-num">{{stats.trialCount || 0}}</text>
-          <text class="stat-label">体验卡</text>
-        </view>
-      </view>
-
-      <!-- 展开的招式列表 -->
-      <view class="stat-expand-list {{statExpanded ? 'show' : ''}}">
-        <scroll-view scroll-y class="stat-list-scroll" wx:if="{{statExpanded === 'mastered' && statTrickLists.mastered.length > 0}}">
-          <view class="stat-trick-item" wx:for="{{statTrickLists.mastered}}" wx:key="id">
-            <text class="stat-trick-emoji">{{item.emoji || '🛹'}}</text>
-            <text class="stat-trick-name">{{item.name}}</text>
-            <text class="stat-trick-stance" wx:if="{{item.stance}}">{{item.stance}}</text>
-          </view>
-        </scroll-view>
-        <view class="stat-list-empty" wx:if="{{statExpanded === 'mastered' && statTrickLists.mastered.length === 0}}">
-          <text class="stat-list-empty-text">还没有一脚一个的招式</text>
-        </view>
-
-        <scroll-view scroll-y class="stat-list-scroll" wx:if="{{statExpanded === 'grinding' && statTrickLists.grinding.length > 0}}">
-          <view class="stat-trick-item" wx:for="{{statTrickLists.grinding}}" wx:key="id">
-            <text class="stat-trick-emoji">{{item.emoji || '🛹'}}</text>
-            <text class="stat-trick-name">{{item.name}}</text>
-            <text class="stat-trick-stance" wx:if="{{item.stance}}">{{item.stance}}</text>
-          </view>
-        </scroll-view>
-        <view class="stat-list-empty" wx:if="{{statExpanded === 'grinding' && statTrickLists.grinding.length === 0}}">
-          <text class="stat-list-empty-text">还没有死磕中的招式</text>
-        </view>
-
-        <scroll-view scroll-y class="stat-list-scroll" wx:if="{{statExpanded === 'trial' && statTrickLists.trial.length > 0}}">
-          <view class="stat-trick-item" wx:for="{{statTrickLists.trial}}" wx:key="id">
-            <text class="stat-trick-emoji">{{item.emoji || '🛹'}}</text>
-            <text class="stat-trick-name">{{item.name}}</text>
-            <text class="stat-trick-stance" wx:if="{{item.stance}}">{{item.stance}}</text>
-          </view>
-        </scroll-view>
-        <view class="stat-list-empty" wx:if="{{statExpanded === 'trial' && statTrickLists.trial.length === 0}}">
-          <text class="stat-list-empty-text">还没有体验卡的招式</text>
-        </view>
-      </view>
-    </view>
-  </view>
-  
-  <!-- 成招记录 - 横屏游戏风格 -->
-  <view class="timeline-card">
-    <view class="timeline-header">
-      <text class="timeline-title"> 成招记录</text>
-      <!-- 解锁新招按钮 -->
-      <view class="unlock-btn" bindtap="onGoToTricks">
-        <text class="unlock-icon"></text>
-        <text class="unlock-text">解锁新招</text>
-        <text class="unlock-arrow">›</text>
-      </view>
-    </view>
-
-    <achievement-scene
-      timeline="{{timeline}}"
-      variant="{{themeId}}"
-      scene-config="{{sceneConfig}}"
-      bind:nodetap="onTimelineNodeTap"
-    />
-  </view>
+  <profile-terraria
+    wx:if="{{componentMap.profileLayout === '/components/terraria/profile-terraria/profile-terraria'}}"
+    theme-id="{{themeId}}"
+    component-map="{{componentMap}}"
+    user-info="{{userInfo}}"
+    scene-config="{{sceneConfig}}"
+    stance-expanded="{{stanceExpanded}}"
+    years-skating="{{yearsSkating}}"
+    unlocked-badges="{{unlockedBadges}}"
+    all-badges="{{allBadges}}"
+    ollie="{{ollie}}"
+    ollie-expanded="{{ollieExpanded}}"
+    stats="{{stats}}"
+    stat-expanded="{{statExpanded}}"
+    stat-trick-lists="{{statTrickLists}}"
+    timeline="{{timeline}}"
+    bind:chooseavatar="chooseAvatar"
+    bind:editnickname="editNickname"
+    bind:togglestanceexpand="toggleStanceExpand"
+    bind:setstance="setStance"
+    bind:skatinghistorytap="onSkatingHistoryTap"
+    bind:toggleollieexpand="toggleOllieExpand"
+    bind:adjustollie="adjustOllie"
+    bind:togglestatexpand="toggleStatExpand"
+    bind:badgetap="onBadgeTap"
+    bind:timelinenodetap="onTimelineNodeTap"
+    bind:gototrics="onGoToTricks"
+  />
+  <profile-default
+    wx:else
+    theme-id="{{themeId}}"
+    component-map="{{componentMap}}"
+    user-info="{{userInfo}}"
+    scene-config="{{sceneConfig}}"
+    stance-expanded="{{stanceExpanded}}"
+    years-skating="{{yearsSkating}}"
+    unlocked-badges="{{unlockedBadges}}"
+    all-badges="{{allBadges}}"
+    ollie="{{ollie}}"
+    ollie-expanded="{{ollieExpanded}}"
+    stats="{{stats}}"
+    stat-expanded="{{statExpanded}}"
+    stat-trick-lists="{{statTrickLists}}"
+    timeline="{{timeline}}"
+    bind:chooseavatar="chooseAvatar"
+    bind:editnickname="editNickname"
+    bind:togglestanceexpand="toggleStanceExpand"
+    bind:setstance="setStance"
+    bind:skatinghistorytap="onSkatingHistoryTap"
+    bind:toggleollieexpand="toggleOllieExpand"
+    bind:adjustollie="adjustOllie"
+    bind:togglestatexpand="toggleStatExpand"
+    bind:badgetap="onBadgeTap"
+    bind:timelinenodetap="onTimelineNodeTap"
+    bind:gototrics="onGoToTricks"
+  />
   
   <!-- 滑板打卡墙 - 游戏风格 -->
   <checkin-wall variant="{{themeId}}" />

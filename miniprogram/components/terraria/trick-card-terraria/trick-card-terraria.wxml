@@ -1,0 +1,24 @@
+<view class="terraria-trick-card" bindtap="onTap" hover-class="terraria-trick-card-active">
+  <view class="slot-frame icon-slot">
+    <text class="slot-icon">{{trick.icon || trick.emoji || '🛹'}}</text>
+  </view>
+
+  <view class="slot-frame detail-slot">
+    <view class="detail-head">
+      <text class="trick-name">{{trick.name}}</text>
+      <text class="trick-name-cn">{{trick.nameCn}}</text>
+    </view>
+    <view class="ore-status-grid">
+      <view class="ore-status-cell" wx:for="{{stances}}" wx:key="*this">
+        <view class="ore-icon-slot">
+          <view class="ore-icon {{trick.stances[item] || 'none'}}">
+            <view class="ore-core"></view>
+            <view class="ore-shard shard-a"></view>
+            <view class="ore-shard shard-b"></view>
+          </view>
+        </view>
+        <text class="ore-label">{{stanceConfig[item].abbr}}</text>
+      </view>
+    </view>
+  </view>
+</view>

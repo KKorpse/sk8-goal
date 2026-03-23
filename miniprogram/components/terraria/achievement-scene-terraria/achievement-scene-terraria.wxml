@@ -1,0 +1,49 @@
+<view class="terraria-scene">
+  <view class="timeline-empty" wx:if="{{timeline.length === 0}}">
+    <view class="empty-surface"></view>
+    <view class="empty-soil"></view>
+    <view class="empty-stone"></view>
+    <text class="empty-icon">▣</text>
+    <text class="empty-text">还没有成招记录</text>
+    <text class="empty-hint">{{sceneConfig.emptyHint}}</text>
+  </view>
+
+  <view class="layer-scene" wx:else>
+    <scroll-view scroll-x class="scene-scroll" enhanced show-scrollbar="{{false}}">
+      <view class="scene-track" style="width: {{timeline.length * 170 + 260}}rpx;">
+        <view class="start-totem">
+          <view class="totem-block"></view>
+          <text class="totem-label">{{sceneConfig.startLabel}}</text>
+        </view>
+
+        <view
+          class="scene-node {{index < 3 ? 'surface' : index < 7 ? 'soil' : 'cavern'}}"
+          wx:for="{{timeline}}"
+          wx:key="id"
+          bindtap="onNodeTap"
+          data-index="{{index}}"
+          style="left: {{index * 150 + 40}}rpx; top: {{index < 3 ? 28 : index < 7 ? 124 : 220}}rpx;"
+        >
+          <view class="node-token {{index % 3 === 0 ? 'altar' : index % 3 === 1 ? 'ore' : 'chest'}} {{item.status}}">
+            <view class="token-core"></view>
+            <view class="token-piece piece-a"></view>
+            <view class="token-piece piece-b"></view>
+          </view>
+          <view class="node-meta">
+            <text class="node-name">{{item.trickName}}</text>
+            <text class="node-stance">{{item.stance === 'normal' ? 'N' : item.stance === 'fakie' ? 'F' : item.stance === 'switch' ? 'S' : 'No'}}</text>
+          </view>
+        </view>
+
+        <view class="end-shrine">
+          <view class="shrine-block"></view>
+          <text class="totem-label">{{sceneConfig.endLabel}}</text>
+        </view>
+      </view>
+    </scroll-view>
+
+    <view class="surface-layer"></view>
+    <view class="soil-layer"></view>
+    <view class="stone-layer"></view>
+  </view>
+</view>

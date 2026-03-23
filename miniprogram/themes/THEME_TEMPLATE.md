@@ -8,7 +8,7 @@
 4. 如有页面内容差异，直接补到主题文件里的：
    - `sceneConfig`
    - `authorContent`
-5. 如有组件结构差异，补对应组件的 `variant` 样式
+5. 如有组件结构差异，在 `components/<theme-id>/` 下新增变体组件，并在主题文件的 `componentMap` 里声明路径
 6. 执行 `npm run theme:validate`
 
 主题配置最小字段：
@@ -23,6 +23,11 @@ module.exports = {
   navigationBar: {
     frontColor: '#ffffff',
     backgroundColor: '#000000'
+  },
+  componentMap: {
+    trickCard: '/components/trick-card/trick-card',
+    achievementScene: '/components/achievement-scene/achievement-scene',
+    profileLayout: '/components/profile-default/profile-default'
   },
   sceneConfig: {
     avatarIcon: '',

@@ -47,13 +47,24 @@
         
         <!-- 招式卡片 -->
         <view class="group-content">
-          <trick-card 
-            wx:for="{{item.tricks}}" 
-            wx:for-item="trick"
-            wx:key="id"
-            trick="{{trick}}"
-            bind:tap="onTrickTap"
-          />
+          <block wx:if="{{componentMap.trickCard === '/components/terraria/trick-card-terraria/trick-card-terraria'}}">
+            <trick-card-terraria
+              wx:for="{{item.tricks}}"
+              wx:for-item="trick"
+              wx:key="id"
+              trick="{{trick}}"
+              bind:tap="onTrickTap"
+            />
+          </block>
+          <block wx:else>
+            <trick-card 
+              wx:for="{{item.tricks}}" 
+              wx:for-item="trick"
+              wx:key="id"
+              trick="{{trick}}"
+              bind:tap="onTrickTap"
+            />
+          </block>
         </view>
       </view>
     </block>
