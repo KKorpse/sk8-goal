@@ -1,10 +1,87 @@
 /**
  * SkateGoal 存储服务
- * 封装本地存储操作
+ * 基于 StorageEngine 封装业务存储操作
  */
 
 const config = require('../config')
+const LocalStorageAdapter = require('./storage/LocalStorageAdapter')
+const MemoryStorageAdapter = require('./storage/MemoryStorageAdapter')
+const StorageEngine = require('./storage/StorageEngine')
+
 const KEYS = config.storageKeys
+
+let localAdapter = new LocalStorageAdapter()
+let memoryAdapter = new MemoryStorageAdapter()
+let engine = new StorageEngine(localAdapter, memoryAdapter)
+let currentBackend = 'local'
+
+function createAdapters(options = {}) {
+  const {
+    localData = {},
+    memoryData = {},
+    useLocalAsPrimary = true,
+    pureMemory = false
+  } = options
+
+  localAdapter = new LocalStorageAdapter()
+  memoryAdapter = new MemoryStorageAdapter(memoryData)
+
+  if (pureMemory) {
+    engine = new StorageEngine(
+      memoryAdapter,
+      new MemoryStorageAdapter(memoryData)
+    )
+    currentBackend = 'memory'
+    return engine
+  }
+
+  if (useLocalAsPrimary) {
+    engine = new StorageEngine(localAdapter, memoryAdapter)
+    currentBackend = 'local'
+    return engine
+  }
+
+  localAdapter.replaceAllSync(localData)
+  engine = new StorageEngine(memoryAdapter, localAdapter)
+  currentBackend = 'memory'
+  return engine
+}
+
+function getEngine() {
+  return engine
+}
+
+function getPrimaryAdapter() {
+  return engine.primaryAdapter
+}
+
+function getFallbackAdapter() {
+  return engine.fallbackAdapter
+}
+
+function initStorage(options = {}) {
+  const {
+    primaryAdapter,
+    fallbackAdapter,
+    warmup = true,
+    backend = 'local'
+  } = options
+
+  if (primaryAdapter && fallbackAdapter) {
+    engine = new StorageEngine(primaryAdapter, fallbackAdapter)
+    currentBackend = backend
+  } else {
+    createAdapters({
+      useLocalAsPrimary: backend !== 'memory'
+    })
+  }
+
+  if (warmup && currentBackend !== 'memory') {
+    engine.warmupFallbackSync()
+  }
+
+  return engine
+}
 
 /**
  * 同步获取数据
@@ -13,13 +90,17 @@ const KEYS = config.storageKeys
  * @returns {*}
  */
 function get(key, defaultValue = null) {
-  try {
-    const value = wx.getStorageSync(key)
-    return value !== '' ? value : defaultValue
-  } catch (e) {
-    console.error(`[Storage] Get ${key} failed:`, e)
-    return defaultValue
-  }
+  return engine.getSync(key, defaultValue)
+}
+
+/**
+ * 异步获取数据
+ * @param {string} key
+ * @param {*} defaultValue
+ * @returns {Promise<*>}
+ */
+function getAsync(key, defaultValue = null) {
+  return engine.get(key, defaultValue)
 }
 
 /**
@@ -29,13 +110,17 @@ function get(key, defaultValue = null) {
  * @returns {boolean}
  */
 function set(key, value) {
-  try {
-    wx.setStorageSync(key, value)
-    return true
-  } catch (e) {
-    console.error(`[Storage] Set ${key} failed:`, e)
-    return false
-  }
+  return engine.setSync(key, value)
+}
+
+/**
+ * 异步设置数据
+ * @param {string} key
+ * @param {*} value
+ * @returns {Promise<boolean>}
+ */
+function setAsync(key, value) {
+  return engine.set(key, value)
 }
 
 /**
@@ -44,13 +129,16 @@ function set(key, value) {
  * @returns {boolean}
  */
 function remove(key) {
-  try {
-    wx.removeStorageSync(key)
-    return true
-  } catch (e) {
-    console.error(`[Storage] Remove ${key} failed:`, e)
-    return false
-  }
+  return engine.removeSync(key)
+}
+
+/**
+ * 异步删除数据
+ * @param {string} key
+ * @returns {Promise<boolean>}
+ */
+function removeAsync(key) {
+  return engine.remove(key)
 }
 
 /**
@@ -58,61 +146,131 @@ function remove(key) {
  * @returns {boolean}
  */
 function clear() {
-  try {
-    wx.clearStorageSync()
+  return engine.clearSync()
+}
+
+/**
+ * 异步清空所有数据
+ * @returns {Promise<boolean>}
+ */
+function clearAsync() {
+  return engine.clear()
+}
+
+function exportSnapshot() {
+  return engine.exportSnapshotSync()
+}
+
+function exportStorage() {
+  return exportSnapshot()
+}
+
+function exportSnapshotAsync() {
+  return engine.exportSnapshot()
+}
+
+function importSnapshot(snapshot = {}) {
+  return engine.importSnapshotSync(snapshot)
+}
+
+function importStorage(snapshot = {}) {
+  return importSnapshot(snapshot)
+}
+
+function importSnapshotAsync(snapshot = {}) {
+  return engine.importSnapshot(snapshot)
+}
+
+function warmupMemoryFallback() {
+  return engine.warmupFallbackSync()
+}
+
+function warmupMemoryFallbackAsync() {
+  return engine.warmupFallback()
+}
+
+function persistFallbackToPrimary() {
+  return engine.persistFallbackToPrimarySync()
+}
+
+function persistFallbackToPrimaryAsync() {
+  return engine.persistFallbackToPrimary()
+}
+
+function setStorageBackend(backend, options = {}) {
+  const snapshot = exportSnapshot()
+
+  if (backend === 'memory') {
+    createAdapters({
+      localData: snapshot,
+      memoryData: snapshot,
+      useLocalAsPrimary: false
+    })
     return true
-  } catch (e) {
-    console.error('[Storage] Clear failed:', e)
-    return false
   }
+
+  if (backend === 'local') {
+    createAdapters({
+      useLocalAsPrimary: true
+    })
+
+    if (options.importCurrentSnapshot !== false) {
+      engine.importSnapshotSync(snapshot)
+    } else {
+      engine.warmupFallbackSync()
+    }
+
+    return true
+  }
+
+  if (backend && typeof backend.getSync === 'function' && options.fallbackAdapter) {
+    engine = new StorageEngine(backend, options.fallbackAdapter)
+    currentBackend = options.backendName || 'custom'
+
+    if (options.warmup !== false) {
+      engine.warmupFallbackSync()
+    }
+
+    return true
+  }
+
+  return false
+}
+
+function resetToMemoryMode(initialData) {
+  const snapshot = initialData || exportSnapshot()
+  createAdapters({
+    memoryData: snapshot,
+    pureMemory: true
+  })
+  return true
+}
+
+function getCurrentBackend() {
+  return currentBackend
 }
 
 // ========== 用户相关 ==========
 
-/**
- * 获取用户信息
- * @returns {Object|null}
- */
 function getUserInfo() {
   return get(KEYS.USER_INFO, null)
 }
 
-/**
- * 保存用户信息
- * @param {Object} userInfo
- * @returns {boolean}
- */
 function setUserInfo(userInfo) {
   return set(KEYS.USER_INFO, userInfo)
 }
 
-/**
- * 获取用户进度
- * @returns {Object}
- */
 function getUserProgress() {
   return get(KEYS.USER_PROGRESS, {})
 }
 
-/**
- * 保存用户进度
- * @param {Object} progress
- * @returns {boolean}
- */
 function setUserProgress(progress) {
   return set(KEYS.USER_PROGRESS, progress)
 }
 
-/**
- * 更新单个招式进度
- * @param {string} trickId - 招式 ID
- * @param {string} stance - 脚位
- * @param {string} status - 状态
- * @returns {boolean}
- */
 function updateTrickStatus(trickId, stance, status) {
   const progress = getUserProgress()
-  
+
   if (!progress[trickId]) {
     progress[trickId] = {
       normal: 'none',
@@ -121,117 +279,77 @@ function updateTrickStatus(trickId, stance, status) {
       nollie: 'none'
     }
   }
-  
+
   progress[trickId][stance] = status
   return setUserProgress(progress)
 }
 
 // ========== 时光轴相关 ==========
 
-/**
- * 获取时光轴
- * @returns {Array}
- */
 function getTimeline() {
   return get(KEYS.TIMELINE, [])
 }
 
-/**
- * 保存时光轴
- * @param {Array} timeline
- * @returns {boolean}
- */
 function setTimeline(timeline) {
   return set(KEYS.TIMELINE, timeline)
 }
 
-/**
- * 添加时光轴记录
- * @param {Object} record
- * @returns {boolean}
- */
 function addTimelineRecord(record) {
   const timeline = getTimeline()
-  timeline.unshift(record) // 最新的在前面
+  timeline.unshift(record)
   return setTimeline(timeline)
 }
 
 // ========== 打卡相关 ==========
 
-/**
- * 获取打卡记录
- * @returns {Object} { '2024-01-01': { count: 2, timestamps: [timestamp1, timestamp2] } }
- */
 function getCheckinRecords() {
   return get(KEYS.CHECKIN_RECORDS, {})
 }
 
-/**
- * 保存打卡记录
- * @param {Object} records
- * @returns {boolean}
- */
 function setCheckinRecords(records) {
   return set(KEYS.CHECKIN_RECORDS, records)
 }
 
-/**
- * 添加打卡记录
- * @param {string} date - 日期字符串 'YYYY-MM-DD'
- * @returns {boolean}
- */
 function addCheckin(date) {
   const records = getCheckinRecords()
-  
+
   if (!records[date]) {
     records[date] = {
       count: 0,
       timestamps: []
     }
   }
-  
+
   records[date].count++
   records[date].timestamps.push(Date.now())
-  
-  // 清理超过365天的记录
+
   cleanOldCheckinRecords(records)
-  
+
   return setCheckinRecords(records)
 }
 
-/**
- * 移除打卡记录（取消打卡）
- * @param {string} date - 日期字符串 'YYYY-MM-DD'
- * @returns {boolean}
- */
 function removeCheckin(date) {
   const records = getCheckinRecords()
-  
+
   if (records[date] && records[date].count > 0) {
     records[date].count--
     records[date].timestamps.pop()
-    
-    // 如果打卡次数为0，删除该日期记录
+
     if (records[date].count === 0) {
       delete records[date]
     }
-    
+
     return setCheckinRecords(records)
   }
-  
+
   return false
 }
 
-/**
- * 清理过期的打卡记录
- * @param {Object} records
- */
 function cleanOldCheckinRecords(records) {
-  const config = require('../config')
   const maxDays = config.checkin.maxDays
   const cutoffDate = new Date()
   cutoffDate.setDate(cutoffDate.getDate() - maxDays)
-  
+
   Object.keys(records).forEach(date => {
     const recordDate = new Date(date)
     if (recordDate < cutoffDate) {
@@ -240,35 +358,26 @@ function cleanOldCheckinRecords(records) {
   })
 }
 
-/**
- * 获取连续打卡天数
- * @returns {number}
- */
 function getConsecutiveDays() {
   const records = getCheckinRecords()
   const today = new Date()
   let consecutive = 0
-  
+
   for (let i = 0; i < 365; i++) {
     const date = new Date(today)
     date.setDate(date.getDate() - i)
     const dateStr = formatDate(date)
-    
+
     if (records[dateStr] && records[dateStr].count > 0) {
       consecutive++
     } else {
       break
     }
   }
-  
+
   return consecutive
 }
 
-/**
- * 格式化日期为 YYYY-MM-DD
- * @param {Date} date
- * @returns {string}
- */
 function formatDate(date) {
   const year = date.getFullYear()
   const month = String(date.getMonth() + 1).padStart(2, '0')
@@ -277,10 +386,31 @@ function formatDate(date) {
 }
 
 module.exports = {
+  initStorage,
+  getEngine,
+  getPrimaryAdapter,
+  getFallbackAdapter,
+  getCurrentBackend,
+  setStorageBackend,
+  warmupMemoryFallback,
+  warmupMemoryFallbackAsync,
+  persistFallbackToPrimary,
+  persistFallbackToPrimaryAsync,
+  exportSnapshot,
+  exportStorage,
+  exportSnapshotAsync,
+  importSnapshot,
+  importStorage,
+  importSnapshotAsync,
+  resetToMemoryMode,
   get,
+  getAsync,
   set,
+  setAsync,
   remove,
+  removeAsync,
   clear,
+  clearAsync,
   getUserInfo,
   setUserInfo,
   getUserProgress,

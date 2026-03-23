@@ -4,13 +4,25 @@
  */
 
 const userService = require('./services/userService')
+const storageService = require('./services/storageService')
 const themeService = require('./services/themeService')
 const themePage = require('./utils/themePage')
+
+const STORAGE_OPTIONS = {
+  persistOnLaunch: false,
+  persistOnHide: false
+}
 
 App({
   onLaunch(opts) {
     console.log('🛹 SkateGoal Launch', opts)
-    
+
+    this.initStorage()
+
+    if (STORAGE_OPTIONS.persistOnLaunch) {
+      storageService.persistFallbackToPrimary()
+    }
+
     // 初始化用户数据
     this.initUserData()
 
@@ -27,6 +39,20 @@ App({
 
   onHide() {
     console.log('🛹 SkateGoal Hide')
+
+    if (STORAGE_OPTIONS.persistOnHide) {
+      storageService.persistFallbackToPrimary()
+    }
+  },
+
+  /**
+   * 初始化存储引擎
+   */
+  initStorage() {
+    storageService.initStorage({
+      backend: 'local',
+      warmup: true
+    })
   },
 
   /**
@@ -35,11 +61,10 @@ App({
   initUserData() {
     // 初始化示例数据（首次使用）
     userService.initSampleData()
-    
-    // 从本地存储读取用户数据
-    const userInfo = wx.getStorageSync('userInfo')
-    const userProgress = wx.getStorageSync('userProgress')
-    const timeline = wx.getStorageSync('timeline')
+
+    const userInfo = storageService.getUserInfo()
+    const userProgress = storageService.getUserProgress()
+    const timeline = storageService.getTimeline()
 
     if (userInfo) {
       this.globalData.userInfo = userInfo
