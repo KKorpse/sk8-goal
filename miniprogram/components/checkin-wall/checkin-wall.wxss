@@ -291,12 +291,12 @@
 .mc-block {
   width: 80rpx;
   height: 80rpx;
-  background: linear-gradient(135deg, #4CAF50 0%, #2E7D32 100%);
-  border: 4rpx solid #1B5E20;
+  background: linear-gradient(180deg, #5e9c3a 0%, #5e9c3a 22%, #8b5a2b 22%, #8b5a2b 100%);
+  border: 4rpx solid #4b2e16;
   box-shadow: 
-    inset 4rpx 4rpx 0px 0px #81C784,
-    inset -4rpx -4rpx 0px 0px #1B5E20,
-    0 0 20rpx rgba(76, 175, 80, 0.5);
+    inset 4rpx 4rpx 0px 0px rgba(255, 255, 255, 0.16),
+    inset -4rpx -4rpx 0px 0px rgba(43, 25, 9, 0.45),
+    0 0 20rpx rgba(107, 74, 34, 0.28);
 }
 
 /* MC 粒子容器 */
@@ -315,11 +315,16 @@
   position: absolute;
   width: 14rpx;
   height: 14rpx;
-  background: linear-gradient(135deg, #81C784 0%, #4CAF50 100%);
-  border: 3rpx solid #1B5E20;
-  box-shadow: 
-    inset 2rpx 2rpx 0px 0px #A5D6A7,
-    0 0 6rpx rgba(76, 175, 80, 0.5);
+  border: 3rpx solid #4b2e16;
+  box-shadow: inset 2rpx 2rpx 0px 0px rgba(255, 255, 255, 0.18);
+}
+
+.mc-particle.dirt {
+  background: linear-gradient(135deg, #9a6735 0%, #6b4423 100%);
+}
+
+.mc-particle.grass {
+  background: linear-gradient(180deg, #63ad3b 0%, #63ad3b 30%, #8f6032 30%, #8f6032 100%);
 }
 
 .checkin-btn {

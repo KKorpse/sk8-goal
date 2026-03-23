@@ -86,7 +86,7 @@
     <!-- 粒子容器 -->
     <view class="mc-particles-container" wx:if="{{checkinParticles}}">
       <view 
-        class="mc-particle"
+        class="mc-particle {{item.type === 'grass' ? 'grass' : 'dirt'}}"
         wx:for="{{checkinParticles}}"
         wx:key="index"
         animation="{{item.animData}}"

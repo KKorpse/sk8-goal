@@ -129,13 +129,13 @@ function getCurrentPage() {
 
 /**
  * 打卡成功效果
- * MC 风格的方块放置 + 粒子
+ * MC 风格的泥土方块迸发 + 粒子
  * @param {Object} component - 组件实例
  */
 function playCheckinEffect(component) {
   if (!component) return
 
-  // 创建 MC 方块动画
+  // 创建 MC 泥土方块弹出动画
   const blockAnim = wx.createAnimation({
     duration: 300,
     timingFunction: 'ease-out'
@@ -151,7 +151,7 @@ function playCheckinEffect(component) {
   // 播放放置音效
   playPlaceSound()
 
-  // 创建粒子
+  // 创建泥土粒子
   setTimeout(() => {
     createCheckinParticles(component)
   }, 100)
@@ -186,37 +186,34 @@ function playBreakSound() {
 
 /**
  * 创建打卡粒子效果
+ * 模拟 MC 泥土方块被激活时向四周迸发的小碎块
  * @param {Object} component - 组件实例
  */
 function createCheckinParticles(component) {
-  // 生成8个粒子，初始在中心
-  const particleCount = 8
+  // 生成 10 个泥土碎块，带一点向上抛出的弧线感
+  const particleCount = 10
   const particles = []
   
   for (let i = 0; i < particleCount; i++) {
-    const angle = (i / particleCount) * Math.PI * 2
-    const distance = 40 + Math.random() * 20
+    const angle = (-Math.PI * 0.9) + (i / (particleCount - 1)) * (Math.PI * 0.8)
+    const distance = 36 + Math.random() * 28
+    const offsetX = Math.cos(angle) * distance
+    const offsetY = Math.sin(angle) * distance - (8 + Math.random() * 12)
     
-    // 每个粒子分步动画：先扩大距离，再缩小消失
+    // 每个粒子分步动画：先向外爆开，再快速淡出
     const anim = wx.createAnimation({
-      duration: 400,
+      duration: 420,
       timingFunction: 'ease-out',
-      delay: i * 30  // 错开延迟
+      delay: i * 24
     })
     
-    // 第一步：从中心向外移动
-    anim.translate(
-      Math.cos(angle) * distance, 
-      Math.sin(angle) * distance
-    ).scale(1).opacity(1).step({ duration: 200 })
+    anim.translate(offsetX, offsetY).rotate((Math.random() - 0.5) * 90).scale(1.05).opacity(1).step({ duration: 220 })
     
-    // 第二步：缩小消失
-    anim.scale(0.3).opacity(0).step({ duration: 200 })
+    anim.translate(offsetX * 1.15, offsetY + 10 + Math.random() * 8).rotate((Math.random() - 0.5) * 140).scale(0.35).opacity(0).step({ duration: 200 })
     
     particles.push({
       animData: anim.export(),
-      x: Math.cos(angle) * distance,
-      y: Math.sin(angle) * distance
+      type: i % 3 === 0 ? 'grass' : 'dirt'
     })
   }
   

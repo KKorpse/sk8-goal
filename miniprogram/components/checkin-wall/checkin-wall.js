@@ -221,7 +221,7 @@ Component({
       storageService.addCheckin(todayStr)
       vibrate.success()
       
-      // MC 放置效果（打卡成功）
+      // MC 泥土迸发效果（打卡成功）
       mcEffects.playCheckinEffect(this)
       
       wx.showToast({
@@ -255,6 +255,7 @@ Component({
         // 补打卡
         storageService.addCheckin(selectedDate)
         vibrate.success()
+        mcEffects.playCheckinEffect(this)
         wx.showToast({
           title: '补打卡成功！',
           icon: 'success',
