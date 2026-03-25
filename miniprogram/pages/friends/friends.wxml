@@ -8,23 +8,33 @@
     <view
       wx:for="{{friends}}"
       wx:key="id"
-      class="friend-card"
+      class="friend-item"
     >
-      <image
-        class="friend-avatar"
-        src="{{item.avatar}}"
-        mode="aspectFill"
-      />
-      <view class="friend-body">
-        <view class="friend-topline">
-          <text class="friend-name">{{item.nickname}}</text>
-          <text class="friend-city">{{item.city}}</text>
+      <view
+        class="friend-card {{expandedFriendId === item.id ? 'expanded' : ''}}"
+        bindtap="onFriendTap"
+        data-id="{{item.id}}"
+      >
+        <image
+          class="friend-avatar"
+          src="{{item.avatar}}"
+          mode="aspectFill"
+        />
+        <view class="friend-body">
+          <view class="friend-topline">
+            <text class="friend-name">{{item.nickname}}</text>
+            <text class="friend-city">{{item.city}}</text>
+          </view>
+          <view class="friend-stats">
+            <text class="friend-stat">Ollie {{item.ollieHeight}} 立</text>
+            <text class="friend-stat">练习 {{item.practiceDays}} 天</text>
+          </view>
+          <text class="friend-tagline">{{item.tagline}}</text>
         </view>
-        <view class="friend-stats">
-          <text class="friend-stat">Ollie {{item.ollieHeight}} 立</text>
-          <text class="friend-stat">练习 {{item.practiceDays}} 天</text>
-        </view>
-        <text class="friend-tagline">{{item.tagline}}</text>
+        <text class="friend-arrow {{expandedFriendId === item.id ? 'expanded' : ''}}">▼</text>
+      </view>
+      <view class="friend-profile-panel" wx:if="{{expandedFriendId === item.id}}">
+        <friend-readonly-profile friend="{{item}}"></friend-readonly-profile>
       </view>
     </view>
   </view>

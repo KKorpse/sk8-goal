@@ -30,6 +30,12 @@
   gap: var(--spacing-md);
 }
 
+.friend-item {
+  display: flex;
+  flex-direction: column;
+  gap: 12rpx;
+}
+
 .friend-card {
   display: flex;
   align-items: center;
@@ -39,6 +45,15 @@
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-md);
   padding: var(--spacing-inner);
+  transition: box-shadow var(--transition-fast), transform var(--transition-fast);
+}
+
+.friend-card:active {
+  box-shadow: var(--shadow-pressed);
+}
+
+.friend-card.expanded {
+  transform: translateY(-2rpx);
 }
 
 .friend-avatar {
@@ -54,6 +69,16 @@
 .friend-body {
   min-width: 0;
   flex: 1;
+}
+
+.friend-arrow {
+  font-size: 20rpx;
+  color: var(--text-secondary-light);
+  transition: transform var(--transition-normal);
+}
+
+.friend-arrow.expanded {
+  transform: rotate(180deg);
 }
 
 .friend-topline {
@@ -101,6 +126,10 @@
   font-size: var(--font-sm);
   color: var(--text-secondary);
   line-height: 1.5;
+}
+
+.friend-profile-panel {
+  margin-top: 4rpx;
 }
 
 .bottom-safe {

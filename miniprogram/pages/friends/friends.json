@@ -1,3 +1,6 @@
 {
-  "navigationBarTitleText": "好友列表"
+  "navigationBarTitleText": "好友列表",
+  "usingComponents": {
+    "friend-readonly-profile": "/components/friend-readonly-profile/friend-readonly-profile"
+  }
 }

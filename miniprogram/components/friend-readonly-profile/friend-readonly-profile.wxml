@@ -1,0 +1,57 @@
+<view class="readonly-profile-card">
+  <view class="readonly-profile-header">
+    <image
+      class="readonly-profile-avatar"
+      src="{{friend.avatar}}"
+      mode="aspectFill"
+    />
+    <view class="readonly-profile-main">
+      <view class="readonly-profile-topline">
+        <text class="readonly-profile-name">{{friend.nickname}}</text>
+        <text class="readonly-profile-city">{{friend.city}}</text>
+      </view>
+      <text class="readonly-profile-signature">{{friend.profile.signature}}</text>
+      <view class="readonly-profile-meta">
+        <view class="readonly-profile-chip">
+          <text class="readonly-profile-chip-label">Skate Level</text>
+          <text class="readonly-profile-chip-value">{{friend.profile.skateLevel}}</text>
+        </view>
+        <view class="readonly-profile-chip">
+          <text class="readonly-profile-chip-label">练习天数</text>
+          <text class="readonly-profile-chip-value">{{friend.practiceDays}} 天</text>
+        </view>
+        <view class="readonly-profile-chip">
+          <text class="readonly-profile-chip-label">Ollie</text>
+          <text class="readonly-profile-chip-value">{{friend.ollieHeight}} 立</text>
+        </view>
+      </view>
+    </view>
+  </view>
+
+  <view class="readonly-profile-section">
+    <text class="readonly-profile-section-title">主要成就</text>
+    <view class="readonly-profile-list">
+      <view
+        wx:for="{{friend.profile.achievements}}"
+        wx:key="*this"
+        class="readonly-profile-list-item"
+      >
+        <text class="readonly-profile-list-bullet">◆</text>
+        <text class="readonly-profile-list-text">{{item}}</text>
+      </view>
+    </view>
+  </view>
+
+  <view class="readonly-profile-section">
+    <text class="readonly-profile-section-title">擅长招式</text>
+    <view class="readonly-profile-tags">
+      <text
+        wx:for="{{friend.profile.specialtyTricks}}"
+        wx:key="*this"
+        class="readonly-profile-tag"
+      >
+        {{item}}
+      </text>
+    </view>
+  </view>
+</view>
