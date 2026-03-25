@@ -1,3 +1,7 @@
 {
-  "component": true
+  "component": true,
+  "usingComponents": {
+    "readonly-ollie": "/components/readonly-ollie/readonly-ollie",
+    "achievement-scene": "/components/achievement-scene/achievement-scene"
+  }
 }

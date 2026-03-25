@@ -1,0 +1,19 @@
+<view class="progress-ollie">
+  <view class="progress-ollie-left">
+    <text class="progress-ollie-label">Ollie 高度</text>
+    <view class="progress-ollie-values">
+      <text class="progress-ollie-main">{{ollie.normal}}</text>
+      <text class="progress-ollie-sep">/</text>
+      <text class="progress-ollie-sub">{{ollie.switch}}</text>
+      <text class="progress-ollie-unit">立</text>
+    </view>
+  </view>
+  <view class="progress-ollie-right">
+    <view class="progress-ollie-bar">
+      <view class="progress-ollie-fill" style="width: {{normalWidth}}%;"></view>
+    </view>
+    <view class="progress-ollie-bar">
+      <view class="progress-ollie-fill progress-ollie-fill-switch" style="width: {{switchWidth}}%;"></view>
+    </view>
+  </view>
+</view>

@@ -33,6 +33,7 @@ const defaultFriends = [
         grindingCount: 4,
         trialCount: 6
       },
+      monthlyCheckinDays: 12,
       timeline: [
         { emoji: '🌀', trickName: 'Frontside 180', stance: 'normal', status: 'grinding', date: '03.18' },
         { emoji: '🛹', trickName: 'Ollie', stance: 'normal', status: 'mastered', date: '03.11' },
@@ -73,6 +74,7 @@ const defaultFriends = [
         grindingCount: 5,
         trialCount: 4
       },
+      monthlyCheckinDays: 18,
       timeline: [
         { emoji: '🦋', trickName: 'Kickflip', stance: 'normal', status: 'grinding', date: '03.21' },
         { emoji: '🌪️', trickName: 'Heelflip', stance: 'normal', status: 'mastered', date: '03.15' },
@@ -113,6 +115,7 @@ const defaultFriends = [
         grindingCount: 3,
         trialCount: 7
       },
+      monthlyCheckinDays: 9,
       timeline: [
         { emoji: '🔄', trickName: 'Backside 180', stance: 'normal', status: 'trial', date: '03.19' },
         { emoji: '⚖️', trickName: 'Manual', stance: 'normal', status: 'grinding', date: '03.12' },

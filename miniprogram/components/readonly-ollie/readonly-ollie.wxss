@@ -1,0 +1,81 @@
+.progress-ollie {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.progress-ollie-left {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  flex: 1;
+  overflow: hidden;
+}
+
+.progress-ollie-label {
+  font-size: var(--font-lg);
+  color: var(--text-secondary);
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+.progress-ollie-values {
+  display: flex;
+  align-items: baseline;
+  gap: 4rpx;
+}
+
+.progress-ollie-main {
+  font-size: var(--font-xl);
+  font-weight: bold;
+  color: var(--primary-yellow);
+  text-shadow: var(--text-shadow-strong);
+  font-variant-numeric: tabular-nums;
+}
+
+.progress-ollie-sep {
+  font-size: var(--font-lg);
+  color: var(--text-secondary);
+}
+
+.progress-ollie-sub {
+  font-size: var(--font-xl);
+  color: var(--primary-cyan);
+  font-weight: bold;
+  font-variant-numeric: tabular-nums;
+}
+
+.progress-ollie-unit {
+  font-size: var(--font-sm);
+  color: var(--text-secondary);
+  margin-left: 4rpx;
+}
+
+.progress-ollie-right {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6rpx;
+  flex: 1;
+  margin-left: 24rpx;
+}
+
+.progress-ollie-bar {
+  width: 120rpx;
+  height: 12rpx;
+  background: rgba(255,255,255,0.1);
+  border: 2rpx solid var(--border-color);
+  border-radius: 6rpx;
+  overflow: hidden;
+}
+
+.progress-ollie-fill {
+  height: 100%;
+  background: var(--primary-yellow);
+  transition: width 0.3s;
+}
+
+.progress-ollie-fill-switch {
+  background: var(--primary-cyan);
+}
