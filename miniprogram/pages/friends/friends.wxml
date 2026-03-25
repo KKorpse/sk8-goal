@@ -26,7 +26,7 @@
             <text class="friend-city">{{item.city}}</text>
           </view>
           <view class="friend-stats">
-            <text class="friend-stat">Ollie {{item.ollieHeight}} 立</text>
+            <text class="friend-stat">Ollie {{item.profile.ollie.normal}} 立</text>
             <text class="friend-stat">练习 {{item.practiceDays}} 天</text>
           </view>
           <text class="friend-tagline">{{item.tagline}}</text>

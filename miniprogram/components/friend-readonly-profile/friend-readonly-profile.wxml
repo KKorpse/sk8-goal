@@ -1,57 +1,116 @@
-<view class="readonly-profile-card">
-  <view class="readonly-profile-header">
-    <image
-      class="readonly-profile-avatar"
-      src="{{friend.avatar}}"
-      mode="aspectFill"
-    />
-    <view class="readonly-profile-main">
-      <view class="readonly-profile-topline">
-        <text class="readonly-profile-name">{{friend.nickname}}</text>
-        <text class="readonly-profile-city">{{friend.city}}</text>
+<view class="readonly-profile-shell">
+  <view class="readonly-profile-card">
+    <view class="readonly-card-header">
+      <view class="readonly-avatar-wrapper">
+        <image
+          class="readonly-avatar"
+          src="{{friend.avatar}}"
+          mode="aspectFill"
+        />
       </view>
-      <text class="readonly-profile-signature">{{friend.profile.signature}}</text>
-      <view class="readonly-profile-meta">
-        <view class="readonly-profile-chip">
-          <text class="readonly-profile-chip-label">Skate Level</text>
-          <text class="readonly-profile-chip-value">{{friend.profile.skateLevel}}</text>
+
+      <view class="readonly-user-info">
+        <text class="readonly-nickname">{{friend.nickname}}</text>
+        <text class="readonly-user-id">ID: {{friend.id}}</text>
+        <text class="readonly-signature">{{friend.profile.signature}}</text>
+      </view>
+
+      <view class="readonly-header-right">
+        <view class="readonly-header-tag">
+          <text class="readonly-header-tag-text">脚位 {{friend.profile.stance === 'regular' ? 'Regular' : 'Goofy'}}</text>
         </view>
-        <view class="readonly-profile-chip">
-          <text class="readonly-profile-chip-label">练习天数</text>
-          <text class="readonly-profile-chip-value">{{friend.practiceDays}} 天</text>
+        <view class="readonly-header-tag">
+          <text class="readonly-header-tag-text">板龄 {{friend.profile.yearsSkating}} 年</text>
         </view>
-        <view class="readonly-profile-chip">
-          <text class="readonly-profile-chip-label">Ollie</text>
-          <text class="readonly-profile-chip-value">{{friend.ollieHeight}} 立</text>
+      </view>
+    </view>
+
+    <view class="readonly-badges-wrapper">
+      <view class="readonly-badges-header">
+        <text class="readonly-badges-title">成就徽章</text>
+        <text class="readonly-badges-count">{{friend.profile.badgesUnlockedCount || 0}}/{{friend.profile.badges.length}}</text>
+      </view>
+      <scroll-view scroll-x class="readonly-badges-list">
+        <view
+          class="readonly-badge-item {{item.unlocked ? '' : 'locked'}}"
+          wx:for="{{friend.profile.badges}}"
+          wx:key="id"
+        >
+          <text class="readonly-badge-emoji">{{item.emoji}}</text>
         </view>
+      </scroll-view>
+    </view>
+  </view>
+
+  <view class="readonly-progress-card">
+    <view class="readonly-progress-card-title">滑手数据</view>
+
+    <view class="readonly-progress-ollie">
+      <view class="readonly-progress-ollie-left">
+        <text class="readonly-progress-ollie-label">Ollie 高度</text>
+        <view class="readonly-progress-ollie-values">
+          <text class="readonly-progress-ollie-main">{{friend.profile.ollie.normal}}</text>
+          <text class="readonly-progress-ollie-sep">/</text>
+          <text class="readonly-progress-ollie-sub">{{friend.profile.ollie.switch}}</text>
+          <text class="readonly-progress-ollie-unit">立</text>
+        </view>
+      </view>
+      <view class="readonly-progress-ollie-right">
+        <view class="readonly-progress-ollie-bar">
+          <view class="readonly-progress-ollie-fill" style="width: {{friend.profile.ollie.normal * 20}}%;"></view>
+        </view>
+        <view class="readonly-progress-ollie-bar">
+          <view class="readonly-progress-ollie-fill readonly-progress-ollie-fill-switch" style="width: {{friend.profile.ollie.switch * 20}}%;"></view>
+        </view>
+      </view>
+    </view>
+
+    <view class="readonly-progress-divider"></view>
+
+    <view class="readonly-stats-row">
+      <view class="readonly-stats-col mastered">
+        <text class="readonly-stat-num">{{friend.profile.stats.masteredCount}}</text>
+        <text class="readonly-stat-label">一脚一个</text>
+      </view>
+      <view class="readonly-stats-col-divider"></view>
+      <view class="readonly-stats-col grinding">
+        <text class="readonly-stat-num">{{friend.profile.stats.grindingCount}}</text>
+        <text class="readonly-stat-label">死磕中</text>
+      </view>
+      <view class="readonly-stats-col-divider"></view>
+      <view class="readonly-stats-col trial">
+        <text class="readonly-stat-num">{{friend.profile.stats.trialCount}}</text>
+        <text class="readonly-stat-label">体验卡</text>
       </view>
     </view>
   </view>
 
-  <view class="readonly-profile-section">
-    <text class="readonly-profile-section-title">主要成就</text>
-    <view class="readonly-profile-list">
+  <view class="readonly-timeline-card">
+    <view class="readonly-timeline-header">
+      <text class="readonly-timeline-title">成招记录</text>
+      <text class="readonly-timeline-count">{{friend.profile.timeline.length}} 条</text>
+    </view>
+
+    <view class="readonly-timeline-list">
       <view
-        wx:for="{{friend.profile.achievements}}"
-        wx:key="*this"
-        class="readonly-profile-list-item"
+        class="readonly-timeline-item {{item.status}}"
+        wx:for="{{friend.profile.timeline}}"
+        wx:key="date"
       >
-        <text class="readonly-profile-list-bullet">◆</text>
-        <text class="readonly-profile-list-text">{{item}}</text>
+        <view class="readonly-timeline-left">
+          <text class="readonly-timeline-emoji">{{item.emoji}}</text>
+        </view>
+        <view class="readonly-timeline-main">
+          <view class="readonly-timeline-topline">
+            <text class="readonly-timeline-trick">{{item.trickName}}</text>
+            <text class="readonly-timeline-date">{{item.date}}</text>
+          </view>
+          <view class="readonly-timeline-meta">
+            <text class="readonly-timeline-tag">{{item.stance === 'normal' ? '正脚' : item.stance === 'switch' ? 'Switch' : item.stance === 'fakie' ? 'Fakie' : 'Nollie'}}</text>
+            <text class="readonly-timeline-tag status-{{item.status}}">{{item.status === 'mastered' ? '一脚一个' : item.status === 'grinding' ? '死磕中' : '体验卡'}}</text>
+          </view>
+        </view>
       </view>
-    </view>
-  </view>
-
-  <view class="readonly-profile-section">
-    <text class="readonly-profile-section-title">擅长招式</text>
-    <view class="readonly-profile-tags">
-      <text
-        wx:for="{{friend.profile.specialtyTricks}}"
-        wx:key="*this"
-        class="readonly-profile-tag"
-      >
-        {{item}}
-      </text>
     </view>
   </view>
 </view>

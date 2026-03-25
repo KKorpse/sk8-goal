@@ -129,7 +129,8 @@
 }
 
 .friend-profile-panel {
-  margin-top: 4rpx;
+  margin-top: 6rpx;
+  padding: 0 4rpx 2rpx;
 }
 
 .bottom-safe {
