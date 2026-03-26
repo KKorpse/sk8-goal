@@ -960,10 +960,8 @@ Page({
    * 执行导出
    */
   doExportImage() {
-    const ctx = wx.createCanvasContext('exportCanvas', this)
     const themeId = this.data.themeId
     const themeColors = this.getThemeColors(themeId)
-    const W = 750 // canvas 宽度 px（对应 750rpx）
 
     // 预计算每个区块的高度，确定总高度
     const content = this.buildExportContent()
@@ -974,7 +972,7 @@ Page({
 
     // 等待 canvas 尺寸更新后再绘制
     setTimeout(() => {
-      const ctx = wx.createCanvasContext('exportCanvas', this)
+      const ctx = wx.createCanvasContext('exportCanvas')
       this.drawExportPage(ctx, W, totalHeight, themeColors, content)
       ctx.draw(false, () => {
         this.saveExportImage()
@@ -1551,7 +1549,7 @@ Page({
         wx.showToast({ title: '生成图片失败', icon: 'none' })
         console.error('canvasToTempFilePath failed', err)
       }
-    }, this)
+    })
   },
 
   applyThemeState(themeId) {
