@@ -962,6 +962,7 @@ Page({
   doExportImage() {
     const themeId = this.data.themeId
     const themeColors = this.getThemeColors(themeId)
+    const W = 750 // canvas 宽度 px
 
     // 预计算每个区块的高度，确定总高度
     const content = this.buildExportContent()
