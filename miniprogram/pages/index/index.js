@@ -965,7 +965,7 @@ Page({
     const W = 750 // canvas 宽度 px
 
     // 预计算每个区块的高度，确定总高度
-    const content = this.buildExportContent()
+    const content = this.buildExportContent(W)
     const totalHeight = content.totalHeight
 
     // 更新 canvas 高度
@@ -984,7 +984,7 @@ Page({
   /**
    * 构建导出内容数据（用于计算高度和绘制）
    */
-  buildExportContent() {
+  buildExportContent(W) {
     const { userInfo, ollie, stats, allBadges, unlockedBadges, timeline, yearsSkating, themeId } = this.data
     const allTricks = require('../../mock/tricks').getAllTricks()
     const trickMap = {}
