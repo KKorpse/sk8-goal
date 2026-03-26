@@ -945,59 +945,67 @@ Page({
   // ==================== 导出图片功能 ====================
 
   /**
-   * 导出首页图片
+   * 导出首页图片 - 使用真实元素位置精确绘制
    */
   onExportImage() {
     wx.showLoading({ title: '正在生成图片…', mask: true })
 
-    // 等待 WXML 渲染完成后再开始绘制
-    setTimeout(() => {
-      this.doExportImage()
-    }, 100)
+    // 用 createSelectorQuery 量出每个区块的真实坐标
+    const query = wx.createSelectorQuery().in(this)
+    query.select('.profile-page').boundingClientRect()
+    query.select('.profile-card').boundingClientRect()
+    query.select('.progress-card').boundingClientRect()
+    query.select('.timeline-card').boundingClientRect()
+    query.select('.checkin-wall-card').boundingClientRect()
+    query.select('.footer').boundingClientRect()
+
+    query.exec((res) => {
+      const pageRect = res[0]
+      const profileRect = res[1]
+      const progressRect = res[2]
+      const timelineRect = res[3]
+      const checkinRect = res[4]
+      const footerRect = res[5]
+
+      if (!pageRect) {
+        wx.hideLoading()
+        wx.showToast({ title: '页面未就绪，请重试', icon: 'none' })
+        return
+      }
+
+      const W = 750
+      // 用 page 的实际宽度作为内容宽度
+      const contentW = Math.min(Math.ceil(pageRect.width), W)
+      // 总高度 = page 高度 + 顶部偏移 + 底部留白
+      const totalHeight = Math.ceil(pageRect.height) + 80
+
+      this.setData({ exportCanvasHeight: totalHeight })
+
+      setTimeout(() => {
+        const ctx = wx.createCanvasContext('exportCanvas')
+        this._doDrawExport({
+          ctx, W, totalHeight, contentW,
+          pageRect, profileRect, progressRect,
+          timelineRect, checkinRect, footerRect
+        })
+      }, 150)
+    })
   },
 
   /**
-   * 执行导出
+   * 实际执行绘制
    */
-  doExportImage() {
+  _doDrawExport({ ctx, W, totalHeight, contentW, pageRect, profileRect, progressRect, timelineRect, checkinRect, footerRect }) {
     const themeId = this.data.themeId
-    const themeColors = this.getThemeColors(themeId)
-    const W = 750 // canvas 宽度 px
-
-    // 预计算每个区块的高度，确定总高度
-    const content = this.buildExportContent(W)
-    const totalHeight = content.totalHeight
-
-    // 更新 canvas 高度
-    this.setData({ exportCanvasHeight: totalHeight })
-
-    // 等待 canvas 尺寸更新后再绘制
-    setTimeout(() => {
-      const ctx = wx.createCanvasContext('exportCanvas')
-      this.drawExportPage(ctx, W, totalHeight, themeColors, content)
-      ctx.draw(false, () => {
-        this.saveExportImage()
-      })
-    }, 150)
-  },
-
-  /**
-   * 构建导出内容数据（用于计算高度和绘制）
-   */
-  buildExportContent(W) {
-    const { userInfo, ollie, stats, allBadges, unlockedBadges, timeline, yearsSkating, themeId } = this.data
-    const allTricks = require('../../mock/tricks').getAllTricks()
-    const trickMap = {}
-    allTricks.forEach(t => { trickMap[t.id] = t })
-
-    const records = require('../../services/storageService').getCheckinRecords()
+    const c = this.getThemeColorsV2(themeId)
+    const { userInfo, ollie, stats, allBadges, unlockedBadges, timeline, yearsSkating, sceneConfig } = this.data
+    const storageService = require('../../services/storageService')
+    const records = storageService.getCheckinRecords()
     const today = new Date()
-    const todayStr = require('../../services/storageService').formatDate(today)
+    const todayStr = storageService.formatDate(today)
     const todayChecked = (records[todayStr] && records[todayStr].count) > 0
-    const consecutiveDays = require('../../services/storageService').getConsecutiveDays()
+    const consecutiveDays = storageService.getConsecutiveDays()
     const totalCheckins = Object.keys(records).length
-
-    // 计算月份和年的打卡数
     const monthCheckins = Object.keys(records).filter(d => {
       const dt = new Date(d)
       return dt.getFullYear() === today.getFullYear() && dt.getMonth() === today.getMonth() && records[d].count > 0
@@ -1007,453 +1015,355 @@ Page({
       return dt.getFullYear() === today.getFullYear() && records[d].count > 0
     }).length
 
-    // 预计算每个区块高度
-    const PAD = 32
-    const CARD_RADIUS = 16
-    const FONT_BASE = 28
-    const FONT_SM = 24
-    const FONT_LG = 32
-    const FONT_XL = 36
-    const FONT_2XL = 44
-    const LINE = FONT_BASE * 1.6
-
-    let y = PAD // 当前纵向偏移
-
-    // ── 顶部留白 ──
-    y += 24
-
-    // ── ① 个人信息卡片 ──
-    const cardX = PAD
-    const cardW = W - PAD * 2
-    const cardH = 200
-    y += cardH + 24
-
-    // ── ② 滑手数据卡片（Ollie + 统计）──
-    y += 160 + 24
-
-    // ── ③ 成招记录 ──
-    if (timeline.length > 0) {
-      y += 360 + 24
-    } else {
-      y += 240 + 24
-    }
-
-    // ── ④ 打卡墙 ──
-    y += 300 + 24
-
-    // ── ⑤ 底部 Footer ──
-    y += 80
-
-    const totalHeight = y + PAD + 200 // 底部留白
-
-    return {
-      totalHeight,
-      cardX, cardW,
-      userInfo, ollie, stats, allBadges, unlockedBadges, timeline,
-      yearsSkating, themeId, trickMap,
-      records, todayStr, todayChecked, consecutiveDays,
-      totalCheckins, monthCheckins, yearCheckins,
-      PAD, CARD_RADIUS, FONT_BASE, FONT_SM, FONT_LG, FONT_XL, FONT_2XL, LINE,
-      W
-    }
-  },
-
-  /**
-   * 获取主题色
-   */
-  getThemeColors(themeId) {
-    const themes = {
-      minecraft: {
-        bgCard: '#c6c6c6', bgSurface: '#8b8b8b', bgDark: '#3b2818',
-        primaryYellow: '#ffff55', primaryCyan: '#00cccc', primaryOrange: '#ffaa00',
-        primaryGreen: '#44dd44', border: '#000000',
-        textPrimary: '#2a2a2a', textLight: '#ffffff', textSecondary: '#555555',
-        textLightSec: '#cccccc',
-        sceneSkyStart: '#5c94fc', sceneSkyEnd: '#87ceeb',
-        sceneGroundStart: '#5cb85c', sceneGroundEnd: '#4a9f4a',
-        sceneSoilStart: '#8b5a2b', sceneSoilEnd: '#6b4423',
-        sceneCardAccent: '#e89b3c', sceneCardHighlight: '#f0b860', sceneCardShadow: '#a06020',
-        cardRadius: 0
-      },
-      stardew: {
-        bgCard: '#fff8e7', bgSurface: '#d6b98b', bgDark: '#f3e7c5',
-        primaryYellow: '#f4d27a', primaryCyan: '#75b7c9', primaryOrange: '#d88b4d',
-        primaryGreen: '#7ba05b', border: '#6e4a2c',
-        textPrimary: '#4e3620', textLight: '#fff9ed', textSecondary: '#7b6041',
-        textLightSec: '#f7e8c7',
-        sceneSkyStart: '#c3ebff', sceneSkyEnd: '#f9efd6',
-        sceneGroundStart: '#97bf6e', sceneGroundEnd: '#749c4e',
-        sceneSoilStart: '#d8b883', sceneSoilEnd: '#b88e5e',
-        sceneCardAccent: '#c98a52', sceneCardHighlight: '#e9bf8f', sceneCardShadow: '#9c6337',
-        cardRadius: 26
-      },
-      terraria: {
-        bgCard: '#465a46', bgSurface: '#304330', bgDark: '#1f2b1f',
-        primaryYellow: '#f3d25b', primaryCyan: '#66c8d7', primaryOrange: '#d88941',
-        primaryGreen: '#61b05f', border: '#182518',
-        textPrimary: '#eef5df', textLight: '#f7ffe8', textSecondary: '#c2d2b8',
-        textLightSec: '#dce9cf',
-        sceneSkyStart: '#6fa7d6', sceneSkyEnd: '#bfe8ff',
-        sceneGroundStart: '#65ad54', sceneGroundEnd: '#4f8f42',
-        sceneSoilStart: '#7c5a39', sceneSoilEnd: '#5d4028',
-        sceneCardAccent: '#9d7f42', sceneCardHighlight: '#d1b36c', sceneCardShadow: '#68542b',
-        cardRadius: 18
-      }
-    }
-    return themes[themeId] || themes.minecraft
-  },
-
-  /**
-   * 绘制导出页面
-   */
-  drawExportPage(ctx, W, totalHeight, c, content) {
-    const { PAD, CARD_RADIUS, FONT_BASE, FONT_SM, FONT_LG, FONT_XL, FONT_2XL, LINE } = content
+    // 计算偏移量：pageRect.left 是页面在屏幕中的左边界，内容从 0 开始
+    const pageLeft = pageRect.left
+    const offsetX = -pageLeft  // 使 pageLeft 映射到 canvas 0
 
     // ── 背景 ──
     ctx.setFillStyle(c.bgDark)
     ctx.fillRect(0, 0, W, totalHeight)
 
-    // ── 页面标题 ──
-    let y = PAD + 16
-    ctx.setFontSize(FONT_LG)
-    ctx.setFillStyle(c.primaryYellow)
-    ctx.setTextAlign('center')
-    ctx.fillText('🛹 SkateGoal', W / 2, y)
+    // 背景纹理（近似 CSS radial-gradient 点阵）
+    ctx.save()
+    ctx.globalAlpha = 0.25
+    for (let px = 0; px < W; px += 24) {
+      for (py = 0; py < totalHeight; py += 24) {
+        ctx.setFillStyle(c.bgDot || '#4a3520')
+        ctx.fillRect(px, py, 2, 2)
+      }
+    }
+    ctx.restore()
 
-    y += LINE * 1.5
+    // ── 逐区块绘制（使用真实坐标偏移） ──
+    let nextY = 0
 
-    // ── ① 个人信息卡片 ──
-    y = this.drawExportProfileCard(ctx, y, c, content)
-
-    // ── ② 滑手数据卡片 ──
-    y = this.drawExportProgressCard(ctx, y, c, content)
-
-    // ── ③ 成招记录 ──
-    if (content.timeline.length > 0) {
-      y = this.drawExportTimeline(ctx, y, c, content)
+    if (profileRect) {
+      const absY = profileRect.top - pageRect.top + 24
+      this._drawProfileCard(ctx, absY, c, { userInfo, ollie, allBadges, unlockedBadges, yearsSkating, sceneConfig }, offsetX, W)
+      nextY = absY + profileRect.height + 24
     }
 
-    // ── ④ 打卡墙 ──
-    y = this.drawExportCheckinWall(ctx, y, c, content)
+    if (progressRect) {
+      const absY = progressRect.top - pageRect.top + 24
+      this._drawProgressCard(ctx, absY, c, { ollie, stats }, offsetX, W)
+      nextY = absY + progressRect.height + 24
+    }
 
-    // ── ⑤ 底部 ──
-    ctx.setFontSize(FONT_SM)
-    ctx.setFillStyle(c.textLightSec)
-    ctx.setTextAlign('center')
-    ctx.fillText('Made with 🛹 by Korpse  ·  v1.0.0', W / 2, y + 40)
+    if (timelineRect) {
+      const absY = timelineRect.top - pageRect.top + 24
+      this._drawTimelineCard(ctx, absY, c, { timeline }, offsetX, W)
+      nextY = absY + timelineRect.height + 24
+    }
+
+    if (checkinRect) {
+      const absY = checkinRect.top - pageRect.top + 24
+      this._drawCheckinCard(ctx, absY, c, { todayChecked, consecutiveDays, totalCheckins, monthCheckins, yearCheckins }, offsetX, W)
+      nextY = absY + checkinRect.height + 24
+    }
+
+    if (footerRect) {
+      const absY = footerRect.top - pageRect.top + 24
+      ctx.setFontSize(24)
+      ctx.setFillStyle(c.textSecondary)
+      ctx.setTextAlign('center')
+      ctx.fillText('Made with 🛹 by Korpse  ·  v1.0.0', W / 2, absY + 40)
+    }
+
+    ctx.draw(false, () => {
+      this._saveExportImage()
+    })
   },
 
+  // ──────────────────────────────── 各区块绘制 ────────────────────────────────
+
   /**
-   * 绘制个人信息卡片
+   * 个人信息卡片
    */
-  drawExportProfileCard(ctx, y, c, content) {
-    const { cardX, cardW, userInfo, ollie, stats, allBadges, unlockedBadges, yearsSkating,
-      PAD, FONT_BASE, FONT_SM, FONT_LG, FONT_XL, LINE } = content
-    const cardH = 200
+  _drawProfileCard(ctx, startY, c, data, offsetX, W) {
+    const { userInfo, ollie, allBadges, unlockedBadges, yearsSkating, sceneConfig } = data
+    const x = Math.max(24 + offsetX, 24)
+    const cardW = Math.min(W - 48, W - offsetX - 48)
     const r = c.cardRadius
+    const ip = 28
 
-    // 卡片背景
-    this.drawRoundedRect(ctx, cardX, y, cardW, cardH, r, c.bgCard, c.border, 4)
+    // 卡片背景 + 边框
+    this.drawRRect(ctx, x, startY, cardW, 220, r, c.bgCard)
+    ctx.setStrokeStyle(c.border)
+    ctx.setLineWidth(4)
+    ctx.stroke()
 
-    const innerPad = 24
-    let cx = cardX + innerPad
-    let cy = y + innerPad
-
-    // 头像占位
-    ctx.setFillStyle(c.bgSurface)
-    this.roundRect(ctx, cx, cy, 100, 100, 8, c.bgSurface)
-    ctx.fill()
-    ctx.setFontSize(56)
-    ctx.setTextAlign('center')
-    ctx.setFillStyle(c.textPrimary)
-    const avatarIcon = this.data.sceneConfig.avatarIcon || '🛹'
-    ctx.fillText(avatarIcon, cx + 50, cy + 72)
-
-    cx += 120
+    // 头像
+    if (userInfo.avatar) {
+      this._drawAvatar(ctx, x + ip, startY + ip, 110, 110, 8, userInfo.avatar)
+    } else {
+      this.drawRRect(ctx, x + ip, startY + ip, 110, 110, 8, c.bgSurface)
+      ctx.setStrokeStyle(c.border)
+      ctx.setLineWidth(4)
+      ctx.stroke()
+      ctx.setFontSize(56)
+      ctx.setFillStyle(c.textPrimary)
+      ctx.setTextAlign('center')
+      ctx.fillText((sceneConfig && sceneConfig.avatarIcon) ? sceneConfig.avatarIcon : '🛹', x + ip + 55, startY + ip + 78)
+    }
 
     // 昵称
-    ctx.setFontSize(FONT_XL)
+    ctx.setFontSize(44)
     ctx.setFillStyle(c.textPrimary)
     ctx.setTextAlign('left')
-    ctx.fillText(userInfo.nickname || '滑板玩家', cx, cy + 36)
+    ctx.fillText(userInfo.nickname || '滑板玩家', x + ip + 145, startY + ip + 44)
 
     // ID
-    cy += 48
-    ctx.setFontSize(FONT_SM)
+    ctx.setFontSize(24)
     ctx.setFillStyle(c.textSecondary)
-    ctx.fillText('ID: ' + (userInfo.id || '—'), cx, cy)
+    ctx.fillText('ID: ' + (userInfo.id || '—'), x + ip + 145, startY + ip + 80)
 
-    // 右侧标签：脚位 + 板龄
-    const rx = cardX + cardW - innerPad
-    ctx.setFontSize(FONT_SM)
-    ctx.setTextAlign('right')
+    // 脚位标签
+    const stance = userInfo.stance === 'regular' ? 'Regular' : 'Goofy'
+    this._drawTag(ctx, x + cardW - 160, startY + ip, 130, 40, '脚位 ' + stance, c.bgSurface, c.textPrimary)
 
-    ctx.setFillStyle(c.bgSurface)
-    this.roundRect(ctx, rx - 130, y + innerPad, 130, 40, 8, c.bgSurface)
-    ctx.fill()
-    ctx.setFillStyle(c.textPrimary)
-    ctx.fillText('脚位 ' + (userInfo.stance === 'regular' ? 'Regular' : 'Goofy'), rx, y + innerPad + 28)
+    // 板龄标签
+    this._drawTag(ctx, x + cardW - 160, startY + ip + 50, 130, 40, '板龄 ' + yearsSkating + ' 年', c.bgSurface, c.textPrimary)
 
-    ctx.setFillStyle(c.bgSurface)
-    this.roundRect(ctx, rx - 100, y + innerPad + 52, 100, 40, 8, c.bgSurface)
-    ctx.fill()
-    ctx.setFillStyle(c.textPrimary)
-    ctx.fillText('板龄 ' + yearsSkating + ' 年', rx, y + innerPad + 80)
+    // Ollie 高度
+    this._drawTag(ctx, x + ip, startY + 220 - ip - 40, 220, 40, 'Ollie ' + (ollie.normal || 0) + ' / ' + (ollie.switch || 0) + ' 立', c.primaryYellow, c.textPrimaryDark)
 
-    // Ollie 高度（主卡片右下）
-    ctx.setFontSize(FONT_SM)
-    ctx.setFillStyle(c.bgSurface)
-    this.roundRect(ctx, cardX + innerPad, y + cardH - innerPad - 40, 200, 40, 8, c.bgSurface)
-    ctx.fill()
-    ctx.setTextAlign('left')
-    ctx.setFillStyle(c.primaryYellow)
-    ctx.fillText('Ollie ' + (ollie.normal || 0) + ' / ' + (ollie.switch || 0) + ' 立', cardX + innerPad + 16, y + cardH - innerPad - 12)
-
-    // 成就徽章
-    const badgesY = y + cardH + 12
-    ctx.setFontSize(FONT_SM)
+    // 成就徽章区
+    const badgesY = startY + 220 + 12
+    ctx.setFontSize(24)
     ctx.setFillStyle(c.textSecondary)
     ctx.setTextAlign('left')
-    ctx.fillText('成就徽章 ' + unlockedBadges.length + '/' + allBadges.length, cardX, badgesY)
+    ctx.fillText('成就徽章 ' + unlockedBadges.length + '/' + allBadges.length, x, badgesY)
 
-    const badgeStartX = cardX
     const badgeSize = 52
     const badgeGap = 16
-    const maxBadges = 8
-    const displayBadges = allBadges.slice(0, maxBadges)
+    const maxShow = 8
+    const displayBadges = allBadges.slice(0, maxShow)
 
     displayBadges.forEach((badge, i) => {
-      const bx = badgeStartX + i * (badgeSize + badgeGap)
+      const bx = x + i * (badgeSize + badgeGap)
       const by = badgesY + 12
-
       if (badge.unlocked) {
-        this.roundRect(ctx, bx, by, badgeSize, badgeSize, 8, c.primaryGreen)
-        ctx.fill()
+        this.drawRRect(ctx, bx, by, badgeSize, badgeSize, 8, c.primaryGreen)
+        ctx.setStrokeStyle(c.border)
+        ctx.setLineWidth(4)
+        ctx.stroke()
         ctx.setFontSize(32)
-        ctx.setTextAlign('center')
         ctx.setFillStyle(c.textLight)
+        ctx.setTextAlign('center')
         ctx.fillText(badge.emoji, bx + badgeSize / 2, by + badgeSize / 2 + 12)
       } else {
-        this.roundRect(ctx, bx, by, badgeSize, badgeSize, 8, c.bgSurface)
-        ctx.fill()
+        this.drawRRect(ctx, bx, by, badgeSize, badgeSize, 8, c.bgSurfaceDark)
+        ctx.setStrokeStyle(c.border)
+        ctx.setLineWidth(4)
+        ctx.stroke()
         ctx.setFontSize(28)
-        ctx.setTextAlign('center')
         ctx.setFillStyle(c.textSecondary)
+        ctx.setTextAlign('center')
         ctx.fillText('🔒', bx + badgeSize / 2, by + badgeSize / 2 + 10)
       }
     })
 
-    if (allBadges.length > maxBadges) {
-      ctx.setFontSize(FONT_SM)
+    if (allBadges.length > maxShow) {
+      ctx.setFontSize(24)
       ctx.setFillStyle(c.textSecondary)
-      ctx.fillText('+' + (allBadges.length - maxBadges), badgeStartX + maxBadges * (badgeSize + badgeGap) + 8, badgesY + 42)
+      ctx.setTextAlign('left')
+      ctx.fillText('+' + (allBadges.length - maxShow), x + maxShow * (badgeSize + badgeGap), badgesY + 44)
     }
-
-    return badgesY + badgeSize + 12 + 24
   },
 
   /**
-   * 绘制滑手数据卡片（Ollie + 统计）
+   * 滑手数据卡片
    */
-  drawExportProgressCard(ctx, y, c, content) {
-    const { cardX, cardW, ollie, stats, FONT_BASE, FONT_SM, FONT_LG, FONT_XL, LINE, PAD } = content
-    const cardH = 160
+  _drawProgressCard(ctx, startY, c, data, offsetX, W) {
+    const { ollie, stats } = data
+    const x = Math.max(24 + offsetX, 24)
+    const cardW = Math.min(W - 48, W - offsetX - 48)
     const r = c.cardRadius
 
-    this.drawRoundedRect(ctx, cardX, y, cardW, cardH, r, c.bgCard, c.border, 4)
+    this.drawRRect(ctx, x, startY, cardW, 160, r, c.bgCard)
+    ctx.setStrokeStyle(c.border)
+    ctx.setLineWidth(4)
+    ctx.stroke()
 
-    // 标题
-    ctx.setFontSize(FONT_LG)
+    ctx.setFontSize(32)
     ctx.setFillStyle(c.textPrimary)
     ctx.setTextAlign('left')
-    ctx.fillText('滑手数据', cardX + 24, y + 40)
+    ctx.fillText('滑手数据', x + 24, startY + 40)
 
-    // Ollie 主高度
-    ctx.setFontSize(FONT_XL)
+    ctx.setFontSize(36)
     ctx.setFillStyle(c.primaryYellow)
-    ctx.fillText('Ollie ' + (ollie.normal || 0) + ' 立', cardX + 24, y + 80)
-    ctx.setFontSize(FONT_SM)
+    ctx.fillText('Ollie ' + (ollie.normal || 0) + ' 立', x + 24, startY + 80)
+    ctx.setFontSize(24)
     ctx.setFillStyle(c.primaryCyan)
-    ctx.fillText('Switch ' + (ollie.switch || 0) + ' 立', cardX + 200, y + 80)
+    ctx.fillText('Switch ' + (ollie.switch || 0) + ' 立', x + 240, startY + 80)
 
     // 三个统计
-    const statY = y + 110
     const statsData = [
       { label: '一脚一个', value: stats.masteredCount || 0, color: c.primaryGreen },
       { label: '死磕中', value: stats.grindingCount || 0, color: c.primaryOrange },
       { label: '体验卡', value: stats.trialCount || 0, color: c.primaryCyan }
     ]
-
-    const statStartX = cardX + 24
     const statW = (cardW - 48) / 3
 
     statsData.forEach((s, i) => {
-      const sx = statStartX + i * statW
-      ctx.setFontSize(FONT_XL)
+      const sx = x + 24 + i * statW
+      ctx.setFontSize(36)
       ctx.setFillStyle(s.color)
       ctx.setTextAlign('left')
-      ctx.fillText(s.value, sx, statY)
-      ctx.setFontSize(FONT_SM)
+      ctx.fillText(s.value, sx, startY + 128)
+      ctx.setFontSize(24)
       ctx.setFillStyle(c.textSecondary)
-      ctx.fillText(s.label, sx, statY + 24)
+      ctx.fillText(s.label, sx, startY + 152)
     })
-
-    return y + cardH + 24
   },
 
   /**
-   * 绘制成招记录时间线
+   * 成招记录卡片（游戏场景风格）
    */
-  drawExportTimeline(ctx, y, c, content) {
-    const { cardX, cardW, timeline, FONT_BASE, FONT_SM, FONT_LG, FONT_XL, LINE } = content
+  _drawTimelineCard(ctx, startY, c, data, offsetX, W) {
+    const { timeline } = data
+    const x = Math.max(24 + offsetX, 24)
+    const cardW = Math.min(W - 48, W - offsetX - 48)
+    const r = c.cardRadius
     const sceneH = 360
-    const r = c.cardRadius
-
-    // 游戏风格背景
-    const skyH = sceneH * 0.55
-    ctx.setFillStyle(c.sceneSkyStart)
-    ctx.fillRect(cardX, y, cardW, skyH)
-
-    // 渐变到地面
-    ctx.setFillStyle(c.sceneGroundStart)
-    ctx.fillRect(cardX, y + skyH, cardW, sceneH - skyH)
-
-    // 地面纹理
-    ctx.setFillStyle(c.sceneGroundEnd)
-    for (let i = 0; i < cardW; i += 16) {
-      ctx.fillRect(cardX + i, y + skyH, 8, 4)
-    }
-
-    // 土壤
-    ctx.setFillStyle(c.sceneSoilStart)
-    ctx.fillRect(cardX, y + sceneH - 48, cardW, 48)
-    ctx.setFillStyle(c.sceneSoilEnd)
-    for (let i = 0; i < cardW; i += 16) {
-      ctx.fillRect(cardX + i, y + sceneH - 48, 8, 48)
-    }
-
-    // 标题
-    ctx.setFontSize(FONT_LG)
-    ctx.setFillStyle(c.textLight)
-    ctx.setTextAlign('left')
-    ctx.fillText('成招记录', cardX + 24, y + 36)
-
-    // 起点旗帜
-    ctx.setFontSize(36)
-    ctx.fillText('🚩', cardX + 24, y + 80)
-
-    // 时间线节点（最多显示6个）
-    const displayTimeline = timeline.slice(0, 6)
-    const nodeStartX = cardX + 80
-    const nodeW = 100
-    const nodeY = y + 60
-
-    displayTimeline.forEach((item, i) => {
-      const nx = nodeStartX + i * nodeW
-
-      // 节点方块
-      this.drawRoundedRect(ctx, nx, nodeY, 72, 72, 8, c.sceneCardAccent, c.border, 4)
-      ctx.setFontSize(36)
-      ctx.setTextAlign('center')
-      ctx.setFillStyle(c.textLight)
-      ctx.fillText(item.emoji || '🛹', nx + 36, nodeY + 48)
-
-      // 状态星标
-      const starColor = item.status === 'mastered' ? c.primaryGreen
-        : item.status === 'trial' ? c.primaryCyan
-        : c.primaryOrange
-      ctx.setFontSize(20)
-      ctx.fillText(item.status === 'mastered' ? '⭐' : item.status === 'trial' ? '✨' : '🔥', nx + 60, nodeY + 20)
-
-      // 脚位标签
-      ctx.setFontSize(18)
-      ctx.setFillStyle(c.textLight)
-      ctx.fillText(item.stance === 'normal' ? 'N' : item.stance === 'fakie' ? 'F' : item.stance === 'switch' ? 'S' : 'No', nx + 36, nodeY + 96)
-
-      // 招式名
-      ctx.setFontSize(16)
-      ctx.setFillStyle(c.textLight)
-      const name = (item.trickName || '').substring(0, 6)
-      ctx.fillText(name, nx + 36, nodeY + 116)
-    })
-
-    // 终点城堡
-    ctx.setFontSize(40)
-    ctx.setTextAlign('left')
-    ctx.fillText('🏰', cardX + cardW - 80, y + 100)
-
-    // 云朵装饰
-    ctx.setFontSize(28)
-    ctx.fillText('☁️', cardX + 200, y + 50)
-    ctx.fillText('☁️', cardX + 450, y + 30)
-
-    return y + sceneH + 24
-  },
-
-  /**
-   * 绘制打卡墙
-   */
-  drawExportCheckinWall(ctx, y, c, content) {
-    const { cardX, cardW, consecutiveDays, todayChecked, totalCheckins, monthCheckins, yearCheckins,
-      FONT_BASE, FONT_SM, FONT_LG, FONT_XL, LINE } = content
-    const cardH = 300
-    const r = c.cardRadius
-
-    this.drawRoundedRect(ctx, cardX, y, cardW, cardH, r, c.bgCard, c.border, 4)
-
-    // 标题
-    ctx.setFontSize(FONT_LG)
-    ctx.setFillStyle(c.textPrimary)
-    ctx.setTextAlign('left')
-    ctx.fillText('滑板打卡', cardX + 24, y + 36)
-
-    // 连续打卡徽章
-    ctx.setFillStyle(c.primaryOrange)
-    this.roundRect(ctx, cardX + cardW - 160, y + 18, 136, 40, 8, c.primaryOrange)
-    ctx.fill()
-    ctx.setFontSize(FONT_SM)
-    ctx.setTextAlign('center')
-    ctx.setFillStyle(c.textLight)
-    ctx.fillText('🔥 ' + consecutiveDays + ' 天', cardX + cardW - 92, y + 45)
-
-    // 游戏场景背景
-    const sceneY = y + 68
-    const sceneH = 140
 
     // 天空
     ctx.setFillStyle(c.sceneSkyStart)
-    ctx.fillRect(cardX + 16, sceneY, cardW - 32, sceneH * 0.6)
-
-    // 地面
+    ctx.fillRect(x, startY, cardW, sceneH * 0.55)
+    // 草地
     ctx.setFillStyle(c.sceneGroundStart)
-    ctx.fillRect(cardX + 16, sceneY + sceneH * 0.6, cardW - 32, sceneH * 0.25)
-
+    ctx.fillRect(x, startY + sceneH * 0.55, cardW, sceneH * 0.3)
     // 土壤
     ctx.setFillStyle(c.sceneSoilStart)
-    ctx.fillRect(cardX + 16, sceneY + sceneH * 0.85, cardW - 32, sceneH * 0.15)
+    ctx.fillRect(x, startY + sceneH * 0.85, cardW, sceneH * 0.15)
 
-    // 滑板小人
+    // 草地纹理
+    ctx.save()
+    ctx.globalAlpha = 0.3
+    for (let gx = x; gx < x + cardW; gx += 16) {
+      ctx.setFillStyle(c.sceneGroundEnd)
+      ctx.fillRect(gx, startY + sceneH * 0.55, 8, 4)
+    }
+    ctx.restore()
+
+    // 标题
+    ctx.setFontSize(32)
+    ctx.setFillStyle(c.textLight)
+    ctx.setTextAlign('left')
+    ctx.fillText('成招记录', x + 24, startY + 36)
+
+    // 起点旗帜
     ctx.setFontSize(40)
-    ctx.setTextAlign('right')
-    ctx.fillText('🛹', cardX + cardW - 40, sceneY + sceneH * 0.55)
+    ctx.fillText('🚩', x + 24, startY + 90)
+    ctx.setFontSize(18)
+    ctx.fillText('起点', x + 28, startY + 110)
+
+    // 时间线节点
+    const displayTimeline = (timeline || []).slice(0, 6)
+    const nodeStartX = x + 90
+    const nodeW = Math.min((cardW - 120) / Math.max(displayTimeline.length, 1), 120)
+    const nodeY = startY + 60
+
+    displayTimeline.forEach((item, i) => {
+      const nx = nodeStartX + i * nodeW
+      const blockSize = Math.min(nodeW - 8, 80)
+
+      // 方块背景
+      this._drawBlock(ctx, nx + 4, nodeY, blockSize, blockSize, c.sceneCardAccent, c.border)
+      ctx.setFontSize(Math.min(blockSize * 0.5, 36))
+      ctx.setFillStyle(c.textLight)
+      ctx.setTextAlign('center')
+      ctx.fillText(item.emoji || '🛹', nx + 4 + blockSize / 2, nodeY + blockSize / 2 + 12)
+
+      // 状态标记
+      const star = item.status === 'mastered' ? '⭐' : item.status === 'trial' ? '✨' : '🔥'
+      const starColor = item.status === 'mastered' ? c.primaryGreen : item.status === 'trial' ? c.primaryCyan : c.primaryOrange
+      ctx.setFontSize(20)
+      ctx.setFillStyle(starColor)
+      ctx.fillText(star, nx + 4 + blockSize - 4, nodeY + 16)
+
+      // 脚位标签
+      const stanceLabel = item.stance === 'normal' ? 'N' : item.stance === 'fakie' ? 'F' : item.stance === 'switch' ? 'S' : 'No'
+      ctx.setFontSize(16)
+      ctx.setFillStyle(c.textLight)
+      ctx.fillText(stanceLabel, nx + 4 + blockSize / 2, nodeY + blockSize + 18)
+
+      // 招式名（最多4字）
+      ctx.setFontSize(16)
+      ctx.setFillStyle(c.textLight)
+      ctx.fillText((item.trickName || '').substring(0, 4), nx + 4 + blockSize / 2, nodeY + blockSize + 36)
+    })
+
+    // 终点城堡
+    const endX = x + cardW - 80
+    ctx.setFontSize(44)
+    ctx.fillText('🏰', endX, startY + 90)
+    ctx.setFontSize(18)
+    ctx.fillText('终点', endX + 4, startY + 110)
+
+    // 云朵
+    ctx.setFontSize(32)
+    ctx.fillText('☁️', x + 200, startY + 40)
+    ctx.fillText('☁️', x + 420, startY + 25)
+  },
+
+  /**
+   * 打卡墙卡片
+   */
+  _drawCheckinCard(ctx, startY, c, data, offsetX, W) {
+    const { todayChecked, consecutiveDays, totalCheckins, monthCheckins, yearCheckins } = data
+    const x = Math.max(24 + offsetX, 24)
+    const cardW = Math.min(W - 48, W - offsetX - 48)
+    const r = c.cardRadius
+    const ip = 28
+
+    this.drawRRect(ctx, x, startY, cardW, 300, r, c.bgCard)
+    ctx.setStrokeStyle(c.border)
+    ctx.setLineWidth(4)
+    ctx.stroke()
+
+    // 标题
+    ctx.setFontSize(32)
+    ctx.setFillStyle(c.textPrimary)
+    ctx.setTextAlign('left')
+    ctx.fillText('滑板打卡', x + ip, startY + 40)
+
+    // 连续打卡徽章
+    this._drawTag(ctx, x + cardW - 160, startY + 20, 136, 40, '🔥 ' + consecutiveDays + ' 天', c.primaryOrange, c.textLight)
+
+    // 游戏场景
+    const sceneY = startY + 80
+    const sceneH = 140
+    const sx = x + 16
+    const sw = cardW - 32
+
+    ctx.setFillStyle(c.sceneSkyStart)
+    ctx.fillRect(sx, sceneY, sw, sceneH * 0.6)
+    ctx.setFillStyle(c.sceneGroundStart)
+    ctx.fillRect(sx, sceneY + sceneH * 0.6, sw, sceneH * 0.25)
+    ctx.setFillStyle(c.sceneSoilStart)
+    ctx.fillRect(sx, sceneY + sceneH * 0.85, sw, sceneH * 0.15)
 
     // 云
-    ctx.setFontSize(28)
-    ctx.setTextAlign('left')
-    ctx.fillText('☁️', cardX + 40, sceneY + 30)
+    ctx.setFontSize(32)
+    ctx.fillText('☁️', sx + 30, sceneY + 28)
 
-    // 打卡按钮（简化）
+    // 滑板小人
+    ctx.setFontSize(44)
+    ctx.fillText('🛹', sx + sw - 60, sceneY + sceneH * 0.5)
+
+    // 打卡按钮
     const btnY = sceneY + sceneH + 12
     const btnW = cardW - 32
-    ctx.setFillStyle(todayChecked ? c.bgSurface : c.primaryGreen)
-    this.roundRect(ctx, cardX + 16, btnY, btnW, 48, 24, todayChecked ? c.bgSurface : c.primaryGreen)
-    ctx.fill()
-    ctx.setFontSize(FONT_BASE)
-    ctx.setTextAlign('center')
+    const btnColor = todayChecked ? c.bgSurface : c.primaryGreen
+    const btnText = todayChecked ? '✓ 今日已打卡' : '🎯 今日打卡'
+    this._drawRoundBtn(ctx, x + 16, btnY, btnW, 48, btnColor, c.border, 4)
+    ctx.setFontSize(28)
     ctx.setFillStyle(todayChecked ? c.textSecondary : c.textLight)
-    ctx.fillText(todayChecked ? '✓ 今日已打卡' : '🎯 今日打卡', cardX + cardW / 2, btnY + 32)
+    ctx.setTextAlign('center')
+    ctx.fillText(btnText, x + 16 + btnW / 2, btnY + 32)
 
-    // 统计
+    // 三个统计
     const statsY = btnY + 56
     const statsData = [
       { label: '本月', value: monthCheckins },
@@ -1464,40 +1374,152 @@ Page({
 
     ctx.setTextAlign('center')
     statsData.forEach((s, i) => {
-      const sx = cardX + 24 + i * statW
-      ctx.setFontSize(FONT_XL)
+      const ssx = x + 24 + i * statW
+      ctx.setFontSize(36)
       ctx.setFillStyle(c.primaryYellow)
-      ctx.fillText(s.value, sx + statW / 2, statsY)
-      ctx.setFontSize(FONT_SM)
+      ctx.fillText(s.value, ssx + statW / 2, statsY)
+      ctx.setFontSize(24)
       ctx.setFillStyle(c.textSecondary)
-      ctx.fillText(s.label, sx + statW / 2, statsY + 24)
+      ctx.fillText(s.label, ssx + statW / 2, statsY + 24)
     })
-
-    return y + cardH + 24
   },
 
-  // ==================== 绘制辅助函数 ====================
+  // ──────────────────────────────── 辅助绘制函数 ────────────────────────────────
 
   /**
-   * 绘制圆角矩形（填充 + 边框）
+   * 获取主题色（精确版，完全匹配 theme.wxss 变量）
    */
-  drawRoundedRect(ctx, x, y, w, h, r, fillColor, strokeColor, strokeWidth) {
+  getThemeColorsV2(themeId) {
+    const t = {
+      minecraft: {
+        bgDark: '#3b2818', bgCard: '#c6c6c6', bgCardLight: '#d8d8d8',
+        bgSurface: '#8b8b8b', bgSurfaceDark: '#6b6b6b',
+        primaryYellow: '#ffff55', primaryCyan: '#00cccc', primaryOrange: '#ffaa00',
+        primaryGreen: '#44dd44',
+        border: '#000000',
+        textPrimary: '#2a2a2a', textPrimaryDark: '#2a2a2a',
+        textSecondary: '#555555', textLight: '#ffffff', textLightSec: '#cccccc',
+        sceneSkyStart: '#5c94fc', sceneSkyEnd: '#87ceeb',
+        sceneGroundStart: '#5cb85c', sceneGroundEnd: '#4a9f4a',
+        sceneSoilStart: '#8b5a2b', sceneSoilEnd: '#6b4423',
+        sceneCardAccent: '#e89b3c',
+        cardRadius: 0, bgDot: '#4a3520'
+      },
+      stardew: {
+        bgDark: '#f3e7c5', bgCard: '#fff8e7', bgCardLight: '#fffdf4',
+        bgSurface: '#d6b98b', bgSurfaceDark: '#c4a16c',
+        primaryYellow: '#f4d27a', primaryCyan: '#75b7c9', primaryOrange: '#d88b4d',
+        primaryGreen: '#7ba05b',
+        border: '#6e4a2c',
+        textPrimary: '#4e3620', textPrimaryDark: '#4e3620',
+        textSecondary: '#7b6041', textLight: '#fff9ed', textLightSec: '#f7e8c7',
+        sceneSkyStart: '#c3ebff', sceneSkyEnd: '#f9efd6',
+        sceneGroundStart: '#97bf6e', sceneGroundEnd: '#749c4e',
+        sceneSoilStart: '#d8b883', sceneSoilEnd: '#b88e5e',
+        sceneCardAccent: '#c98a52',
+        cardRadius: 26, bgDot: '#c4a060'
+      },
+      terraria: {
+        bgDark: '#1f2b1f', bgCard: '#465a46', bgCardLight: '#567056',
+        bgSurface: '#304330', bgSurfaceDark: '#233223',
+        primaryYellow: '#f3d25b', primaryCyan: '#66c8d7', primaryOrange: '#d88941',
+        primaryGreen: '#61b05f',
+        border: '#182518',
+        textPrimary: '#eef5df', textPrimaryDark: '#102010',
+        textSecondary: '#c2d2b8', textLight: '#f7ffe8', textLightSec: '#dce9cf',
+        sceneSkyStart: '#6fa7d6', sceneSkyEnd: '#bfe8ff',
+        sceneGroundStart: '#65ad54', sceneGroundEnd: '#4f8f42',
+        sceneSoilStart: '#7c5a39', sceneSoilEnd: '#5d4028',
+        sceneCardAccent: '#9d7f42',
+        cardRadius: 18, bgDot: '#1a2e1a'
+      }
+    }
+    return t[themeId] || t.minecraft
+  },
+
+  /**
+   * 绘制圆角矩形（填充）
+   */
+  drawRRect(ctx, x, y, w, h, r, fillColor) {
+    r = Math.min(r, w / 2, h / 2)
     ctx.setFillStyle(fillColor)
     ctx.beginPath()
-    this._roundRectPath(ctx, x, y, w, h, r)
+    ctx.moveTo(x + r, y)
+    ctx.lineTo(x + w - r, y)
+    ctx.arcTo(x + w, y, x + w, y + r, r)
+    ctx.lineTo(x + w, y + h - r)
+    ctx.arcTo(x + w, y + h, x + w - r, y + h, r)
+    ctx.lineTo(x + r, y + h)
+    ctx.arcTo(x, y + h, x, y + h - r, r)
+    ctx.lineTo(x, y + r)
+    ctx.arcTo(x, y, x + r, y, r)
     ctx.closePath()
     ctx.fill()
-    if (strokeColor && strokeWidth) {
-      ctx.setStrokeStyle(strokeColor)
-      ctx.setLineWidth(strokeWidth)
-      ctx.stroke()
-    }
   },
 
   /**
-   * 圆角矩形路径
+   * 绘制头像（带圆角裁剪）
    */
-  _roundRectPath(ctx, x, y, w, h, r) {
+  _drawAvatar(ctx, x, y, w, h, r, avatarPath) {
+    ctx.save()
+    ctx.beginPath()
+    this._rrectPath(ctx, x, y, w, h, r)
+    ctx.clip()
+    ctx.drawImage(avatarPath, x, y, w, h)
+    ctx.restore()
+    // 头像边框
+    ctx.setStrokeStyle('#000000')
+    ctx.setLineWidth(4)
+    ctx.stroke()
+  },
+
+  /**
+   * 绘制标签（药丸形状按钮/标签）
+   */
+  _drawTag(ctx, x, y, w, h, text, bgColor, textColor) {
+    const r = h / 2
+    this.drawRRect(ctx, x, y, w, h, r, bgColor)
+    ctx.setStrokeStyle('#000000')
+    ctx.setLineWidth(3)
+    ctx.stroke()
+    ctx.setFontSize(24)
+    ctx.setFillStyle(textColor)
+    ctx.setTextAlign('center')
+    ctx.fillText(text, x + w / 2, y + h / 2 + 8)
+  },
+
+  /**
+   * 绘制游戏场景中的方块
+   */
+  _drawBlock(ctx, x, y, w, h, fillColor, borderColor) {
+    // 主体
+    ctx.setFillStyle(fillColor)
+    ctx.fillRect(x, y, w, h)
+    // 高光（左上）
+    ctx.setFillStyle('rgba(255,255,255,0.3)')
+    ctx.fillRect(x, y, w, 4)
+    ctx.fillRect(x, y, 4, h)
+    // 边框
+    ctx.setStrokeStyle(borderColor)
+    ctx.setLineWidth(4)
+    ctx.strokeRect(x, y, w, h)
+  },
+
+  /**
+   * 绘制圆角按钮
+   */
+  _drawRoundBtn(ctx, x, y, w, h, fillColor, borderColor, borderW) {
+    const r = h / 2
+    this.drawRRect(ctx, x, y, w, h, r, fillColor)
+    ctx.setStrokeStyle(borderColor)
+    ctx.setLineWidth(borderW)
+    ctx.stroke()
+  },
+
+  /**
+   * 圆角矩形路径（内部用）
+   */
+  _rrectPath(ctx, x, y, w, h, r) {
     r = Math.min(r, w / 2, h / 2)
     ctx.moveTo(x + r, y)
     ctx.lineTo(x + w - r, y)
@@ -1511,23 +1533,11 @@ Page({
   },
 
   /**
-   * 填充圆角矩形（快捷方法）
-   */
-  roundRect(ctx, x, y, w, h, r, fillColor) {
-    ctx.beginPath()
-    this._roundRectPath(ctx, x, y, w, h, r)
-    ctx.closePath()
-    ctx.setFillStyle(fillColor)
-    ctx.fill()
-  },
-
-  /**
    * 保存导出图片到相册
    */
-  saveExportImage() {
-    const canvasId = 'exportCanvas'
+  _saveExportImage() {
     wx.canvasToTempFilePath({
-      canvasId,
+      canvasId: 'exportCanvas',
       success: (res) => {
         wx.saveImageToPhotosAlbum({
           filePath: res.tempFilePath,
