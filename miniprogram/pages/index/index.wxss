@@ -963,6 +963,42 @@
   height: var(--safe-area-bottom);
 }
 
+/* ========== 导出图片浮窗按钮 ========== */
+.export-float-btn {
+  position: fixed;
+  right: 32rpx;
+  bottom: calc(var(--safe-area-bottom) + 120rpx);
+  width: 88rpx;
+  height: 88rpx;
+  background: var(--primary-yellow);
+  border: 4rpx solid var(--border-color);
+  border-radius: var(--radius-full);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: var(--shadow-md);
+  z-index: 50;
+  transition: all var(--transition-fast);
+}
+
+.export-float-btn:active {
+  transform: scale(0.92);
+  box-shadow: var(--shadow-pressed);
+}
+
+.export-btn-icon {
+  font-size: 40rpx;
+  line-height: 1;
+}
+
+/* 隐藏的导出 Canvas */
+.export-canvas {
+  position: fixed;
+  left: -9999px;
+  top: 0;
+  pointer-events: none;
+}
+
 /* ========== 徽章详情弹窗 - 优化版 ========== */
 .badge-modal-mask {
   position: fixed;

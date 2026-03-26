@@ -263,6 +263,14 @@
   <view class="bottom-safe"></view>
 </view>
 
+<!-- 导出按钮浮窗（放在主页内容下方，弹窗之上） -->
+<view class="export-float-btn" bindtap="onExportImage">
+  <text class="export-btn-icon">📸</text>
+</view>
+
+<!-- 隐藏的导出用 Canvas（绝对定位移出屏幕） -->
+<canvas canvas-id="exportCanvas" id="exportCanvas" class="export-canvas" style="width:750px;height:{{exportCanvasHeight}}px;" />
+
 <!-- 新成就弹窗 -->
 <view class="badge-modal-mask {{showNewBadgesModal ? 'show' : ''}}" bindtap="closeNewBadgesModal" wx:if="{{showNewBadgesModal}}">
   <view class="new-badges-modal theme-{{themeId}}" catchtap="preventClose">
