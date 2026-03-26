@@ -1027,7 +1027,7 @@ Page({
     ctx.save()
     ctx.globalAlpha = 0.25
     for (let px = 0; px < W; px += 24) {
-      for (py = 0; py < totalHeight; py += 24) {
+      for (let py = 0; py < totalHeight; py += 24) {
         ctx.setFillStyle(c.bgDot || '#4a3520')
         ctx.fillRect(px, py, 2, 2)
       }
